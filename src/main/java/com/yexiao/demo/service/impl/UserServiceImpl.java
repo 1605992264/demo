@@ -19,7 +19,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public List<UserDO> getList() {
-        int a = 1/0;
         return null;
     }
 }
