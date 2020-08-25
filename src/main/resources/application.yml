@@ -1,0 +1,29 @@
+# 主配置文件 可用于通用的属性
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non-null  #json字符串忽略Null值
+    generator:
+      write_numbers_as_strings: true
+  profiles:
+    active: dev  #附加配置文件 用于开发环境dev 正式环境prod等
+  servlet:
+    multipart:
+      max-file-size: 1024Mb       #文件上传最大值
+      max-request-size: 1024Mb
+
+mybatis-plus:
+  # MyBaits 别名包扫描路径，通过该属性可以给包中的类注册别名，注册后在 Mapper 对应的 XML 文件中可以直接使用类名，而不用使用全限定的类名（即 XML 中调用的时候不用包含包名）
+  # type-aliases-package: com.yexiao.demo.**.domain
+  # MyBatis Mapper 所对应的 XML 文件位置
+  mapper-locations: classpath:/mybatis/*Mapper.xml
+  # 是否开启自动驼峰命名规则映射
+  mapUnderscoreToCamelCase: true
+  # 是否自动刷新 Mapper 对应的 XML 文件
+  global-config:
+    refresh: true
+
+logging:
+  config: classpath:logback.xml
