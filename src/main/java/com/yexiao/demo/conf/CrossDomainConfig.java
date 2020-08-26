@@ -16,6 +16,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CrossDomainConfig {
 
+
     @Bean
     public CorsFilter corsFilter() {
         // 1.添加CORS配置信息

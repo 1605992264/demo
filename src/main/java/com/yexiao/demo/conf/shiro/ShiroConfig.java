@@ -28,22 +28,12 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/login");
         shiroFilterFactoryBean.setSuccessUrl("/index");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/404");
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/login","anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/docs/**", "anon");
-        filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put("/upload/**", "anon");
-        filterChainDefinitionMap.put("/files/**", "anon");
         filterChainDefinitionMap.put("/logout", "anon");
         filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/blog", "anon");
-        filterChainDefinitionMap.put("/blog/open/**", "anon");
-        filterChainDefinitionMap.put("/sys/user/export", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -77,10 +67,12 @@ public class ShiroConfig {
 
 
     /**
-     * 开启shiro aop注解支持.
-     * 使用代理方式;所以需要开启代码支持;
-     * @param securityManager
-     * @return
+     * 开启shiro 注解支持. 使以下注解能够生效 :
+     * 需要认证 {@link org.apache.shiro.authz.annotation.RequiresAuthentication RequiresAuthentication}
+     * 需要用户 {@link org.apache.shiro.authz.annotation.RequiresUser RequiresUser}
+     * 需要访客 {@link org.apache.shiro.authz.annotation.RequiresGuest RequiresGuest}
+     * 需要角色 {@link org.apache.shiro.authz.annotation.RequiresRoles RequiresRoles}
+     * 需要权限 {@link org.apache.shiro.authz.annotation.RequiresPermissions RequiresPermissions}
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {

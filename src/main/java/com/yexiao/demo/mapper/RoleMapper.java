@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yexiao.demo.domain.RoleDO;
 import com.yexiao.demo.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 
 
@@ -12,12 +13,11 @@ import java.util.List;
  * @date 2020/8/20 10:48
  **/
 @Mapper
-public interface UserMapper extends BaseMapper<UserDO> {
+public interface RoleMapper extends BaseMapper<RoleDO> {
 
     /**
-     * 物理删除
+     * 获取用户角色列表
      * */
-    Integer removeById(String id);
-
+    List<RoleDO> getRoleList(String userId);
 
 }

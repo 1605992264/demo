@@ -34,6 +34,9 @@
 	<sql id="leftJion">
     </sql>
 
+    <delete id="removeById">
+        delete from sys_user where id = #{value}
+    </delete>
 
 
 </mapper>

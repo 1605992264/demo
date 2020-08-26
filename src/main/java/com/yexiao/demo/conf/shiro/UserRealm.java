@@ -1,6 +1,11 @@
 package com.yexiao.demo.conf.shiro;
 
+import com.yexiao.demo.domain.PermissionDO;
+import com.yexiao.demo.domain.RoleDO;
 import com.yexiao.demo.domain.UserDO;
+import com.yexiao.demo.service.PermissionService;
+import com.yexiao.demo.service.RoleService;
+import com.yexiao.demo.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,6 +17,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +31,13 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
+
 
     /**
      * shiro拦截后调用
@@ -30,18 +46,16 @@ public class UserRealm extends AuthorizingRealm {
      * */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("权限配置");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        //获取用户所有用的角色和权限 把它们添加到SimpleAuthorizationInfo中
-//        User userInfo  = (User) principals.getPrimaryPrincipal();
-//        for(Role role:userInfo.getRoleList()){
-//            authorizationInfo.addRole(role.getRoleName());
-//            /* 添加权限
-//            for(SysPermission p:role.getPermissions()){
-//                authorizationInfo.addStringPermission(p.getPermission());
-//            }
-//            */
-//        }
+        // 获取用户所有的角色和权限 把它们添加到SimpleAuthorizationInfo中
+        UserDO user = (UserDO) principals.getPrimaryPrincipal();
+        List<RoleDO> roleList = roleService.getRoleList(user.getId());
+        for(RoleDO roleDO : roleList){
+            authorizationInfo.addRole(roleDO.getName());
+            for(PermissionDO permissionDO : permissionService.getPermissionList(roleDO.getId())){
+                authorizationInfo.addStringPermission(permissionDO.getName());
+            }
+        }
         return authorizationInfo;
     }
 
@@ -54,28 +68,23 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户的输入的账号.
         String username = (String)token.getPrincipal();
-        System.out.println(token.getCredentials());
         //通过username从数据库中查找 User对象，如果找到，没找到.
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         //从数据库中查询user User userInfo = userService.getByName(username);
-        UserDO userInfo = new UserDO();
-        /**
-         * 从数据库中查询数据
-         * */
-        userInfo.setName("tom");
-        userInfo.setPassword("3f924a3b2d9ed860548357e00e3b060a");
-        if(userInfo == null){
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        UserDO user = ((List<UserDO>) userService.listByMap(map)).get(0);
+        if(user == null){
             return null;
         }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 // 用户名（对象）
-                userInfo,
+                user,
                 //密码
-                userInfo.getPassword(),
+                user.getPassword(),
                 //realm name
                 getName()
         );
-        redisTemplate.opsForValue().set("user",userInfo,1, TimeUnit.MINUTES);
         return authenticationInfo;
     }
 }

@@ -1,9 +1,10 @@
 package com.yexiao.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yexiao.demo.domain.PermissionDO;
 import com.yexiao.demo.domain.RoleDO;
-import com.yexiao.demo.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
 
 
@@ -12,12 +13,8 @@ import java.util.List;
  * @date 2020/8/20 10:48
  **/
 @Mapper
-public interface UserMapper extends BaseMapper<UserDO> {
+public interface PermissionMapper extends BaseMapper<PermissionDO> {
 
-    /**
-     * 物理删除
-     * */
-    Integer removeById(String id);
-
+    List<PermissionDO> getPermissionList(String roleId);
 
 }

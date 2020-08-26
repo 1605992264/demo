@@ -1,6 +1,8 @@
 package com.yexiao.demo.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yexiao.demo.base.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -24,9 +26,25 @@ public class UserDO extends BaseEntity {
     @TableField("name")
     private String name;
 
+    @ApiModelProperty(value = "登录名")
+    @TableField("username")
+    private String username;
+
     @ApiModelProperty(value = "密码")
     @TableField("password")
     private String password;
+
+    @ApiModelProperty(value = "手机号")
+    @TableField("mobile")
+    private String mobile;
+
+    @ApiModelProperty(value = "性别")
+    @TableField("sex")
+    private String sex;
+
+    @ApiModelProperty(value = "出生日期")
+    @TableField("birth")
+    private Long birth;
 
 
 }

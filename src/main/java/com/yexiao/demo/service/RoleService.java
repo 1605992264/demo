@@ -1,6 +1,7 @@
 package com.yexiao.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yexiao.demo.domain.PermissionDO;
 import com.yexiao.demo.domain.RoleDO;
 import com.yexiao.demo.domain.UserDO;
 
@@ -10,15 +11,11 @@ import java.util.List;
  * @author xuhf
  * @date 2020/8/20 10:59
  **/
-public interface UserService extends IService<UserDO> {
+public interface RoleService extends IService<RoleDO> {
 
     /**
-     * 物理删除
+     * 获取用户角色列表
      * */
-    Integer deleteById(String id);
-
-    UserDO login(String username,String password);
-
-    void logout();
+    List<RoleDO> getRoleList(String userId);
 
 }

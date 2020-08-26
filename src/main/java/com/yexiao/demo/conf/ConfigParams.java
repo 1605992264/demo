@@ -15,64 +15,7 @@ import org.springframework.stereotype.Component;
 public class ConfigParams {
 
     private String uploadPath;
-
     private String zipPath;
-
-    private String appId;
-    private String privateKey;
-    private String publicKey;
-
-    private String appIdLYH;
-    private String privateKeyLYH;
-    private String publicKeyLYH;
-
-    public String getAppIdLYH() {
-        return appIdLYH;
-    }
-
-    public void setAppIdLYH(String appIdLYH) {
-        this.appIdLYH = appIdLYH;
-    }
-
-    public String getPrivateKeyLYH() {
-        return privateKeyLYH;
-    }
-
-    public void setPrivateKeyLYH(String privateKeyLYH) {
-        this.privateKeyLYH = privateKeyLYH;
-    }
-
-    public String getPublicKeyLYH() {
-        return publicKeyLYH;
-    }
-
-    public void setPublicKeyLYH(String publicKeyLYH) {
-        this.publicKeyLYH = publicKeyLYH;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
 
     public String getUploadPath() {
         return uploadPath;
