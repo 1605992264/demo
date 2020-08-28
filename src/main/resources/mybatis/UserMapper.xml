@@ -3,40 +3,8 @@
 
 <mapper namespace="com.yexiao.demo.mapper.UserMapper">
 
-	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="com.yexiao.demo.domain.UserDO">
-			<result column="id" property="id"/>
-			<result column="name" property="name"/>
-			<result column="password" property="password"/>
-	</resultMap>
-
-	<!-- 通用查询结果列 -->
-	<sql id="Base_Column_List">
-			sys_user.`id`,
-			sys_user.`name`,
-			sys_user.`password`
-	</sql>
-
-	<sql id="Map_Where_Clause" >
-		<trim prefix="where" prefixOverrides="AND | OR" >
-			<if test="entity.id != null and entity.id != ''">
-				AND sys_user.id = #{entity.id}
-			</if>
-			<if test="entity.name != null and entity.name != ''">
-				AND sys_user.name = #{entity.name}
-			</if>
-			<if test="entity.password != null and entity.password != ''">
-				AND sys_user.password = #{entity.password}
-			</if>
-		</trim>
-	</sql>
-
-	<sql id="leftJion">
-    </sql>
-
     <delete id="removeById">
         delete from sys_user where id = #{value}
     </delete>
-
 
 </mapper>

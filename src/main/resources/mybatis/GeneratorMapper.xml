@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yexiao.demo.base.generator.mapper.GeneratorMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="tableInfo" type="com.yexiao.demo.base.generator.domain.Table">
+    <result column="tableName" property="tableName"/>
+    <result column="tableComment" property="tableComment"/>
+    <collection property="columns" ofType="com.yexiao.demo.base.generator.domain.Column">
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="comment" property="comment"/>
+    </collection>
+</resultMap>
+
+    <select id="generatorCode" resultMap="tableInfo">
+       SELECT
+            a.table_schema,
+            a.table_name tableName,
+            a.table_comment tableComment,
+            column_name NAME,
+            data_type type,
+            column_comment COMMENT
+        FROM
+            information_schema.TABLES a
+            JOIN information_schema.COLUMNS b ON a.table_name = b.table_name
+            AND a.table_schema = b.table_schema
+        WHERE
+            a.table_schema = ( SELECT DATABASE ( ) )
+            AND a.table_name = #{value}
+    </select>
+
+</mapper>

@@ -1,7 +1,6 @@
 package com.yexiao.demo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yexiao.demo.domain.RoleDO;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
@@ -10,10 +9,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author xuhf
@@ -27,11 +22,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
      * 物理删除
      * */
     @Override
-    public Integer deleteById(String id) {
-        return baseMapper.removeById(id);
+    public boolean deleteById(String id) {
+        if(baseMapper.removeById(id) >= 1){
+            return true;
+        }
+        return false;
     }
-
-
 
     @Override
     public UserDO login(String username, String password) {
@@ -50,6 +46,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
     }
-
 
 }

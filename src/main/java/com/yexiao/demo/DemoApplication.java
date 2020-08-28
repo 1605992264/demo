@@ -10,8 +10,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author xuhf
  * */
 @SpringBootApplication
-@MapperScan({"com.yexiao.demo.mapper"})
+@MapperScan({"com.ye`xiao.demo.mapper","com.yexiao.demo.**.mapper"})
 public class DemoApplication extends SpringBootServletInitializer {
+
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
         System.out.println("ヾ(◍°∇°◍)ﾉﾞ   启动成功 ");

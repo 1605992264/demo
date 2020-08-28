@@ -1,9 +1,7 @@
 package com.yexiao.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yexiao.demo.domain.PermissionDO;
 import com.yexiao.demo.domain.RoleDO;
-import com.yexiao.demo.domain.UserDO;
 
 import java.util.List;
 

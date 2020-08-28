@@ -3,7 +3,6 @@ package com.yexiao.demo.base.domain;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import java.io.Serializable;
 
 /**
