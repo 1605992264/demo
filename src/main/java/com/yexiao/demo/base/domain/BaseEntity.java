@@ -32,9 +32,4 @@ public class BaseEntity implements Serializable {
     @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE)
     private Long updateDate;
 
-    @ApiModelProperty(value = "删除标识")
-    @TableField(value = "delete_flag")
-    @TableLogic(value = "0",delval = "1")
-    private Integer deleteFlag;
-
 }

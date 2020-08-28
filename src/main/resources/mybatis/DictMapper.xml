@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yexiao.demo.mapper.DictMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yexiao.demo.domain.DictDO">
+            <result column="create_by" property="createBy"/>
+            <result column="create_date" property="createDate"/>
+            <result column="del_flag" property="delFlag"/>
+            <result column="description" property="description"/>
+            <result column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="parent_id" property="parentId"/>
+            <result column="remarks" property="remarks"/>
+            <result column="sort" property="sort"/>
+            <result column="type" property="type"/>
+            <result column="update_by" property="updateBy"/>
+            <result column="update_date" property="updateDate"/>
+            <result column="value" property="value"/>
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+            sys_dict.`create_by`,
+            sys_dict.`create_date`,
+            sys_dict.`del_flag`,
+            sys_dict.`description`,
+            sys_dict.`id`,
+            sys_dict.`name`,
+            sys_dict.`parent_id`,
+            sys_dict.`remarks`,
+            sys_dict.`sort`,
+            sys_dict.`type`,
+            sys_dict.`update_by`,
+            sys_dict.`update_date`,
+            sys_dict.`value`
+	</sql>
+
+	<sql id="Map_Where_Clause" >
+		<trim prefix="where" prefixOverrides="AND" >
+                <if test="where.createBy != null and where.createBy != ''">
+                    AND sys_dict.`create_by` = #{where.createBy}
+                </if>
+                <if test="where.createDate != null and where.createDate != ''">
+                    AND sys_dict.`create_date` = #{where.createDate}
+                </if>
+                <if test="where.delFlag != null and where.delFlag != ''">
+                    AND sys_dict.`del_flag` = #{where.delFlag}
+                </if>
+                <if test="where.description != null and where.description != ''">
+                    AND sys_dict.`description` = #{where.description}
+                </if>
+                <if test="where.id != null and where.id != ''">
+                    AND sys_dict.`id` = #{where.id}
+                </if>
+                <if test="where.name != null and where.name != ''">
+                    AND sys_dict.`name` = #{where.name}
+                </if>
+                <if test="where.parentId != null and where.parentId != ''">
+                    AND sys_dict.`parent_id` = #{where.parentId}
+                </if>
+                <if test="where.remarks != null and where.remarks != ''">
+                    AND sys_dict.`remarks` = #{where.remarks}
+                </if>
+                <if test="where.sort != null and where.sort != ''">
+                    AND sys_dict.`sort` = #{where.sort}
+                </if>
+                <if test="where.type != null and where.type != ''">
+                    AND sys_dict.`type` = #{where.type}
+                </if>
+                <if test="where.updateBy != null and where.updateBy != ''">
+                    AND sys_dict.`update_by` = #{where.updateBy}
+                </if>
+                <if test="where.updateDate != null and where.updateDate != ''">
+                    AND sys_dict.`update_date` = #{where.updateDate}
+                </if>
+                <if test="where.value != null and where.value != ''">
+                    AND sys_dict.`value` = #{where.value}
+                </if>
+		</trim>
+	</sql>
+
+	<sql id="leftJion">
+    </sql>
+
+
+</mapper>

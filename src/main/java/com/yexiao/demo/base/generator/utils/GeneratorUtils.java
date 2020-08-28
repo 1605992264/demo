@@ -1,15 +1,11 @@
 package com.yexiao.demo.base.generator.utils;
 
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.ZipUtil;
 import com.yexiao.demo.base.generator.domain.Column;
 import com.yexiao.demo.base.generator.domain.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.Version;
-import sun.applet.Main;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;

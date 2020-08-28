@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @date ${DATE} ${TIME}
 **/
 @Mapper
-public interface ${className}Dao extends BaseMapper<${className}DO> {
+public interface ${className}Mapper extends BaseMapper<${className}DO> {
 
 
 }

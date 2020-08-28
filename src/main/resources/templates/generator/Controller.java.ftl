@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 * @date ${DATE} ${TIME}
 **/
 @RestController
-@RequestMapping("user")
+@RequestMapping("${className}")
 public class ${className}Controller {
 
     @Autowired

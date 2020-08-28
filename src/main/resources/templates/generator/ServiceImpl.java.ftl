@@ -1,5 +1,6 @@
 package ${packageName!"com.yexiao.demo"}.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import ${packageName!"com.yexiao.demo"}.domain.${className}DO;
 import ${packageName!"com.yexiao.demo"}.mapper.${className}Mapper;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 **/
 @Service
 @Transactional(rollbackFor = Exception.class)
-public interface ${className}ServiceImpl extends IService<${className}DO> {
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper,${className}DO> implements ${className}Service {
 
 
 }

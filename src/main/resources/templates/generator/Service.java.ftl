@@ -1,7 +1,7 @@
 package ${packageName!"com.yexiao.demo"}.service;
 
-import com.yexiao.demo.base.BaseDao;
-import ${packageName!"com.yexiao.demo"}.domain${className}DO;
+import com.baomidou.mybatisplus.extension.service.IService;
+import ${packageName!"com.yexiao.demo"}.domain.${className}DO;
 
 /**
 * @author xuhf
