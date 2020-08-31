@@ -55,18 +55,6 @@ public class ShiroConfig {
     }
 
     /**
-     * @param password 未加密的密码
-     * @param salt 混淆值 可以任意
-     * @return 返回新的加密了的密码
-     * */
-    public String newPassword(String password,String salt){
-        String newPassword = new SimpleHash("md5", password,
-                salt, 2).toHex();
-        return newPassword;
-    }
-
-
-    /**
      * 开启shiro 注解支持. 使以下注解能够生效 :
      * 需要认证 {@link org.apache.shiro.authz.annotation.RequiresAuthentication RequiresAuthentication}
      * 需要用户 {@link org.apache.shiro.authz.annotation.RequiresUser RequiresUser}

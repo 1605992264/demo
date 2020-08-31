@@ -1,5 +1,6 @@
 package com.yexiao.demo.conf.shiro;
 
+import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.domain.PermissionDO;
 import com.yexiao.demo.domain.RoleDO;
 import com.yexiao.demo.domain.UserDO;
@@ -68,15 +69,13 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户的输入的账号.
         String username = (String)token.getPrincipal();
-        //通过username从数据库中查找 User对象，如果找到，没找到.
-        //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-        //从数据库中查询user User userInfo = userService.getByName(username);
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         UserDO user = ((List<UserDO>) userService.listByMap(map)).get(0);
         if(user == null){
             return null;
         }
+        user.setToken(UserUtils.newToken(user.getPassword(),user.getName()));
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 // 用户名（对象）
                 user,

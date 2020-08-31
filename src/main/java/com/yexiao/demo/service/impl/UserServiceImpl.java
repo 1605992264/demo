@@ -33,10 +33,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     public UserDO login(String username, String password) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         Subject subject = SecurityUtils.getSubject();
-//        UserDO userDO = (UserDO) subject.getPrincipal();
-//        if(userDO != null){
-//
-//        }
+        UserDO userDO = (UserDO) subject.getPrincipal();
+        if(userDO != null){
+            throw new RuntimeException("请先退出原用户");
+        }
         subject.login(token);
         return (UserDO) subject.getPrincipal();
     }

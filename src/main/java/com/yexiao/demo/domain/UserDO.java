@@ -42,5 +42,8 @@ public class UserDO extends BaseEntity {
     @TableField("birth")
     private Long birth;
 
+    @ApiModelProperty(value = "token")
+    @TableField(exist = false)
+    private String token;
 
 }

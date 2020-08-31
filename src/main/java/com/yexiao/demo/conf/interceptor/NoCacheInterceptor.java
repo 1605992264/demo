@@ -9,6 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author xuhf
+ * @date 2020/8/26 15:36
+ * */
 @Configuration
 public class NoCacheInterceptor implements WebMvcConfigurer {
 

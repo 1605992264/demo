@@ -5,10 +5,9 @@
 3.websocket
 4.mybatis + mybatis-plus
 5.shiro安全验证
+6.使用freeMaker自动生成代码
 7.跨域处理
 8.声明式事务
 9.基于spring的自定义注解
 10.阿里支付
 11.微信公众号
-//未完成
-使用freeMaker自动生成代码
