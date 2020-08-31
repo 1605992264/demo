@@ -47,4 +47,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         subject.logout();
     }
 
+    @Override
+    public boolean verificationUserName(String name) {
+        Integer integer = baseMapper.verificationUserName(name);
+        if(integer == null || integer.equals(0)){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean register(UserDO userDO) {
+        boolean flag = verificationUserName(userDO.getName());
+        if(flag){
+            int insert = baseMapper.insert(userDO);
+            if (insert > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

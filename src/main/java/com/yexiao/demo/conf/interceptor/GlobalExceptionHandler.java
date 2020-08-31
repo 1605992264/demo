@@ -1,5 +1,6 @@
 package com.yexiao.demo.conf.interceptor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,7 @@ import java.util.Map;
  * 全局异常处理器
  * 只能拦截service层 所以业务逻辑全部放在service层
  **/
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -42,6 +44,7 @@ public class GlobalExceptionHandler {
         map.put("message",exception.getMessage());
         map.put("errorMethod",exception.getStackTrace()[0]);
         map.put("errorMsg",exception.toString());
+        log.error("报错的方法: " + exception.getStackTrace()[0].toString());
         return map;
     }
 }

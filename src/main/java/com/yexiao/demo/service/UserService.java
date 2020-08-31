@@ -18,4 +18,11 @@ public interface UserService extends IService<UserDO> {
 
     void logout();
 
+    /**
+     * 验证登录名唯一性
+     * */
+    boolean verificationUserName(String name);
+
+    boolean register(UserDO userDO);
+
 }

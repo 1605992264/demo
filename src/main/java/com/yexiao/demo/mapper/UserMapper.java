@@ -17,4 +17,10 @@ public interface UserMapper extends BaseMapper<UserDO> {
      * */
     Integer removeById(String id);
 
+    /**
+     * 验证用户名唯一性
+     * */
+    Integer verificationUserName(String name);
+
+
 }

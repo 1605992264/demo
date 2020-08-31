@@ -24,6 +24,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/register")
+    public R register(UserDO userDO){
+        if( userService.register(userDO) ){
+            return R.success("注册成功");
+        }
+        return R.error("注册失败");
+    }
+
     @MyAspect(message = "列表")
     @RequestMapping("/list")
     public R list(Page<UserDO> page){
