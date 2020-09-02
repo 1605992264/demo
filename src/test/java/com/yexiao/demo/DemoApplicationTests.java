@@ -1,11 +1,6 @@
 package com.yexiao.demo;
 
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
-import com.yexiao.demo.base.extra.alipay.MyAlipayUtils;
-import com.yexiao.demo.base.extra.weixin.PublicNumberUtils;
-import com.yexiao.demo.base.utils.annotation.MyAspect;
+import com.yexiao.demo.base.extra.email.EmailUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +14,11 @@ import java.io.File;
 public class DemoApplicationTests {
 
     @Autowired
-    private PublicNumberUtils publicNumberUtils;
-
-    @Autowired
-    private MyAlipayUtils alipayUtils;
+    private EmailUtils emailUtils;
 
     @Test
     public void contextLoads() {
-        File file = alipayUtils.generatePayQRCode(IdUtil.fastSimpleUUID(),"0.01","ces1","5m");
+
     }
 
 }

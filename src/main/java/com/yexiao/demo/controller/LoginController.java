@@ -1,6 +1,7 @@
 package com.yexiao.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,14 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping("/login")
-        public String login(@RequestParam String username, @RequestParam String password){
-        return JSONObject.toJSONString(userService.login(username,password));
+    public R login(@RequestParam String username, @RequestParam String password){
+        return R.success(userService.login(username,password));
     }
 
     @RequestMapping("/logout")
-    public String logout(){
+    public R logout(){
         userService.logout();
-        return JSONObject.toJSONString("登出");
+        return R.success("登出成功");
     }
 
 }

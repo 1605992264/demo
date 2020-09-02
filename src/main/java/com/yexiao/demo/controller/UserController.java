@@ -1,8 +1,11 @@
 package com.yexiao.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yexiao.demo.base.domain.BasePage;
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.base.utils.annotation.MyAspect;
@@ -34,8 +37,8 @@ public class UserController {
 
     @MyAspect(message = "列表")
     @RequestMapping("/list")
-    public R list(Page<UserDO> page){
-        IPage<UserDO> list = userService.page(page, null);
+    public R list(BasePage<UserDO> basePage, UserDO entity){
+        IPage<UserDO> list = userService.page(basePage.newMybatisPlusPage(),null);
         return R.success(list);
     }
 
