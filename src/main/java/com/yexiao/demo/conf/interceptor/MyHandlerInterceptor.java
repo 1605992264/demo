@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author xuhf
+ * @date 2020/8/26 15:36
+ * */
 @Component
 public class MyHandlerInterceptor implements HandlerInterceptor {
 

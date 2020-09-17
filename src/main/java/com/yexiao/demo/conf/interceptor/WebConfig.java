@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 /**
+ * @author xuhf
+ * @date 2020/8/26 15:36
  * 拦截配置
  * */
 @Configuration

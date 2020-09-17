@@ -1,5 +1,6 @@
 package com.yexiao.demo;
 
+import com.yexiao.demo.base.extra.alipay.MyAlipayUtils;
 import com.yexiao.demo.base.extra.email.EmailUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +13,6 @@ import java.io.File;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class DemoApplicationTests {
-
-    @Autowired
-    private EmailUtils emailUtils;
 
     @Test
     public void contextLoads() {

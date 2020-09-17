@@ -3,6 +3,9 @@ package com.yexiao.demo.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yexiao.demo.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -22,5 +25,8 @@ public interface UserMapper extends BaseMapper<UserDO> {
      * */
     Integer verificationUserName(String name);
 
+    UserDO findUserInfo(@Param("userId") String userId);
+
+    List<UserDO> findUserInfo();
 
 }
