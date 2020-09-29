@@ -10,16 +10,14 @@ import java.util.concurrent.*;
  **/
 public class MyScheduleExecutorService  {
 
-    private static ThreadLocal<ScheduledFuture> threadLocal = new ThreadLocal<>();
-
     private static ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(10);
 
     /**
      * @param runnable 任务
      * @param seconds 每隔几秒执行
-     * 执行定时任务
+     * 循环执行定时任务
      * */
-    public static ScheduledFuture task(Runnable runnable,long seconds){
+    public static ScheduledFuture loopTask(Runnable runnable,long seconds){
         ScheduledFuture<?> schedule = scheduled.scheduleWithFixedDelay (new Runnable() {
             @Override
             public void run() {
@@ -27,15 +25,16 @@ public class MyScheduleExecutorService  {
             }
 
         },0, seconds, TimeUnit.SECONDS);
-        threadLocal.set(schedule);
         return schedule;
     }
 
     /**
-     * 终止定时任务
+     * 单次延迟实现
+     * @param runnable 要执行的任务
+     * @param seconds 延迟时间（秒）
      * */
-    public static Boolean cancel(){
-        return threadLocal.get().cancel(true);
+    public static void singleTask(Runnable runnable,long seconds){
+        scheduled.schedule(runnable,seconds,TimeUnit.SECONDS);
     }
 
 

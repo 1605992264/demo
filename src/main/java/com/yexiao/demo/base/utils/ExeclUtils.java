@@ -16,17 +16,30 @@ import java.util.List;
 @Slf4j
 public class ExeclUtils {
 
+    /**
+     * 根据sheet位置获取数据
+     * @param sheetNum sheet位置
+     * @param workbook 工作簿
+     * */
     public static List<JSONObject> getSheetData(Integer sheetNum, Workbook workbook){
         List<JSONObject> jsonObjectList = new LinkedList<>();
         Sheet sheet = workbook.getSheetAt(sheetNum);
+        if(sheet == null){
+            throw new RuntimeException("没有页数为:" + sheetNum + " 这个sheet");
+        }
         for( int nowRow = 1 ; nowRow <= sheet.getLastRowNum(); nowRow++){
-            JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(0,sheet));
+            JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(sheet));
             log.info(rowData.toJSONString());
             jsonObjectList.add(rowData);
         }
         return jsonObjectList;
     }
 
+    /**
+     * 根据sheet名称获取数据
+     * @param sheetName sheet名称
+     * @param workbook 工作簿
+     * */
     public static List<JSONObject> getSheetData(String sheetName, Workbook workbook){
         List<JSONObject> jsonObjectList = new LinkedList<>();
         Sheet sheet = workbook.getSheet(sheetName);
@@ -34,7 +47,7 @@ public class ExeclUtils {
             throw new RuntimeException("没有名字叫:" + sheetName + " 这个sheet");
         }
         for( int nowRow = 1 ; nowRow <= sheet.getLastRowNum(); nowRow++){
-            JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(0,sheet));
+            JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(sheet));
             log.info(rowData.toJSONString());
             if(rowData.size() != 0){
                 jsonObjectList.add(rowData);
@@ -42,7 +55,6 @@ public class ExeclUtils {
         }
         return jsonObjectList;
     }
-
 
     public static JSONObject getRowData(Integer nowRow, Sheet sheet, List<String> title){
         JSONObject jsonObject = new JSONObject();
@@ -60,9 +72,12 @@ public class ExeclUtils {
         return jsonObject;
     }
 
-    public static List<String> getRowTitle(Integer nowRow, Sheet sheet){
+    /**
+     * 获取标题 默认第一行
+     * */
+    public static List<String> getRowTitle(Sheet sheet){
         List<String> title = new LinkedList<>();
-        Row row = sheet.getRow(nowRow);
+        Row row = sheet.getRow(0);
         for( int nowCell = 0; nowCell < row.getLastCellNum() ; nowCell ++){
             Cell cell = row.getCell(nowCell);
             if(!"".equals(getCellValue(cell))) {

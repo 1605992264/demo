@@ -1,5 +1,7 @@
 package com.yexiao.demo.base.utils.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 /**
@@ -13,6 +15,8 @@ public @interface MyAspect {
     /**
      * 完成基于spring AOP 的自定义注解
      * */
+    @AliasFor("message")
     String value() default "";
+    @AliasFor("value")
     String message() default "";
 }

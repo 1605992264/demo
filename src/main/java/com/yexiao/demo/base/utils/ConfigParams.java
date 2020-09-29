@@ -1,4 +1,4 @@
-package com.yexiao.demo.conf;
+package com.yexiao.demo.base.utils;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,22 +14,15 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix="param")
 public class ConfigParams {
 
-    private String uploadPath;
-    private String zipPath;
+    private static String uploadPath;
+    private static String zipPath;
 
-    public String getUploadPath() {
+    public static String getUploadPath() {
         return uploadPath;
     }
 
     public void setUploadPath(String uploadPath) {
-        this.uploadPath = uploadPath;
+        uploadPath = uploadPath;
     }
 
-    public String getZipPath() {
-        return zipPath;
-    }
-
-    public void setZipPath(String zipPath) {
-        this.zipPath = zipPath;
-    }
 }

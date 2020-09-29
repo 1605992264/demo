@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.base.utils.cache.CacheUtils;
 import com.yexiao.demo.domain.DictDO;
+import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.DictService;
+import com.yexiao.demo.service.RoleService;
+import com.yexiao.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +29,7 @@ public class TestController {
 
     @RequestMapping("/list")
     public R list(Page<DictDO> page){
-        IPage<DictDO> list = dictService.page(page, null);
+        IPage<DictDO> list = dictService.list(page, RoleService.class);
         return R.success(list);
     }
 

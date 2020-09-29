@@ -16,6 +16,7 @@ public class ReflectionUtils {
 
     /**
      * 基于反射获取对象的值
+     * 不能获取父类的值
      * */
     public static Object getAttributes(Object o,String attributesName){
         Class<?> aClass = o.getClass();
@@ -31,6 +32,7 @@ public class ReflectionUtils {
 
     /**
      * 基于反射设置对象的值
+     * 不能设置父类的值
      * */
     public static Object setAttributes(Object o,String attributesName,Object value){
         Class<?> aClass = o.getClass();

@@ -1,5 +1,8 @@
 package com.yexiao.demo.base.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,6 +17,9 @@ public class FileUtils {
 
     /**
      * 文件下载
+     * @param file 文件
+     * @param response 响应
+     * @param fileName 文件名
      * */
     public static void download(HttpServletResponse response, String fileName, InputStream file) throws Exception {
         response.setContentType("application/octet-stream");
@@ -30,10 +36,5 @@ public class FileUtils {
         out.close();
         file.close();
     }
-
-
-
-
-
 
 }

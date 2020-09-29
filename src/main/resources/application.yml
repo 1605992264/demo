@@ -1,5 +1,4 @@
 # 主配置文件 可用于通用的属性
-
 spring:
   jackson:
     time-zone: GMT+8

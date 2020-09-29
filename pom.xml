@@ -6,7 +6,7 @@
     <groupId>com.yexiao</groupId>
     <artifactId>test</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <description>Demo project for Spring Boot</description>
 
@@ -29,6 +29,13 @@
 <!--                </exclusion>-->
 <!--            </exclusions>-->
         </dependency>
+        <!--war包部署需要-->
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>javax.servlet-api</artifactId>-->
+<!--            <version>3.1.0</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -163,13 +170,7 @@
             <artifactId>druid</artifactId>
             <version>1.0.28</version>
         </dependency>
-        <!--war包部署需要-->
-<!--         <dependency>-->
-<!--             <groupId>javax.servlet</groupId>-->
-<!--             <artifactId>javax.servlet-api</artifactId>-->
-<!--             <version>3.1.0</version>-->
-<!--             <scope>provided</scope>-->
-<!--         </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>
@@ -225,6 +226,22 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <!--war包导入外部jar包时使用-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-war-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <webResources>-->
+<!--                        <resource>-->
+<!--                            <directory>src/main/resources/lib</directory>-->
+<!--                            <targetPath>WEB-INF/lib/</targetPath>-->
+<!--                            <includes>-->
+<!--                                <include>**/*.jar</include>-->
+<!--                            </includes>-->
+<!--                        </resource>-->
+<!--                    </webResources>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
