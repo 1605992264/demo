@@ -66,7 +66,7 @@ param:
       appId: wxfcb53e10f150b957
       appSecret: a1e38469c1d3d3284e020ccb25e62014
   email:
-    host: smtp.qq.com
-    from: 你的qq号@qq.com
-    username: 你的qq号
-    password: izrmuycyewejfgha
+    host: smtp.qq.com   # smtp.163.com
+    from: 你的qq号@qq.com  # xxx@163.com
+    username: 你的qq号 # xxx@163.com
+    password: izrmuycyewejfgha # 163的邮箱授权码
