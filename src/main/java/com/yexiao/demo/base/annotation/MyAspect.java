@@ -1,4 +1,4 @@
-package com.yexiao.demo.base.utils.annotation;
+package com.yexiao.demo.base.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 

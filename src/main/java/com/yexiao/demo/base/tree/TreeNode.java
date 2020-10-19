@@ -1,4 +1,4 @@
-package com.yexiao.demo.base.utils.tree;
+package com.yexiao.demo.base.tree;
 
 import lombok.Data;
 

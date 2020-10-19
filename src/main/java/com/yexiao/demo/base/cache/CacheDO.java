@@ -1,4 +1,4 @@
-package com.yexiao.demo.base.utils.cache;
+package com.yexiao.demo.base.cache;
 
 /**
  * @author xuhf

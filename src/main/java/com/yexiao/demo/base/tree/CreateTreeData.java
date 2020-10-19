@@ -1,6 +1,4 @@
-package com.yexiao.demo.base.utils.tree;
-
-import com.alibaba.fastjson.JSONArray;
+package com.yexiao.demo.base.tree;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

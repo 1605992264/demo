@@ -1,4 +1,4 @@
-package com.yexiao.demo.base.utils.annotation;
+package com.yexiao.demo.base.annotation;
 
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,7 +20,7 @@ public class StatisticsTimeAspect {
 
     private long time;
 
-    @Pointcut("@annotation(com.yexiao.demo.base.utils.annotation.MyAspect)")
+    @Pointcut("@annotation(com.yexiao.demo.base.annotation.MyAspect)")
     public void addAdvice(){
 
     }

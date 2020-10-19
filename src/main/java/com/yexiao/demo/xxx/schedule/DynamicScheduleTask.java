@@ -1,4 +1,4 @@
-package com.yexiao.demo.base.utils.schedule;
+package com.yexiao.demo.xxx.schedule;
 
 import cn.hutool.core.util.StrUtil;
 import org.apache.ibatis.annotations.Mapper;

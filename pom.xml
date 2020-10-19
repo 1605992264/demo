@@ -210,6 +210,7 @@
     </dependencies>
 
     <build>
+        <finalName>test</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
