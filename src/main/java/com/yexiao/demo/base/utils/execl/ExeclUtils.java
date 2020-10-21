@@ -1,20 +1,20 @@
-package com.yexiao.demo.base.utils;
+package com.yexiao.demo.base.utils.execl;
 
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
-
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xuhf
  * @date 2020/9/23 11:20
  **/
-@Slf4j
 public class ExeclUtils {
+
+    private static List<String> titleName = new ArrayList<>();
+
 
     /**
      * 根据sheet位置获取数据
@@ -29,7 +29,6 @@ public class ExeclUtils {
         }
         for( int nowRow = 1 ; nowRow <= sheet.getLastRowNum(); nowRow++){
             JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(sheet));
-            log.info(rowData.toJSONString());
             jsonObjectList.add(rowData);
         }
         return jsonObjectList;
@@ -48,7 +47,6 @@ public class ExeclUtils {
         }
         for( int nowRow = 1 ; nowRow <= sheet.getLastRowNum(); nowRow++){
             JSONObject rowData = getRowData(nowRow,sheet,getRowTitle(sheet));
-            log.info(rowData.toJSONString());
             if(rowData.size() != 0){
                 jsonObjectList.add(rowData);
             }
@@ -65,7 +63,6 @@ public class ExeclUtils {
         for( int nowCell = 0; nowCell < row.getLastCellNum() ; nowCell ++){
             Cell cell = row.getCell(nowCell);
             if(!"".equals(getCellValue(cell))) {
-                log.info(getCellValue(cell));
                 jsonObject.put(title.get(nowCell), getCellValue(cell));
             }
         }
@@ -73,9 +70,28 @@ public class ExeclUtils {
     }
 
     /**
+     * 设置标题 把中文替换成英文
+     * @param titleName 要替换的内容
+     * @param sheet 要替换的sheet
+     * */
+    public static void setTitleName(Map<String,String> titleName,Sheet sheet){
+        if(sheet == null){
+            return;
+        }
+        ExeclUtils.titleName.clear();
+        List<String> rowTitle = getRowTitle(sheet);
+        for(String name : rowTitle){
+            ExeclUtils.titleName.add(titleName.get(name));
+        }
+    }
+
+    /**
      * 获取标题 默认第一行
      * */
     public static List<String> getRowTitle(Sheet sheet){
+        if(ExeclUtils.titleName.size() != 0){
+            return ExeclUtils.titleName;
+        }
         List<String> title = new LinkedList<>();
         Row row = sheet.getRow(0);
         for( int nowCell = 0; nowCell < row.getLastCellNum() ; nowCell ++){
@@ -97,7 +113,8 @@ public class ExeclUtils {
         }
         //把数字当成String来读，避免出现1读成1.0的情况
         if(CellType.NUMERIC.equals(cell.getCellTypeEnum())){
-            cell.setCellType(CellType.STRING);
+
+
         }
         //判断数据的类型
         switch (cell.getCellTypeEnum()){

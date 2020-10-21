@@ -22,8 +22,6 @@ public class TestController {
     @Autowired
     private DictService dictService;
 
-    @Autowired
-    private CacheUtils cacheUtils;
 
     @RequestMapping("/list")
     public R list(Page<DictDO> page){
