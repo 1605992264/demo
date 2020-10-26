@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yexiao.demo.mapper.OfficeMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yexiao.demo.domain.OfficeDO">
+            <result column="id" property="id"/>
+            <result column="parent_id" property="parentId"/>
+            <result column="parent_ids" property="parentIds"/>
+            <result column="name" property="name"/>
+            <result column="sort" property="sort"/>
+            <result column="create_by" property="createBy"/>
+            <result column="create_date" property="createDate"/>
+            <result column="update_by" property="updateBy"/>
+            <result column="update_date" property="updateDate"/>
+            <result column="remarks" property="remarks"/>
+            <result column="delete_flag" property="deleteFlag"/>
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+            sys_office.`id`,
+            sys_office.`parent_id`,
+            sys_office.`parent_ids`,
+            sys_office.`name`,
+            sys_office.`sort`,
+            sys_office.`create_by`,
+            sys_office.`create_date`,
+            sys_office.`update_by`,
+            sys_office.`update_date`,
+            sys_office.`remarks`,
+            sys_office.`delete_flag`
+	</sql>
+
+	<sql id="Map_Where_Clause" >
+		<trim prefix="where" prefixOverrides="AND" >
+                <if test="where.id != null and where.id != ''">
+                    AND sys_office.`id` = #{where.id}
+                </if>
+                <if test="where.parentId != null and where.parentId != ''">
+                    AND sys_office.`parent_id` = #{where.parentId}
+                </if>
+                <if test="where.parentIds != null and where.parentIds != ''">
+                    AND sys_office.`parent_ids` = #{where.parentIds}
+                </if>
+                <if test="where.name != null and where.name != ''">
+                    AND sys_office.`name` = #{where.name}
+                </if>
+                <if test="where.sort != null and where.sort != ''">
+                    AND sys_office.`sort` = #{where.sort}
+                </if>
+                <if test="where.createBy != null and where.createBy != ''">
+                    AND sys_office.`create_by` = #{where.createBy}
+                </if>
+                <if test="where.createDate != null and where.createDate != ''">
+                    AND sys_office.`create_date` = #{where.createDate}
+                </if>
+                <if test="where.updateBy != null and where.updateBy != ''">
+                    AND sys_office.`update_by` = #{where.updateBy}
+                </if>
+                <if test="where.updateDate != null and where.updateDate != ''">
+                    AND sys_office.`update_date` = #{where.updateDate}
+                </if>
+                <if test="where.remarks != null and where.remarks != ''">
+                    AND sys_office.`remarks` = #{where.remarks}
+                </if>
+                <if test="where.deleteFlag != null and where.deleteFlag != ''">
+                    AND sys_office.`delete_flag` = #{where.deleteFlag}
+                </if>
+		</trim>
+	</sql>
+
+    <delete id="removeById">
+        delete from sys_office where id = #{value}
+    </delete>
+
+	<sql id="leftJion">
+    </sql>
+
+</mapper>

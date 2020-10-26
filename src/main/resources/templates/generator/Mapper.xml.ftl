@@ -27,8 +27,11 @@
 		</trim>
 	</sql>
 
-	<sql id="leftJion">
+    <sql id="leftJion">
     </sql>
 
+    <delete id="removeById">
+        delete from ${tableName} where id = ${r"#{"}value${r"}"}
+    </delete>
 
 </mapper>

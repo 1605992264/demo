@@ -1,5 +1,7 @@
 package com.yexiao.demo.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yexiao.demo.base.domain.BasePage;
 import com.yexiao.demo.base.domain.R;
@@ -8,8 +10,7 @@ import com.yexiao.demo.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xuhf
@@ -22,7 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public R register(UserDO userDO){
         if( userService.register(userDO) ){
             return R.success("注册成功");
@@ -30,31 +31,29 @@ public class UserController {
         return R.error("注册失败");
     }
 
-    @RequestMapping("/list")
-    public R list(BasePage<UserDO> basePage, UserDO entity){
-        IPage<UserDO> list = userService.page(basePage.newMybatisPlusPage(),null);
+    @GetMapping("/list")
+    public R list(BasePage<UserDO> basePage, UserDO userDO){
+        IPage<UserDO> list = userService.page(basePage.newMybatisPlusPage(),userDO);
         return R.success(list);
     }
 
-
-    @RequestMapping("/get")
+    @GetMapping("/get")
     public R list(String id){
         UserDO user = userService.getById(id);
         return R.success(user);
     }
 
-
     @RequiresPermissions("edit")
-    @RequestMapping("/add")
+    @PostMapping("/update")
     public R add(UserDO userDO){
-        if( userService.save(userDO)) {
-            return R.success("新增成功");
+        if( userService.updateById(userDO)) {
+            return R.success("更新成功");
         }
-        return R.error("新增失败");
+        return R.error("更新失败");
     }
 
     @RequiresRoles("admin")
-    @RequestMapping("/remove")
+    @PostMapping("/remove")
     public R remove(String id){
         if(userService.removeById(id)){
             return R.success("逻辑删除成功");
@@ -63,7 +62,7 @@ public class UserController {
     }
 
     @RequiresRoles("admin")
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public R delete(String id){
         if(userService.deleteById(id)){
             return R.success("物理删除成功");

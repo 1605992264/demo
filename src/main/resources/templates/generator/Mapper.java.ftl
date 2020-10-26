@@ -11,5 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ${className}Mapper extends BaseMapper<${className}DO> {
 
-
+    /**
+    * 物理删除
+    * */
+    Integer removeById(String id);
 }

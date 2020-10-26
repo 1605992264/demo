@@ -1,7 +1,7 @@
-package ${packageName!"com.yexiao.demo"}.service.impl;
+package com.yexiao.demo.controller;
 
-import ${packageName!"com.yexiao.demo"}.service.${className}Service;
-import ${packageName!"com.yexiao.demo"}.domain.${className}DO;
+import com.yexiao.demo.service.OfficeService;
+import com.yexiao.demo.domain.OfficeDO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yexiao.demo.base.domain.BasePage;
 import com.yexiao.demo.base.domain.R;
@@ -13,40 +13,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
 * @author xuhf
-* @date ${DATE} ${TIME}
+* @date 2020-10-26 15:45:31.443
 **/
 @RestController
-@RequestMapping("${className?uncap_first}")
-public class ${className}Controller {
+@RequestMapping("office")
+public class OfficeController {
 
     @Autowired
-    private ${className}Service ${className?uncap_first}Service;
+    private OfficeService officeService;
 
 
     @GetMapping("/list")
-    public R list(BasePage<${className}DO> basePage, ${className}DO ${className?uncap_first}DO){
-        IPage<${className}DO> list = ${className?uncap_first}Service.page(basePage.newMybatisPlusPage(),${className?uncap_first}DO);
+    public R list(BasePage<OfficeDO> basePage, OfficeDO officeDO){
+        IPage<OfficeDO> list = officeService.page(basePage.newMybatisPlusPage(),officeDO);
         return R.success(list);
     }
 
     @GetMapping("/get")
     public R list(String id){
-        ${className}DO ${className?uncap_first} = ${className?uncap_first}Service.getById(id);
-        return R.success(${className?uncap_first});
+        OfficeDO office = officeService.getById(id);
+        return R.success(office);
     }
 
     @PostMapping("/save")
-    public R save(${className}DO ${className?uncap_first}DO){
-        if(${className?uncap_first}Service.save(${className?uncap_first}DO)){
+    public R save(OfficeDO officeDO){
+        if(officeService.save(officeDO)){
             return R.success("保存成功");
         }
         return R.error("保存失败");
     }
 
-
     @PostMapping("/update")
-    public R add(${className}DO ${className?uncap_first}DO){
-        if( ${className?uncap_first}Service.updateById(${className?uncap_first}DO)) {
+    public R update(OfficeDO officeDO){
+        if( officeService.updateById(officeDO)) {
             return R.success("更新成功");
         }
         return R.error("更新失败");
@@ -54,7 +53,7 @@ public class ${className}Controller {
 
     @PostMapping("/remove")
     public R remove(String id){
-        if(${className?uncap_first}Service.removeById(id)){
+        if(officeService.removeById(id)){
             return R.success("逻辑删除成功");
         }
         return R.error("逻辑删除失败");
@@ -62,7 +61,7 @@ public class ${className}Controller {
 
     @PostMapping("/delete")
     public R delete(String id){
-        if(${className?uncap_first}Service.deleteById(id)){
+        if(officeService.deleteById(id)){
             return R.success("物理删除成功");
         }
         return R.error("物理删除失败");

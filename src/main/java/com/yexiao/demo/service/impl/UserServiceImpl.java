@@ -1,5 +1,8 @@
 package com.yexiao.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
@@ -22,6 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
     /**
+     * 查询列表
+     * @return*/
+    @Override
+    public IPage<UserDO> page(IPage<UserDO> basePage, UserDO userDO){
+        QueryWrapper<UserDO> wrapper = new QueryWrapper(userDO);
+        IPage<UserDO> userDOIPage = baseMapper.selectPage(basePage, wrapper);
+        return userDOIPage;
+    }
+
+    /**
      * 物理删除
      * */
     @Override
@@ -34,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public UserDO login(String username, String password) {
-        // 由前端加密更为安全
+        // 由前端一起加密更为安全
         String newPassword = UserUtils.newPassword(password, username);
         // 登入
         UsernamePasswordToken token = new UsernamePasswordToken(username,newPassword);

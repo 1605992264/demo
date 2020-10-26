@@ -1,5 +1,6 @@
 package com.yexiao.demo.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yexiao.demo.domain.UserDO;
 
@@ -8,6 +9,8 @@ import com.yexiao.demo.domain.UserDO;
  * @date 2020/8/20 10:59
  **/
 public interface UserService extends IService<UserDO> {
+
+    IPage<UserDO> page(IPage<UserDO> basePage, UserDO userDO);
 
     /**
      * 物理删除

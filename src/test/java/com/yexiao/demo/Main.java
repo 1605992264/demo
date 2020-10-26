@@ -1,14 +1,9 @@
 package com.yexiao.demo;
 
 
-import com.yexiao.demo.factory.Dog;
-import com.yexiao.demo.factory.DogEnum;
-import com.yexiao.demo.factory.DogFactory;
-import javafx.util.Callback;
-import org.aspectj.weaver.ast.Var;
-
-import java.io.ByteArrayOutputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author xuhf
@@ -17,14 +12,40 @@ import java.util.zip.ZipOutputStream;
 public class Main {
 
     public static void main(String[] args) {
-        Dog dog = DogFactory.newDog(DogEnum.dog1);
-        System.out.println(dog.getName());
+        Test test = new Test();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (Test.flag){
+                    for(int i=0;i<10000;i++){
+                        test.add();
+                    }
+                    System.out.println(Test.count);
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (Test.flag){
+                    for(int i=0;i<10000;i++){
+                        test.add();
+                    }
+                    System.out.println(Test.count);
+                }
+            }
+        }).start();
+    }
+}
+class Test{
 
-
+    public static Integer count=0;
+    public static Integer flag = 0;
+    public Integer x = 0;
+    public void add(){
+        count++;
     }
 
 
-
 }
-
 

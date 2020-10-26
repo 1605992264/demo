@@ -2,6 +2,7 @@ package ${packageName!"com.yexiao.demo"}.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 <#if extendsUserInfoBaseEntity == false>
 import com.yexiao.demo.base.domain.BaseEntity;
 <#else>
@@ -20,7 +21,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("${tableName}")
-public class ${className}DO extends BaseEntity {
+public class ${className}DO extends <#if extendsUserInfoBaseEntity == false>BaseEntity<#else>UserInfoBaseEntity</#if>{
 <#list columns as column>
     <#if column.javaName != 'id'>
     <#if column.javaName == 'deleteFlag'>

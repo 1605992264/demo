@@ -1,8 +1,8 @@
 package com.yexiao.demo.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.yexiao.demo.base.domain.BaseEntity;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -46,5 +46,13 @@ public class UserDO extends UserInfoBaseEntity {
     @ApiModelProperty(value = "token")
     @TableField(exist = false)
     private String token;
+
+    /**
+     * 删除标识
+     */
+    @ApiModelProperty(value = "删除标识")
+    @TableField(value = "delete_flag")
+    @TableLogic(value = "0",delval = "1")
+    private Integer deleteFlag;
 
 }

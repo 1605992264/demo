@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * @author xuhf
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 表必须有这些字段
  * 记录创建人，修改人等
  **/
+@Data
 public class UserInfoBaseEntity extends BaseEntity {
 
     @ApiModelProperty(value = "创建人id")
