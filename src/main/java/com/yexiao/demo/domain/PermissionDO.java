@@ -3,6 +3,7 @@ package com.yexiao.demo.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yexiao.demo.base.domain.BaseEntity;
+import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("sys_permission")
-public class PermissionDO extends BaseEntity {
+public class PermissionDO extends UserInfoBaseEntity {
 
     @ApiModelProperty(value = "名称")
     @TableField("name")

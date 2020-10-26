@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yexiao.demo.base.domain.BaseEntity;
+import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @TableName("sys_role")
-public class RoleDO extends BaseEntity {
+public class RoleDO extends UserInfoBaseEntity {
 
     @ApiModelProperty(value = "名称")
     @TableField("name")

@@ -2,6 +2,7 @@ package com.yexiao.demo.conf.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.yexiao.demo.base.utils.UserUtils;
+import com.yexiao.demo.domain.UserDO;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +20,13 @@ public class MybatisFillHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        if(this.getFieldValByName("createBy",metaObject) == null){
+        if(this.getFieldValByName("createBy",metaObject) == null && UserUtils.getUser() != null){
             this.setFieldValByName("createBy", UserUtils.getUser().getId(), metaObject);
         }
         if(this.getFieldValByName("createDate",metaObject) == null) {
             this.setFieldValByName("createDate", System.currentTimeMillis(), metaObject);
         }
-        if(this.getFieldValByName("updateBy",metaObject) == null){
+        if(this.getFieldValByName("updateBy",metaObject) == null && UserUtils.getUser() != null){
             this.setFieldValByName("updateBy", UserUtils.getUser().getId(),metaObject);
         }
         if(this.getFieldValByName("updateDate",metaObject) == null) {
@@ -35,7 +36,11 @@ public class MybatisFillHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        if(this.getFieldValByName("updateBy",metaObject) == null){
+        UserDO user = UserUtils.getUser();
+        if(user == null){
+            user = new UserDO();
+        }
+        if(this.getFieldValByName("updateBy",metaObject) == null && UserUtils.getUser() != null){
             this.setFieldValByName("updateBy", UserUtils.getUser().getId(),metaObject);
         }
         if(this.getFieldValByName("updateDate",metaObject) == null) {

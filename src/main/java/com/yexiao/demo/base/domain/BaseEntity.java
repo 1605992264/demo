@@ -16,20 +16,4 @@ public class BaseEntity implements Serializable {
     @TableId(value = "id",type = IdType.UUID)
     private String id;
 
-    @ApiModelProperty(value = "创建人id")
-    @TableField(value = "create_by",fill = FieldFill.INSERT)
-    private String createBy;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "create_date",fill = FieldFill.INSERT)
-    private Long createDate;
-
-    @ApiModelProperty(value = "修改人id")
-    @TableField(value = "update_by",fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
-
-    @ApiModelProperty(value = "修改时间")
-    @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE)
-    private Long updateDate;
-
 }

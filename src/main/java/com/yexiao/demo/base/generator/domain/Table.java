@@ -36,5 +36,12 @@ public class Table extends BaseEntity {
     @ApiModelProperty("包名")
     private String packageName;
 
+    /**
+     * 不包含create_date,update_by等的表
+     * 不需要继承UserInfoBaseEntity
+     * */
+    @ApiModelProperty("是否继承UserInfoBaseEntity")
+    private boolean isExtendsUserInfoBaseEntity;
+
 
 }

@@ -2,6 +2,7 @@ package com.yexiao.demo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yexiao.demo.base.utils.UserUtils;
+import com.yexiao.demo.conf.interceptor.ErrorMethodException;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
@@ -40,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         Subject subject = SecurityUtils.getSubject();
         UserDO userDO = (UserDO) subject.getPrincipal();
         if(userDO != null){
-            throw new RuntimeException("请先退出原用户");
+            throw new ErrorMethodException("请先退出原用户");
         }
         try {
             subject.login(token);

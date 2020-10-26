@@ -29,6 +29,7 @@
         WHERE
             a.table_schema = ( SELECT DATABASE ( ) )
             AND a.table_name = #{value}
+            ORDER BY b.ORDINAL_POSITION
     </select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.yexiao.demo.base.generator.utils;
 
 import cn.hutool.core.util.StrUtil;
+import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import com.yexiao.demo.base.generator.domain.Column;
 import com.yexiao.demo.base.generator.domain.Table;
 import freemarker.template.Configuration;
@@ -9,6 +10,7 @@ import freemarker.template.Version;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -116,7 +118,32 @@ public class GeneratorUtils {
             column.setJavaName(getJavaName(column.getName()));
             column.setJavaType(properties.getProperty(column.getType()));
         }
+        return fillIsExtendsUserInfoBaseEntity(table);
+    }
+
+    /**
+     * 是否需要继承UserInfoBaseEntity
+     * */
+    private static Table fillIsExtendsUserInfoBaseEntity(Table table){
+        List<Column> columns = table.getColumns();
+        int count = 0;
+        for(Column column : columns){
+            switch (column.getName()){
+                case "create_date":
+                case "create_by":
+                case  "update_date":
+                case  "update_by":
+                    count++;
+                    break;
+            }
+        }
+        if(count == 4){
+            table.setExtendsUserInfoBaseEntity(true);
+        }else {
+            table.setExtendsUserInfoBaseEntity(false);
+        }
         return table;
+
     }
 
     /**

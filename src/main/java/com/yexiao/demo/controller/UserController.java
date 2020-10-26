@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yexiao.demo.base.domain.BasePage;
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.domain.UserDO;
-import com.yexiao.demo.base.annotation.MyAspect;
 import com.yexiao.demo.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -31,21 +30,20 @@ public class UserController {
         return R.error("注册失败");
     }
 
-    @MyAspect(message = "列表")
     @RequestMapping("/list")
     public R list(BasePage<UserDO> basePage, UserDO entity){
         IPage<UserDO> list = userService.page(basePage.newMybatisPlusPage(),null);
         return R.success(list);
     }
 
-    @MyAspect(message = "查询单个用户信息")
+
     @RequestMapping("/get")
     public R list(String id){
         UserDO user = userService.getById(id);
         return R.success(user);
     }
 
-    @MyAspect(message = "新增")
+
     @RequiresPermissions("edit")
     @RequestMapping("/add")
     public R add(UserDO userDO){
@@ -56,7 +54,6 @@ public class UserController {
     }
 
     @RequiresRoles("admin")
-    @MyAspect(message = "逻辑删除")
     @RequestMapping("/remove")
     public R remove(String id){
         if(userService.removeById(id)){
@@ -66,7 +63,6 @@ public class UserController {
     }
 
     @RequiresRoles("admin")
-    @MyAspect(message = "物理删除")
     @RequestMapping("/delete")
     public R delete(String id){
         if(userService.deleteById(id)){

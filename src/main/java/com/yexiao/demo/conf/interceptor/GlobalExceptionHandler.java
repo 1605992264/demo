@@ -1,5 +1,7 @@
 package com.yexiao.demo.conf.interceptor;
 
+import com.yexiao.demo.base.annotation.LogAspect;
+import com.yexiao.demo.base.utils.HttpRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -39,12 +41,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Map<String, Object> handleException(Exception exception) {
+        exception.printStackTrace();
         Map<String, Object> map = new HashMap<>();
         map.put("code", 500);
         map.put("message",exception.getMessage());
-        map.put("errorMethod",exception.getStackTrace()[0]);
         map.put("errorMsg",exception.toString());
-        log.error("报错的方法: " + exception.getStackTrace()[0].toString());
         return map;
     }
+
+    /**
+     * 自定义方法异常
+     * */
+    @ExceptionHandler(ErrorMethodException.class)
+    @ResponseBody
+    public Map<String, Object> methodException(ErrorMethodException exception) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 500);
+        map.put("message",exception.getMessage());
+        map.put("errorMethod",exception.getErrorMethod());
+        map.put("errorMsg",exception.toString());
+        return map;
+    }
+
+
 }

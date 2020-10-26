@@ -7,7 +7,6 @@ server:
     context-path: /test # 项目名
     uri-encoding: utf-8
 
-
 spring:
   datasource: #数据库配置
     type: com.alibaba.druid.pool.DruidDataSource

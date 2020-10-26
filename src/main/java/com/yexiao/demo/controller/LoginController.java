@@ -1,8 +1,8 @@
 package com.yexiao.demo.controller;
 
-import com.alibaba.fastjson.JSONObject;
+
+import com.yexiao.demo.base.annotation.Log;
 import com.yexiao.demo.base.domain.R;
-import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +19,13 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Log(message = "登入")
     @RequestMapping("/login")
     public R login(@RequestParam String username, @RequestParam String password){
         return R.success(userService.login(username,password));
     }
 
+    @Log(message = "登出")
     @RequestMapping("/logout")
     public R logout(){
         userService.logout();
