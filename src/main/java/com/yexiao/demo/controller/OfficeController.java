@@ -6,10 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yexiao.demo.base.domain.BasePage;
 import com.yexiao.demo.base.domain.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
 * @author xuhf

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.OrderTaskDao">
+
+    <sql id="orderTaskColumns">
+    	a.`id` AS "id",
+    	a.`order_id` AS "orderId",
+    	a.`task_name` AS "taskName",
+    	a.`display_name` AS "displayName",
+    	a.`node_id` AS "nodeId",
+    	a.`state` AS "state"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="OrderTaskDO">
+		SELECT  
+		<include refid="orderTaskColumns"/>
+		FROM flow_order_task a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="OrderTaskDO">
+		SELECT 
+        <include refid="orderTaskColumns"/>
+        FROM flow_order_task a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.orderId != null and entity.orderId != ''"> 
+		  		AND a.order_id = #{entity.orderId}
+		   </if>		
+           <if test="entity.taskName != null and entity.taskName != ''"> 
+		  		AND a.task_name = #{entity.taskName}
+		   </if>		
+           <if test="entity.displayName != null and entity.displayName != ''"> 
+		  		AND a.display_name = #{entity.displayName}
+		   </if>		
+           <if test="entity.nodeId != null and entity.nodeId != ''">
+		  		AND a.node_id = #{entity.nodeId}
+		   </if>		
+           <if test="entity.state != null and entity.state != ''"> 
+		  		AND a.state = #{entity.state}
+		   </if>		
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_order_task
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="orderId != null">`order_id`,</if>
+					<if test="taskName != null">`task_name`,</if>
+					<if test="displayName != null">`display_name`,</if>
+					<if test="nodeId != null">`node_id`,</if>
+					<if test="state != null">`state`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="orderId != null">#{orderId},</if>
+			<if test="taskName != null">#{taskName},</if>
+			<if test="displayName != null">#{displayName},</if>
+			<if test="nodeId != null">#{nodeId},</if>
+			<if test="state != null">#{state},</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_order_task 
+		<set>
+				<if test="orderId != null">`order_id` = #{orderId},</if>
+				<if test="taskName != null">`task_name` = #{taskName},</if>
+				<if test="displayName != null">`display_name` = #{displayName},</if>
+				<if test="nodeId != null">`node_id` = #{nodeId},</if>
+				<if test="state != null">`state` = #{state}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_order_task 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_order_task 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_order_task 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_order_task 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_order_task
+		(
+			`id`,
+			`order_id`,
+			`task_name`,
+			`display_name`,
+			`node_id`,
+			`state`
+		)
+		VALUES
+		<foreach item="orderTask" collection="list" separator=",">
+		(
+			#{orderTask.id},
+			#{orderTask.orderId},
+			#{orderTask.taskName},
+			#{orderTask.displayName},
+			#{orderTask.nodeId},
+			#{orderTask.state}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="orderTask" collection="list" separator=";">
+			UPDATE flow_order_task 
+			<set>
+				<if test="orderTask.orderId != null">`order_id` = #{orderTask.orderId},</if>
+				<if test="orderTask.taskName != null">`task_name` = #{orderTask.taskName},</if>
+				<if test="orderTask.displayName != null">`display_name` = #{orderTask.displayName},</if>
+				<if test="orderTask.nodeId != null">`node_id` = #{orderTask.nodeId},</if>
+				<if test="orderTask.state != null">`state` = #{orderTask.state}</if>
+			</set>
+			WHERE id = #{orderTask.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_order_task 
+		<set>
+			<if test="param.orderId != null">`order_id` = #{param.orderId},</if>
+			<if test="param.taskName != null">`task_name` = #{param.taskName},</if>
+			<if test="param.displayName != null">`display_name` = #{param.displayName},</if>
+			<if test="param.nodeId != null">`node_id` = #{param.nodeId},</if>
+			<if test="param.state != null">`state` = #{param.state}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''">
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_order_task 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''">
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_order_task 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''">
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+		</where>
+	</delete>
+
+    <select id="getOrderIdByUser" resultType="string">
+       select GROUP_CONCAT(b.order_id)
+        from flow_process_node a
+        JOIN  (SELECT
+            b.*,GROUP_CONCAT(c.create_by) 'auditer'
+        FROM
+            flow_order_task b
+            LEFT JOIN flow_task_actor c ON b.id = c.task_id
+        WHERE
+            b.node_id IN (
+        SELECT
+            a.id
+        FROM
+            (
+            (
+        SELECT
+            a.*
+        FROM
+            flow_process_node a
+            LEFT JOIN flow_process b ON a.process_id = b.id
+            LEFT JOIN flow_process_actor c ON c.node_id = a.id
+            LEFT JOIN sys_user d ON d.id = c.`value`
+        WHERE
+            a.type = 2
+            AND c.type = 1
+            AND d.id = #{value}
+            ) UNION
+            (
+        SELECT
+            a.*
+        FROM
+            flow_process_node a
+            LEFT JOIN flow_process b ON a.process_id = b.id
+            LEFT JOIN flow_process_actor c ON c.node_id = a.id
+            LEFT JOIN sys_user_role e ON e.role_id = c.`value`
+        WHERE
+            a.type = 2
+            AND c.type = 3
+            AND e.user_id = #{value}
+            ) UNION
+            (
+        SELECT
+            a.*
+        FROM
+            flow_process_node a
+            LEFT JOIN flow_process b ON a.process_id = b.id
+            LEFT JOIN flow_process_actor c ON c.node_id = a.id
+        WHERE
+            a.type = 2
+            AND c.type = 4
+            ) UNION
+            (
+        SELECT
+            a.*
+        FROM
+            flow_process_node a
+            LEFT JOIN flow_process b ON a.process_id = b.id
+            LEFT JOIN flow_process_actor c ON c.node_id = a.id
+            LEFT JOIN sys_user d ON d.office_id = c.`value`
+        WHERE
+            a.type = 2
+            AND c.type = 5
+            AND d.id = #{value}
+            ) UNION
+            (
+        SELECT
+            a.*
+        FROM
+            flow_process_node a
+            LEFT JOIN flow_process b ON a.process_id = b.id
+            LEFT JOIN flow_process_actor c ON c.node_id = a.id
+        WHERE
+            a.type = 2
+            AND c.type = 6
+            )
+            ) a
+            )
+			GROUP BY  b.order_id) b ON a.id = b.node_id
+        JOIN flow_order d ON d.id = b.order_id
+        where
+        ( ( b.auditer IS NULL AND a.audit_type != 5 )
+	        OR ( !FIND_IN_SET(#{value},b.auditer)) )
+        OR ( a.audit_type = 5 AND d.create_by = #{value} )
+    </select>
+
+    <select id="findOrderLeaderByUserId" resultType="ProcessNodeDO">
+        SELECT
+            a.id AS id,
+            b.order_id AS orderId,
+            d.create_by AS initiator
+        FROM
+            flow_process_node a
+            JOIN flow_order_task b ON a.id = b.node_id
+            JOIN flow_order d ON d.id = b.order_id
+            JOIN sys_user u on u.id = d.create_by
+            JOIN sys_office o on o.id = u.office_id
+            JOIN flow_process_actor e ON e.node_id = a.id
+            and e.type = 2
+            where
+            CASE `value`
+            WHEN 1
+            then o.leader in
+            <foreach collection="userList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            WHEN 2
+            then (select leader from sys_office where id = o.parent_id) in
+            <foreach collection="userList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+                WHEN 3
+            then (select leader from sys_office where id = (
+                    select parent_id from sys_office where id = o.parent_id)) in
+                    <foreach collection="userList" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                WHEN 4
+            then (select leader from sys_office where id = (
+                    select parent_id from sys_office where id = (
+                        select parent_id from sys_office where id = o.parent_id))) in
+                        <foreach collection="userList" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                WHEN 5
+            then (select leader from sys_office where id = (
+                    select parent_id FROM sys_office where id = (
+                        select parent_id from sys_office where id = (
+                            select parent_id from sys_office where id = o.parent_id)))) in
+                            <foreach collection="userList" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+            end
+    </select>
+
+</mapper>

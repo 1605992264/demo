@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.FlowProcessDao">
+
+    <sql id="processColumns">
+    	a.`id` AS "id",
+    	a.`name` AS "name",
+    	a.`state` AS "state",
+    	a.`content` AS "content",
+    	a.`version` AS "version",
+    	a.`original` AS "original",
+    	a.`sort` AS "sort",
+    	a.`create_date` AS "createDate",
+    	a.`create_by` AS "createBy",
+    	a.`update_date` AS "updateDate",
+    	a.`update_by` AS "updateBy",
+    	a.`del_flag` AS "delFlag",
+    	a.`flow_img` AS "flowImg",
+    	a.`flow_group` AS "flowGroup",
+    	a.`auto_repeat` AS "autoRepeat",
+    	a.`my_audit_auto_pass` AS "myAuditAutoPass",
+    	a.`not_visible_for_sponsor` AS "notVisibleForSponsor",
+    	a.`remark_required` AS "remarkRequired",
+    	a.`remark_tip` AS "remarkTip",
+    	a.`process_code` AS "processCode"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+
+	<select id="get" resultType="FlowProcessDO">
+		SELECT
+		<include refid="processColumns"/>
+		FROM flow_process a
+		<include refid="leftJion"/>
+		where a.id = #{value}
+	</select>
+    
+	<select id="form" resultType="FlowProcessDO">
+		SELECT  
+		<include refid="processColumns"/>
+		FROM flow_process a
+		<include refid="leftJion"/>
+		<where>
+			<if test="processCode != null and processCode != ''">
+				and a.process_code = #{processCode}
+			</if>
+				and a.version = #{version}
+		</where>
+	</select>
+
+	<select id="list" resultType="FlowProcessDO">
+		SELECT 
+        <include refid="processColumns"/>
+        FROM flow_process a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.name != null and entity.name != ''"> 
+		  		AND a.name = #{entity.name}
+		   </if>
+		   <if test="entity.nameAllLike != null and entity.nameAllLike != ''"> 
+		  		AND a.name LIKE CONCAT('%',#{entity.nameAllLike},'%') 
+		   </if>
+           <if test="entity.state != null and entity.state != ''"> 
+		  		AND a.state = #{entity.state}
+		   </if>		
+           <if test="entity.content != null and entity.content != ''"> 
+		  		AND a.content = #{entity.content}
+		   </if>		
+           <if test="entity.version != null and entity.version != ''"> 
+		  		AND a.version = #{entity.version}
+		   </if>		
+           <if test="entity.original != null and entity.original != ''"> 
+		  		AND a.original = #{entity.original}
+		   </if>		
+           <if test="entity.sort != null and entity.sort != ''"> 
+		  		AND a.sort = #{entity.sort}
+		   </if>		
+           <if test="entity.createDate != null and entity.createDate != ''"> 
+		  		AND a.create_date = #{entity.createDate}
+		   </if>		
+           <if test="entity.createBy != null and entity.createBy != ''"> 
+		  		AND a.create_by = #{entity.createBy}
+		   </if>		
+           <if test="entity.updateDate != null and entity.updateDate != ''"> 
+		  		AND a.update_date = #{entity.updateDate}
+		   </if>		
+           <if test="entity.updateBy != null and entity.updateBy != ''"> 
+		  		AND a.update_by = #{entity.updateBy}
+		   </if>		
+           <if test="entity.delFlag != null and entity.delFlag != ''"> 
+		  		AND a.del_flag = #{entity.delFlag}
+		   </if>
+		   <if test="entity.delFlag == null or entity.delFlag == ''"> 
+		  		AND a.del_flag = '0'
+		   </if>
+		   <if test="entity.processCode != null and entity.processCode != ''">
+			   AND a.`process_code` = #{processCode}
+		   </if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_process
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="name != null">`name`,</if>
+					<if test="state != null">`state`,</if>
+					<if test="content != null">`content`,</if>
+					<if test="version != null">`version`,</if>
+					<if test="original != null">`original`,</if>
+					<if test="sort != null">`sort`,</if>
+					<if test="createDate != null">`create_date`,</if>
+					<if test="createBy != null">`create_by`,</if>
+					<if test="updateDate != null">`update_date`,</if>
+					<if test="updateBy != null">`update_by`,</if>
+					<if test="delFlag != null">`del_flag`,</if>
+					<if test="flowImg != null">`flow_img`,</if>
+					<if test="flowGroup != null">`flow_group`,</if>
+					<if test="autoRepeat != null">`auto_repeat`,</if>
+					<if test="myAuditAutoPass != null">`my_audit_auto_pass`,</if>
+					<if test="notVisibleForSponsor != null">`not_visible_for_sponsor`,</if>
+					<if test="remarkRequired != null">`remark_required`,</if>
+					<if test="remarkTip != null">`remark_tip`,</if>
+					<if test="processCode != null">`process_code`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="state != null">#{state},</if>
+			<if test="content != null">#{content},</if>
+			<if test="version != null">#{version},</if>
+			<if test="original != null">#{original},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null">#{createBy},</if>
+			<if test="updateDate != null">#{updateDate},</if>
+			<if test="updateBy != null">#{updateBy},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+			<if test="flowImg != null">#{flowImg},</if>
+			<if test="flowGroup != null">#{flowGroup},</if>
+			<if test="autoRepeat != null">#{autoRepeat},</if>
+			<if test="myAuditAutoPass != null">#{myAuditAutoPass},</if>
+			<if test="notVisibleForSponsor != null">#{notVisibleForSponsor},</if>
+			<if test="remarkRequired != null">#{remarkRequired},</if>
+			<if test="remarkTip != null">#{remarkTip},</if>
+			<if test="processCode != null">#{processCode},</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_process 
+		<set>
+				<if test="name != null">`name` = #{name},</if>
+				<if test="state != null">`state` = #{state},</if>
+				<if test="content != null">`content` = #{content},</if>
+				<if test="version != null">`version` = #{version},</if>
+				<if test="original != null">`original` = #{original},</if>
+				<if test="sort != null">`sort` = #{sort},</if>
+				<if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null">`create_by` = #{createBy},</if>
+				<if test="updateDate != null">`update_date` = #{updateDate},</if>
+				<if test="updateBy != null">`update_by` = #{updateBy},</if>
+				<if test="delFlag != null">`del_flag` = #{delFlag},</if>
+				<if test="flowImg != null">`flow_img` = #{flowImg},</if>
+				<if test="flowGroup != null">`flow_group` = #{flowGroup},</if>
+				<if test="autoRepeat != null">`auto_repeat` = #{autoRepeat},</if>
+				<if test="myAuditAutoPass != null">`my_audit_auto_pass` = #{myAuditAutoPass},</if>
+				<if test="notVisibleForSponsor != null">`not_visible_for_sponsor` = #{notVisibleForSponsor},</if>
+				<if test="remarkRequired != null">`remark_required` = #{remarkRequired},</if>
+				<if test="remarkTip != null">`remark_tip` = #{remarkTip},</if>
+				<if test="processCode != null">`process_code` = #{processCode}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_process 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_process 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_process 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_process 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_process
+		(
+			`id`,
+			`name`,
+			`state`,
+			`content`,
+			`version`,
+			`original`,
+			`sort`,
+			`create_date`,
+			`create_by`,
+			`update_date`,
+			`update_by`,
+			`del_flag`
+		)
+		VALUES
+		<foreach item="process" collection="list" separator=",">
+		(
+			#{process.id},
+			#{process.name},
+			#{process.state},
+			#{process.content},
+			#{process.version},
+			#{process.original},
+			#{process.sort},
+			#{process.createDate},
+			#{process.createBy},
+			#{process.updateDate},
+			#{process.updateBy},
+			#{process.delFlag}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="process" collection="list" separator=";">
+			UPDATE flow_process 
+			<set>
+				<if test="process.name != null">`name` = #{process.name},</if>
+				<if test="process.state != null">`state` = #{process.state},</if>
+				<if test="process.content != null">`content` = #{process.content},</if>
+				<if test="process.version != null">`version` = #{process.version},</if>
+				<if test="process.original != null">`original` = #{process.original},</if>
+				<if test="process.sort != null">`sort` = #{process.sort},</if>
+				<if test="process.createDate != null">`create_date` = #{process.createDate},</if>
+				<if test="process.createBy != null">`create_by` = #{process.createBy},</if>
+				<if test="process.updateDate != null">`update_date` = #{process.updateDate},</if>
+				<if test="process.updateBy != null">`update_by` = #{process.updateBy},</if>
+				<if test="process.delFlag != null">`del_flag` = #{process.delFlag}</if>
+			</set>
+			WHERE id = #{process.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_process 
+		<set>
+			<if test="param.name != null">`name` = #{param.name},</if>
+			<if test="param.state != null">`state` = #{param.state},</if>
+			<if test="param.content != null">`content` = #{param.content},</if>
+			<if test="param.version != null">`version` = #{param.version},</if>
+			<if test="param.original != null">`original` = #{param.original},</if>
+			<if test="param.sort != null">`sort` = #{param.sort},</if>
+			<if test="param.createDate != null">`create_date` = #{param.createDate},</if>
+			<if test="param.createBy != null">`create_by` = #{param.createBy},</if>
+			<if test="param.updateDate != null">`update_date` = #{param.updateDate},</if>
+			<if test="param.updateBy != null">`update_by` = #{param.updateBy},</if>
+			<if test="param.delFlag != null">`del_flag` = #{param.delFlag}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.version != null and where.version != ''"> 
+		  		AND version = #{where.version}
+		   </if>
+           <if test="where.original != null and where.original != ''"> 
+		  		AND original = #{where.original}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_process 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.version != null and where.version != ''"> 
+		  		AND version = #{where.version}
+		   </if>
+           <if test="where.original != null and where.original != ''"> 
+		  		AND original = #{where.original}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_process 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.state != null and where.state != ''"> 
+		  		AND state = #{where.state}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.version != null and where.version != ''"> 
+		  		AND version = #{where.version}
+		   </if>
+           <if test="where.original != null and where.original != ''"> 
+		  		AND original = #{where.original}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</delete>
+
+	<!-- 通过流程编号查询最新版本的流程 -->
+	<select id="queryMaxVersionInfo" resultType="FlowProcessDO">
+		SELECT
+			<include refid="processColumns"/>
+		FROM
+			flow_process a
+		WHERE
+			a.version = (select MAX(version) from flow_process where del_flag = 0)
+		and a.process_code = #{processCode}
+	</select>
+
+	<!-- 按照指定的返回格式查询所有的流程信息 -->
+	<select id="queryAllProcess" resultType="com.alibaba.fastjson.JSONObject">
+		select
+			  a.`id` AS "id",
+			  a.`name` AS "name",
+			  a.`newVersion` AS "version" ,
+			  a.`process_code` AS "processCode",
+			  count(DISTINCT b.id) AS "totalNum",
+			  count(DISTINCT d.id) AS "ongoingNum",
+			  count(DISTINCT e.id) AS "endNum",
+			  a.`create_date` AS "beginDate",
+			  a.`update_date` AS "endDate",
+		      max(a.version) AS "currentMaxVersion",
+		      a.`state` AS "state"
+		from
+		(select * from (select max(a.version) AS newVersion,a.* from flow_process a
+		GROUP BY a.id
+		ORDER BY newVersion DESC) b where b.state = 1 GROUP BY b.process_code) a
+		left join flow_order b on b.proc_id = a.id
+		left join flow_hi_circulation c on c.order_id = b.id
+		left join flow_hi_circulation_detailed e on e.circulation_id = c.id and e.type = 6
+		left join flow_order_task d on d.order_id = b.id
+		<where>
+			<if test="entity.name != null and entity.name != ''">
+				and a.name LIKE CONCAT('%',#{entity.name},'%')
+			</if>
+			<if test="entity.processCode != null and entity.processCode != ''">
+				and a.process_code LIKE CONCAT('%',#{entity.processCode},'%')
+			</if>
+			<if test="entity.id != null and entity.id != ''">
+				and a.id = #{entity.id}
+			</if>
+			   and a.del_flag = 0
+		</where>
+		GROUP BY a.id
+		order by a.create_date DESC
+	</select>
+
+	<!-- 查看历史版本流程 -->
+	<select id="queryHisProcess" resultType="com.alibaba.fastjson.JSONObject">
+		select
+		a.`id` AS "id",
+		a.`name` AS "name",
+		a.`version` AS "version" ,
+		a.`process_code` AS "processCode",
+		count(DISTINCT b.id) AS "totalNum",
+		count(DISTINCT d.id) AS "ongoingNum",
+		count(DISTINCT e.id) AS "endNum",
+		a.`create_date` AS "beginDate",
+		a.`update_date` AS "endDate",
+		a.`state` AS "state",
+		(select
+			MAX(version)
+			from
+			flow_process
+			<where>
+				<if test="entity.processCode != null and entity.processCode != ''">
+					and process_code = #{entity.processCode}
+				</if>
+				and del_flag = 0
+			</where>
+			 ) AS "currentMaxVersion"
+		from
+		flow_process a
+		left join flow_order b on b.proc_id = a.id
+		left join flow_hi_circulation c on c.order_id = b.id
+		left join flow_hi_circulation_detailed e on e.circulation_id = c.id and e.type = 6
+		left join flow_order_task d on d.order_id = b.id
+		<where>
+			<if test="entity.processCode != null and entity.processCode != ''">
+				and a.process_code = #{entity.processCode}
+			</if>
+			<if test="entity.version != null and entity.version != ''">
+				and a.version = #{entity.version}
+			</if>
+			<if test="entity.processId != null and entity.processId != ''">
+				and a.id = #{entity.processId}
+			</if>
+			and a.del_flag = 0
+		</where>
+		GROUP BY a.id
+		order by a.create_date DESC
+	</select>
+
+	<!-- 根据流程标识查询启用流程id -->
+	<select id="queryNewIdByCode" resultType="String">
+		select
+			id
+		from
+			flow_process
+		where
+		state = 1
+		and process_code = #{processCode}
+		and del_flag = 0
+	</select>
+
+	<!-- 根据流程id查询流程标识最大的版本号 -->
+	<select id="queryMaxVersion" resultType="Integer">
+		select
+			MAX(`version`) AS "maxVersion"
+		FROM
+			flow_process
+		where
+			process_code = (select process_code
+		FROM
+			flow_process
+		where
+			id = #{processId} and del_flag = 0)
+	</select>
+
+	<!-- 修改流程状态为“发布”状态 -->
+	<update id="updateProcessState">
+		UPDATE flow_process
+		SET `state` = 1
+		<where>
+			<if test="processCode != null and processCode != ''">
+				and process_code = #{processCode}
+			</if>
+			<if test="version != null and version != ''">
+				and version = #{version}
+			</if>
+		</where>
+	</update>
+
+	<!-- 修改其他流程状态为“草稿”状态 -->
+	<update id="updateOtherProcessState">
+		UPDATE flow_process
+		SET `state` = 2
+		<where>
+			<if test="processCode != null and processCode != ''">
+				and process_code = #{processCode}
+			</if>
+		</where>
+	</update>
+</mapper>

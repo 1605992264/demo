@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.HiActorDao">
+
+    <sql id="hiActorColumns">
+    	a.`id` AS "id",
+    	a.`task_id` AS "taskId",
+    	a.`varable` AS "varable",
+    	a.`content` AS "content",
+    	a.`file_url` AS "fileUrl",
+    	a.`create_date` AS "createDate",
+    	a.`create_by` AS "createBy",
+    	a.`del_flag` AS "delFlag",
+    	a.flag AS flag
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="HiActorDO">
+		SELECT  
+		<include refid="hiActorColumns"/>
+		FROM flow_hi_actor a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="HiActorDO">
+		SELECT 
+        <include refid="hiActorColumns"/>
+        FROM flow_hi_actor a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.taskId != null and entity.taskId != ''"> 
+		  		AND a.task_id = #{entity.taskId}
+		   </if>		
+           <if test="entity.varable != null and entity.varable != ''"> 
+		  		AND a.varable = #{entity.varable}
+		   </if>		
+           <if test="entity.content != null and entity.content != ''"> 
+		  		AND a.content = #{entity.content}
+		   </if>		
+           <if test="entity.fileUrl != null and entity.fileUrl != ''"> 
+		  		AND a.file_url = #{entity.fileUrl}
+		   </if>		
+           <if test="entity.createDate != null and entity.createDate != ''"> 
+		  		AND a.create_date = #{entity.createDate}
+		   </if>		
+           <if test="entity.createBy != null and entity.createBy != ''"> 
+		  		AND a.create_by = #{entity.createBy}
+		   </if>		
+           <if test="entity.delFlag != null and entity.delFlag != ''"> 
+		  		AND a.del_flag = #{entity.delFlag}
+		   </if>
+		   <if test="entity.delFlag == null or entity.delFlag == ''"> 
+		  		AND a.del_flag = '0'
+		   </if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_hi_actor
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="taskId != null">`task_id`,</if>
+					<if test="varable != null">`varable`,</if>
+					<if test="content != null">`content`,</if>
+					<if test="fileUrl != null">`file_url`,</if>
+					<if test="createDate != null">`create_date`,</if>
+					<if test="createBy != null">`create_by`,</if>
+					<if test="delFlag != null">`del_flag`,</if>
+					<if test="flag != null">flag</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="taskId != null">#{taskId},</if>
+			<if test="varable != null">#{varable},</if>
+			<if test="content != null">#{content},</if>
+			<if test="fileUrl != null">#{fileUrl},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null">#{createBy},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+            <if test="flag != null">#{flag}</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_hi_actor 
+		<set>
+				<if test="taskId != null">`task_id` = #{taskId},</if>
+				<if test="varable != null">`varable` = #{varable},</if>
+				<if test="content != null">`content` = #{content},</if>
+				<if test="fileUrl != null">`file_url` = #{fileUrl},</if>
+				<if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null">`create_by` = #{createBy},</if>
+				<if test="delFlag != null">`del_flag` = #{delFlag}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_hi_actor 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_hi_actor 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_hi_actor 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_hi_actor 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_hi_actor
+		(
+			`id`,
+			`task_id`,
+			`varable`,
+			`content`,
+			`file_url`,
+			`create_date`,
+			`create_by`,
+			`del_flag`
+		)
+		VALUES
+		<foreach item="hiActor" collection="list" separator=",">
+		(
+			#{hiActor.id},
+			#{hiActor.taskId},
+			#{hiActor.varable},
+			#{hiActor.content},
+			#{hiActor.fileUrl},
+			#{hiActor.createDate},
+			#{hiActor.createBy},
+			#{hiActor.delFlag}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="hiActor" collection="list" separator=";">
+			UPDATE flow_hi_actor 
+			<set>
+				<if test="hiActor.taskId != null">`task_id` = #{hiActor.taskId},</if>
+				<if test="hiActor.varable != null">`varable` = #{hiActor.varable},</if>
+				<if test="hiActor.content != null">`content` = #{hiActor.content},</if>
+				<if test="hiActor.fileUrl != null">`file_url` = #{hiActor.fileUrl},</if>
+				<if test="hiActor.createDate != null">`create_date` = #{hiActor.createDate},</if>
+				<if test="hiActor.createBy != null">`create_by` = #{hiActor.createBy},</if>
+				<if test="hiActor.delFlag != null">`del_flag` = #{hiActor.delFlag}</if>
+			</set>
+			WHERE id = #{hiActor.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_hi_actor 
+		<set>
+			<if test="param.taskId != null">`task_id` = #{param.taskId},</if>
+			<if test="param.varable != null">`varable` = #{param.varable},</if>
+			<if test="param.content != null">`content` = #{param.content},</if>
+			<if test="param.fileUrl != null">`file_url` = #{param.fileUrl},</if>
+			<if test="param.createDate != null">`create_date` = #{param.createDate},</if>
+			<if test="param.createBy != null">`create_by` = #{param.createBy},</if>
+			<if test="param.delFlag != null">`del_flag` = #{param.delFlag}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.taskId != null and where.taskId != ''">
+		  		AND task_id = #{where.taskId}
+		   </if>
+           <if test="where.varable != null and where.varable != ''"> 
+		  		AND varable = #{where.varable}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_hi_actor 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.taskId != null and where.taskId != ''"> 
+		  		AND task_id = #{where.taskId}
+		   </if>
+           <if test="where.varable != null and where.varable != ''"> 
+		  		AND varable = #{where.varable}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_hi_actor 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.taskId != null and where.taskId != ''"> 
+		  		AND task_id = #{where.taskId}
+		   </if>
+           <if test="where.varable != null and where.varable != ''"> 
+		  		AND varable = #{where.varable}
+		   </if>
+           <if test="where.content != null and where.content != ''"> 
+		  		AND content = #{where.content}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</delete>
+</mapper>

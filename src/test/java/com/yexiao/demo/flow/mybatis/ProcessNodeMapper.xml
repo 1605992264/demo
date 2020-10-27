@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.ProcessNodeDao">
+
+    <sql id="processNodeColumns">
+    	a.`id` AS "id",
+    	a.`name` AS "name",
+    	a.`display_name` AS "displayName",
+    	a.`process_id` AS "processId",
+    	a.`prev_id` AS "prevId",
+    	a.`is_branch` AS "isBranch",
+    	a.`type` AS "type",
+    	a.`audit_type` AS "auditType",
+    	a.`counter_sign` AS "counterSign",
+    	a.`reject_type` AS "rejectType",
+    	a.`priority` AS "priority",
+    	a.`sort` AS "sort",
+    	a.`create_date` AS "createDate",
+    	a.`create_by` AS "createBy",
+    	a.`update_date` AS "updateDate",
+    	a.`update_by` AS "updateBy",
+    	a.`del_flag` AS "delFlag"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="ProcessNodeDO">
+		SELECT  
+		<include refid="processNodeColumns"/>
+		FROM flow_process_node a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="ProcessNodeDO">
+		SELECT 
+        <include refid="processNodeColumns"/>
+        FROM flow_process_node a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.name != null and entity.name != ''"> 
+		  		AND a.name = #{entity.name}
+		   </if>
+		   <if test="entity.nameAllLike != null and entity.nameAllLike != ''"> 
+		  		AND a.name LIKE CONCAT('%',#{entity.nameAllLike},'%') 
+		   </if>
+           <if test="entity.displayName != null and entity.displayName != ''"> 
+		  		AND a.display_name = #{entity.displayName}
+		   </if>		
+           <if test="entity.processId != null and entity.processId != ''"> 
+		  		AND a.process_id = #{entity.processId}
+		   </if>		
+           <if test="entity.prevId != null and entity.prevId != ''"> 
+		  		AND a.prev_id = #{entity.prevId}
+		   </if>		
+           <if test="entity.isBranch != null and entity.isBranch != ''"> 
+		  		AND a.is_branch = #{entity.isBranch}
+		   </if>		
+           <if test="entity.type != null and entity.type != ''"> 
+		  		AND a.type = #{entity.type}
+		   </if>		
+           <if test="entity.auditType != null and entity.auditType != ''"> 
+		  		AND a.audit_type = #{entity.auditType}
+		   </if>		
+           <if test="entity.counterSign != null and entity.counterSign != ''"> 
+		  		AND a.counter_sign = #{entity.counterSign}
+		   </if>		
+           <if test="entity.rejectType != null and entity.rejectType != ''"> 
+		  		AND a.reject_type = #{entity.rejectType}
+		   </if>		
+           <if test="entity.priority != null and entity.priority != ''"> 
+		  		AND a.priority = #{entity.priority}
+		   </if>		
+           <if test="entity.sort != null and entity.sort != ''"> 
+		  		AND a.sort = #{entity.sort}
+		   </if>		
+           <if test="entity.createDate != null and entity.createDate != ''"> 
+		  		AND a.create_date = #{entity.createDate}
+		   </if>		
+           <if test="entity.createBy != null and entity.createBy != ''"> 
+		  		AND a.create_by = #{entity.createBy}
+		   </if>		
+           <if test="entity.updateDate != null and entity.updateDate != ''"> 
+		  		AND a.update_date = #{entity.updateDate}
+		   </if>		
+           <if test="entity.updateBy != null and entity.updateBy != ''"> 
+		  		AND a.update_by = #{entity.updateBy}
+		   </if>		
+           <if test="entity.delFlag != null and entity.delFlag != ''"> 
+		  		AND a.del_flag = #{entity.delFlag}
+		   </if>
+		   <if test="entity.delFlag == null or entity.delFlag == ''"> 
+		  		AND a.del_flag = '0'
+		   </if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_process_node
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="name != null">`name`,</if>
+					<if test="displayName != null">`display_name`,</if>
+					<if test="processId != null">`process_id`,</if>
+					<if test="prevId != null">`prev_id`,</if>
+					<if test="isBranch != null">`is_branch`,</if>
+					<if test="type != null">`type`,</if>
+					<if test="auditType != null">`audit_type`,</if>
+					<if test="counterSign != null">`counter_sign`,</if>
+					<if test="rejectType != null">`reject_type`,</if>
+					<if test="priority != null">`priority`,</if>
+					<if test="sort != null">`sort`,</if>
+					<if test="createDate != null">`create_date`,</if>
+					<if test="createBy != null">`create_by`,</if>
+					<if test="updateDate != null">`update_date`,</if>
+					<if test="updateBy != null">`update_by`,</if>
+					<if test="delFlag != null">`del_flag`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="name != null">#{name},</if>
+			<if test="displayName != null">#{displayName},</if>
+			<if test="processId != null">#{processId},</if>
+			<if test="prevId != null">#{prevId},</if>
+			<if test="isBranch != null">#{isBranch},</if>
+			<if test="type != null">#{type},</if>
+			<if test="auditType != null">#{auditType},</if>
+			<if test="counterSign != null">#{counterSign},</if>
+			<if test="rejectType != null">#{rejectType},</if>
+			<if test="priority != null">#{priority},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null">#{createBy},</if>
+			<if test="updateDate != null">#{updateDate},</if>
+			<if test="updateBy != null">#{updateBy},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_process_node 
+		<set>
+				<if test="name != null">`name` = #{name},</if>
+				<if test="displayName != null">`display_name` = #{displayName},</if>
+				<if test="processId != null">`process_id` = #{processId},</if>
+				<if test="prevId != null">`prev_id` = #{prevId},</if>
+				<if test="isBranch != null">`is_branch` = #{isBranch},</if>
+				<if test="type != null">`type` = #{type},</if>
+				<if test="auditType != null">`audit_type` = #{auditType},</if>
+				<if test="counterSign != null">`counter_sign` = #{counterSign},</if>
+				<if test="rejectType != null">`reject_type` = #{rejectType},</if>
+				<if test="priority != null">`priority` = #{priority},</if>
+				<if test="sort != null">`sort` = #{sort},</if>
+				<if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null">`create_by` = #{createBy},</if>
+				<if test="updateDate != null">`update_date` = #{updateDate},</if>
+				<if test="updateBy != null">`update_by` = #{updateBy},</if>
+				<if test="delFlag != null">`del_flag` = #{delFlag}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_process_node 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_process_node 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_process_node 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_process_node 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_process_node
+		(
+			`id`,
+			`name`,
+			`display_name`,
+			`process_id`,
+			`prev_id`,
+			`is_branch`,
+			`type`,
+			`audit_type`,
+			`counter_sign`,
+			`reject_type`,
+			`priority`,
+			`sort`,
+			`create_date`,
+			`create_by`,
+			`update_date`,
+			`update_by`,
+			`del_flag`
+		)
+		VALUES
+		<foreach item="processNode" collection="list" separator=",">
+		(
+			#{processNode.id},
+			#{processNode.name},
+			#{processNode.displayName},
+			#{processNode.processId},
+			#{processNode.prevId},
+			#{processNode.isBranch},
+			#{processNode.type},
+			#{processNode.auditType},
+			#{processNode.counterSign},
+			#{processNode.rejectType},
+			#{processNode.priority},
+			#{processNode.sort},
+			#{processNode.createDate},
+			#{processNode.createBy},
+			#{processNode.updateDate},
+			#{processNode.updateBy},
+			#{processNode.delFlag}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="processNode" collection="list" separator=";">
+			UPDATE flow_process_node 
+			<set>
+				<if test="processNode.name != null">`name` = #{processNode.name},</if>
+				<if test="processNode.displayName != null">`display_name` = #{processNode.displayName},</if>
+				<if test="processNode.processId != null">`process_id` = #{processNode.processId},</if>
+				<if test="processNode.prevId != null">`prev_id` = #{processNode.prevId},</if>
+				<if test="processNode.isBranch != null">`is_branch` = #{processNode.isBranch},</if>
+				<if test="processNode.type != null">`type` = #{processNode.type},</if>
+				<if test="processNode.auditType != null">`audit_type` = #{processNode.auditType},</if>
+				<if test="processNode.counterSign != null">`counter_sign` = #{processNode.counterSign},</if>
+				<if test="processNode.rejectType != null">`reject_type` = #{processNode.rejectType},</if>
+				<if test="processNode.priority != null">`priority` = #{processNode.priority},</if>
+				<if test="processNode.sort != null">`sort` = #{processNode.sort},</if>
+				<if test="processNode.createDate != null">`create_date` = #{processNode.createDate},</if>
+				<if test="processNode.createBy != null">`create_by` = #{processNode.createBy},</if>
+				<if test="processNode.updateDate != null">`update_date` = #{processNode.updateDate},</if>
+				<if test="processNode.updateBy != null">`update_by` = #{processNode.updateBy},</if>
+				<if test="processNode.delFlag != null">`del_flag` = #{processNode.delFlag}</if>
+			</set>
+			WHERE id = #{processNode.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_process_node 
+		<set>
+			<if test="param.name != null">`name` = #{param.name},</if>
+			<if test="param.displayName != null">`display_name` = #{param.displayName},</if>
+			<if test="param.processId != null">`process_id` = #{param.processId},</if>
+			<if test="param.prevId != null">`prev_id` = #{param.prevId},</if>
+			<if test="param.isBranch != null">`is_branch` = #{param.isBranch},</if>
+			<if test="param.type != null">`type` = #{param.type},</if>
+			<if test="param.auditType != null">`audit_type` = #{param.auditType},</if>
+			<if test="param.counterSign != null">`counter_sign` = #{param.counterSign},</if>
+			<if test="param.rejectType != null">`reject_type` = #{param.rejectType},</if>
+			<if test="param.priority != null">`priority` = #{param.priority},</if>
+			<if test="param.sort != null">`sort` = #{param.sort},</if>
+			<if test="param.createDate != null">`create_date` = #{param.createDate},</if>
+			<if test="param.createBy != null">`create_by` = #{param.createBy},</if>
+			<if test="param.updateDate != null">`update_date` = #{param.updateDate},</if>
+			<if test="param.updateBy != null">`update_by` = #{param.updateBy},</if>
+			<if test="param.delFlag != null">`del_flag` = #{param.delFlag}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.processId != null and where.processId != ''"> 
+		  		AND process_id = #{where.processId}
+		   </if>
+           <if test="where.prevId != null and where.prevId != ''"> 
+		  		AND prev_id = #{where.prevId}
+		   </if>
+           <if test="where.isBranch != null and where.isBranch != ''"> 
+		  		AND is_branch = #{where.isBranch}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.auditType != null and where.auditType != ''"> 
+		  		AND audit_type = #{where.auditType}
+		   </if>
+           <if test="where.counterSign != null and where.counterSign != ''"> 
+		  		AND counter_sign = #{where.counterSign}
+		   </if>
+           <if test="where.rejectType != null and where.rejectType != ''"> 
+		  		AND reject_type = #{where.rejectType}
+		   </if>
+           <if test="where.priority != null and where.priority != ''"> 
+		  		AND priority = #{where.priority}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_process_node 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.processId != null and where.processId != ''"> 
+		  		AND process_id = #{where.processId}
+		   </if>
+           <if test="where.prevId != null and where.prevId != ''"> 
+		  		AND prev_id = #{where.prevId}
+		   </if>
+           <if test="where.isBranch != null and where.isBranch != ''"> 
+		  		AND is_branch = #{where.isBranch}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.auditType != null and where.auditType != ''"> 
+		  		AND audit_type = #{where.auditType}
+		   </if>
+           <if test="where.counterSign != null and where.counterSign != ''"> 
+		  		AND counter_sign = #{where.counterSign}
+		   </if>
+           <if test="where.rejectType != null and where.rejectType != ''"> 
+		  		AND reject_type = #{where.rejectType}
+		   </if>
+           <if test="where.priority != null and where.priority != ''"> 
+		  		AND priority = #{where.priority}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_process_node 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.name != null and where.name != ''"> 
+		  		AND name = #{where.name}
+		   </if>
+           <if test="where.displayName != null and where.displayName != ''"> 
+		  		AND display_name = #{where.displayName}
+		   </if>
+           <if test="where.processId != null and where.processId != ''"> 
+		  		AND process_id = #{where.processId}
+		   </if>
+           <if test="where.prevId != null and where.prevId != ''"> 
+		  		AND prev_id = #{where.prevId}
+		   </if>
+           <if test="where.isBranch != null and where.isBranch != ''"> 
+		  		AND is_branch = #{where.isBranch}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.auditType != null and where.auditType != ''"> 
+		  		AND audit_type = #{where.auditType}
+		   </if>
+           <if test="where.counterSign != null and where.counterSign != ''"> 
+		  		AND counter_sign = #{where.counterSign}
+		   </if>
+           <if test="where.rejectType != null and where.rejectType != ''"> 
+		  		AND reject_type = #{where.rejectType}
+		   </if>
+           <if test="where.priority != null and where.priority != ''"> 
+		  		AND priority = #{where.priority}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</delete>
+    
+    <select id="getNextProcessNode" resultType="ProcessNodeDO">
+        SELECT
+        <include refid="processNodeColumns"></include>
+        FROM
+            flow_process_node a
+        WHERE
+            a.prev_id = #{value}
+            AND a.type != '3'
+    </select>
+
+    <select id="conditionNodeList" resultType="ProcessNodeDO">
+        SELECT
+            <include refid="processNodeColumns"></include>
+        FROM
+            flow_process_node a
+        WHERE
+            a.prev_id = #{value}
+            AND a.type = '3'
+        ORDER BY a.priority
+    </select>
+
+    <select id="getStartNode" resultType="ProcessNodeDO">
+        SELECT
+            <include refid="processNodeColumns"></include>
+        FROM
+            flow_process_node a
+            JOIN flow_process b ON a.process_id = b.id
+            JOIN flow_order c ON b.id = c.proc_id
+        WHERE
+            a.type = '1'
+            AND c.id = #{value}
+    </select>
+
+    <select id="findLeaderTaskNode" resultType="ProcessNodeDO">
+        SELECT
+            <include refid="processNodeColumns"></include>
+            ,
+            b.order_id AS orderId,
+            c.create_by AS initiator
+        FROM
+            flow_process_node a
+        JOIN flow_order_task b ON a.id = b.node_id
+        JOIN flow_order c on b.order_id =c.id
+        WHERE
+            a.audit_type = '4'
+    </select>
+</mapper>

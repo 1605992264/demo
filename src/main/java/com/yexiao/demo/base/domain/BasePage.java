@@ -16,10 +16,14 @@ public class BasePage<T> {
     @ApiModelProperty(value = "当前页数")
     private Long pageNo = 1L;
 
+    /**
+     * mybatis plus 分页
+     * */
     public Page<T> newMybatisPlusPage(){
         Page<T> page = new Page<>();
         page.setCurrent(this.pageNo);
         page.setSize(this.pageSize);
         return page;
     }
+
 }

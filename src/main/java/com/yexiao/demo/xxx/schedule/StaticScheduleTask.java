@@ -14,9 +14,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class StaticScheduleTask {
 
     //3.添加定时任务 每30秒执行一次
-    @Scheduled(cron = "0/30 * * * * ?")
+    //@Scheduled(cron = "0/30 * * * * ?")
     //或直接指定时间间隔，例如：5秒
-    //@Scheduled(fixedRate=5000)
+    @Scheduled(fixedRate=5000)
     public void configureTasks() {
         /**
          * 每5秒要执行的任务

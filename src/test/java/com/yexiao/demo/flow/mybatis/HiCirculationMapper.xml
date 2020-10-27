@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.HiCirculationDao">
+
+    <sql id="hiCirculationColumns">
+    	a.`id` AS "id",
+    	a.`order_id` AS "orderId",
+    	a.`task_name` AS "taskName",
+    	a.`node_id` AS "nodeId",
+    	a.`sort` AS "sort",
+    	a.`create_date` AS "createDate"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="HiCirculationDO">
+		SELECT  
+		<include refid="hiCirculationColumns"/>
+		FROM flow_hi_circulation a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="HiCirculationDO">
+		SELECT 
+        <include refid="hiCirculationColumns"/>,
+		MAX(b.`create_date`) AS "updateDate",
+		IFNULL(GROUP_CONCAT(b.commnet),"") AS "comments",
+		GROUP_CONCAT(b.user_id) AS "userIds",
+		GROUP_CONCAT(b.type) AS "types",
+        GROUP_CONCAT(IFNULL(b.file_url,"")) AS "fileUrls",
+		IFNULL(GROUP_CONCAT(d.name),"") AS "userNames",
+		c.type AS "state",
+		c.counter_sign AS "counterSign"
+        FROM flow_hi_circulation a
+		right join flow_hi_circulation_detailed b on b.circulation_id = a.id
+		left join flow_process_node c on c.id = a.node_id
+		left join sys_user d on d.id = b.user_id
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.orderId != null and entity.orderId != ''"> 
+		  		AND a.order_id = #{entity.orderId}
+		   </if>		
+           <if test="entity.taskName != null and entity.taskName != ''"> 
+		  		AND a.task_name = #{entity.taskName}
+		   </if>		
+           <if test="entity.nodeId != null and entity.nodeId != ''"> 
+		  		AND a.node_id = #{entity.nodeId}
+		   </if>		
+           <if test="entity.sort != null and entity.sort != ''"> 
+		  		AND a.sort = #{entity.sort}
+		   </if>		
+		</where>
+		group by a.id
+        ORDER BY a.sort
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_hi_circulation
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="orderId != null">`order_id`,</if>
+					<if test="taskName != null">`task_name`,</if>
+					<if test="nodeId != null">`node_id`,</if>
+					<if test="sort != null">`sort`,</if>
+					<if test="createDate">`create_date`,</if>
+			        <if test="createBy">`create_by`,</if>
+					<if test="updateDate">`update_date`,</if>
+					<if test="updateBy">`update_by`</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="orderId != null">#{orderId},</if>
+			<if test="taskName != null">#{taskName},</if>
+			<if test="nodeId != null">#{nodeId},</if>
+			<if test="sort != null">#{sort},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null" >#{createBy},</if>
+			<if test="updateDate != null">#{updateDate},</if>
+			<if test="updateBy != null">#{updateBy}</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_hi_circulation 
+		<set>
+				<if test="orderId != null">`order_id` = #{orderId},</if>
+				<if test="taskName != null">`task_name` = #{taskName},</if>
+				<if test="nodeId != null">`node_id` = #{nodeId},</if>
+				<if test="sort != null">`sort` = #{sort},</if>
+			    <if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null" >`create_by` = #{createBy},</if>
+				<if test="updateDate != null">`update_date` = #{updateDate},</if>
+				<if test="updateBy != null">`update_by` = #{updateBy}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_hi_circulation 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_hi_circulation 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_hi_circulation 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_hi_circulation 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_hi_circulation
+		(
+			`id`,
+			`order_id`,
+			`task_name`,
+			`node_id`,
+			`sort`
+		)
+		VALUES
+		<foreach item="hiCirculation" collection="list" separator=",">
+		(
+			#{hiCirculation.id},
+			#{hiCirculation.orderId},
+			#{hiCirculation.taskName},
+			#{hiCirculation.nodeId},
+			#{hiCirculation.sort}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="hiCirculation" collection="list" separator=";">
+			UPDATE flow_hi_circulation 
+			<set>
+				<if test="hiCirculation.orderId != null">`order_id` = #{hiCirculation.orderId},</if>
+				<if test="hiCirculation.taskName != null">`task_name` = #{hiCirculation.taskName},</if>
+				<if test="hiCirculation.nodeId != null">`node_id` = #{hiCirculation.nodeId},</if>
+				<if test="hiCirculation.sort != null">`sort` = #{hiCirculation.sort}</if>
+			</set>
+			WHERE id = #{hiCirculation.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_hi_circulation 
+		<set>
+			<if test="param.orderId != null">`order_id` = #{param.orderId},</if>
+			<if test="param.taskName != null">`task_name` = #{param.taskName},</if>
+			<if test="param.nodeId != null">`node_id` = #{param.nodeId},</if>
+			<if test="param.sort != null">`sort` = #{param.sort}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_hi_circulation 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_hi_circulation 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.orderId != null and where.orderId != ''"> 
+		  		AND order_id = #{where.orderId}
+		   </if>
+           <if test="where.taskName != null and where.taskName != ''"> 
+		  		AND task_name = #{where.taskName}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.sort != null and where.sort != ''"> 
+		  		AND sort = #{where.sort}
+		   </if>
+		</where>
+	</delete>
+
+    <select id="count" resultType="int">
+        select count(*)
+        from flow_hi_circulation
+        <where>
+            <if test="where.id != null and where.id != ''">
+                AND id = #{where.id}
+            </if>
+            <if test="where.orderId != null and where.orderId != ''">
+                AND order_id = #{where.orderId}
+            </if>
+            <if test="where.taskName != null and where.taskName != ''">
+                AND task_name = #{where.taskName}
+            </if>
+            <if test="where.nodeId != null and where.nodeId != ''">
+                AND node_id = #{where.nodeId}
+            </if>
+            <if test="where.sort != null and where.sort != ''">
+                AND sort = #{where.sort}
+            </if>
+        </where>
+    </select>
+
+    <select id="getNowHiCirculationByOrder" resultType="HiCirculationDO">
+        select
+        <include refid="hiCirculationColumns"></include>
+        ,
+        b.type AS state
+        from flow_hi_circulation a
+        LEFT JOIN flow_process_node b on a.node_id = b.id
+        where
+            a.order_id = #{orderId}
+            order by a.sort desc
+            limit 1
+    </select>
+
+
+
+</mapper>

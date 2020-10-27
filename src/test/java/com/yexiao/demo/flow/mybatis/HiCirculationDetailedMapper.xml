@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.HiCirculationDetailedDao">
+
+    <sql id="hiCirculationDetailedColumns">
+    	a.`id` AS "id",
+    	a.`circulation_id` AS "circulationId",
+    	a.`user_id` AS "userId",
+    	a.`type` AS "type",
+    	a.`commnet` AS "commnet",
+    	a.`file_url` AS "fileUrl",
+    	a.`create_date` AS "createDate",
+    	a.`create_by` AS "createBy",
+    	a.`del_flag` AS "delFlag"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="HiCirculationDetailedDO">
+		SELECT  
+		<include refid="hiCirculationDetailedColumns"/>
+		FROM flow_hi_circulation_detailed a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="HiCirculationDetailedDO">
+		SELECT 
+        <include refid="hiCirculationDetailedColumns"/>
+        FROM flow_hi_circulation_detailed a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.circulationId != null and entity.circulationId != ''"> 
+		  		AND a.circulation_id = #{entity.circulationId}
+		   </if>		
+           <if test="entity.userId != null and entity.userId != ''"> 
+		  		AND a.user_id = #{entity.userId}
+		   </if>		
+           <if test="entity.type != null and entity.type != ''"> 
+		  		AND a.type = #{entity.type}
+		   </if>		
+           <if test="entity.commnet != null and entity.commnet != ''"> 
+		  		AND a.commnet = #{entity.commnet}
+		   </if>		
+           <if test="entity.fileUrl != null and entity.fileUrl != ''"> 
+		  		AND a.file_url = #{entity.fileUrl}
+		   </if>		
+           <if test="entity.createDate != null and entity.createDate != ''"> 
+		  		AND a.create_date = #{entity.createDate}
+		   </if>		
+           <if test="entity.createBy != null and entity.createBy != ''"> 
+		  		AND a.create_by = #{entity.createBy}
+		   </if>		
+           <if test="entity.delFlag != null and entity.delFlag != ''"> 
+		  		AND a.del_flag = #{entity.delFlag}
+		   </if>
+		   <if test="entity.delFlag == null or entity.delFlag == ''"> 
+		  		AND a.del_flag = '0'
+		   </if>
+		</where>
+        ORDER BY a.update_date DESC,a.id DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_hi_circulation_detailed
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="circulationId != null">`circulation_id`,</if>
+					<if test="userId != null">`user_id`,</if>
+					<if test="type != null">`type`,</if>
+					<if test="commnet != null">`commnet`,</if>
+					<if test="fileUrl != null">`file_url`,</if>
+					<if test="createDate != null">`create_date`,</if>
+					<if test="createBy != null">`create_by`,</if>
+					<if test="delFlag != null">`del_flag`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="circulationId != null">#{circulationId},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="type != null">#{type},</if>
+			<if test="commnet != null">#{commnet},</if>
+			<if test="fileUrl != null">#{fileUrl},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null">#{createBy},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_hi_circulation_detailed 
+		<set>
+				<if test="circulationId != null">`circulation_id` = #{circulationId},</if>
+				<if test="userId != null">`user_id` = #{userId},</if>
+				<if test="type != null">`type` = #{type},</if>
+				<if test="commnet != null">`commnet` = #{commnet},</if>
+				<if test="fileUrl != null">`file_url` = #{fileUrl},</if>
+				<if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null">`create_by` = #{createBy},</if>
+				<if test="delFlag != null">`del_flag` = #{delFlag}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_hi_circulation_detailed 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_hi_circulation_detailed 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_hi_circulation_detailed 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_hi_circulation_detailed 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_hi_circulation_detailed
+		(
+			`id`,
+			`circulation_id`,
+			`user_id`,
+			`type`,
+			`commnet`,
+			`file_url`,
+			`create_date`,
+			`create_by`,
+			`del_flag`
+		)
+		VALUES
+		<foreach item="hiCirculationDetailed" collection="list" separator=",">
+		(
+			#{hiCirculationDetailed.id},
+			#{hiCirculationDetailed.circulationId},
+			#{hiCirculationDetailed.userId},
+			#{hiCirculationDetailed.type},
+			#{hiCirculationDetailed.commnet},
+			#{hiCirculationDetailed.fileUrl},
+			#{hiCirculationDetailed.createDate},
+			#{hiCirculationDetailed.createBy},
+			#{hiCirculationDetailed.delFlag}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="hiCirculationDetailed" collection="list" separator=";">
+			UPDATE flow_hi_circulation_detailed 
+			<set>
+				<if test="hiCirculationDetailed.circulationId != null">`circulation_id` = #{hiCirculationDetailed.circulationId},</if>
+				<if test="hiCirculationDetailed.userId != null">`user_id` = #{hiCirculationDetailed.userId},</if>
+				<if test="hiCirculationDetailed.type != null">`type` = #{hiCirculationDetailed.type},</if>
+				<if test="hiCirculationDetailed.commnet != null">`commnet` = #{hiCirculationDetailed.commnet},</if>
+				<if test="hiCirculationDetailed.fileUrl != null">`file_url` = #{hiCirculationDetailed.fileUrl},</if>
+				<if test="hiCirculationDetailed.createDate != null">`create_date` = #{hiCirculationDetailed.createDate},</if>
+				<if test="hiCirculationDetailed.createBy != null">`create_by` = #{hiCirculationDetailed.createBy},</if>
+				<if test="hiCirculationDetailed.delFlag != null">`del_flag` = #{hiCirculationDetailed.delFlag}</if>
+			</set>
+			WHERE id = #{hiCirculationDetailed.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_hi_circulation_detailed 
+		<set>
+			<if test="param.circulationId != null">`circulation_id` = #{param.circulationId},</if>
+			<if test="param.userId != null">`user_id` = #{param.userId},</if>
+			<if test="param.type != null">`type` = #{param.type},</if>
+			<if test="param.commnet != null">`commnet` = #{param.commnet},</if>
+			<if test="param.fileUrl != null">`file_url` = #{param.fileUrl},</if>
+			<if test="param.createDate != null">`create_date` = #{param.createDate},</if>
+			<if test="param.createBy != null">`create_by` = #{param.createBy},</if>
+			<if test="param.delFlag != null">`del_flag` = #{param.delFlag}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.circulationId != null and where.circulationId != ''"> 
+		  		AND circulation_id = #{where.circulationId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.commnet != null and where.commnet != ''"> 
+		  		AND commnet = #{where.commnet}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_hi_circulation_detailed 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.circulationId != null and where.circulationId != ''"> 
+		  		AND circulation_id = #{where.circulationId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.commnet != null and where.commnet != ''"> 
+		  		AND commnet = #{where.commnet}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_hi_circulation_detailed 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.circulationId != null and where.circulationId != ''"> 
+		  		AND circulation_id = #{where.circulationId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.type != null and where.type != ''"> 
+		  		AND type = #{where.type}
+		   </if>
+           <if test="where.commnet != null and where.commnet != ''"> 
+		  		AND commnet = #{where.commnet}
+		   </if>
+           <if test="where.fileUrl != null and where.fileUrl != ''"> 
+		  		AND file_url = #{where.fileUrl}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+		</where>
+	</delete>
+</mapper>

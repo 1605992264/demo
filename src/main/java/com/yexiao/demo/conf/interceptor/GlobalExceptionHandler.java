@@ -1,7 +1,5 @@
 package com.yexiao.demo.conf.interceptor;
 
-import com.yexiao.demo.base.annotation.LogAspect;
-import com.yexiao.demo.base.utils.HttpRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +13,6 @@ import java.util.Map;
  * @author xuhf
  * @date 2020/8/26 15:36
  * 全局异常处理器
- * 只能拦截service层 所以业务逻辑全部放在service层
  **/
 @Slf4j
 @ControllerAdvice

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.FormDataDao">
+
+    <resultMap type="com.alibaba.fastjson.JSONObject" id="formDataJSONObject">
+        <id column="id" property="id"/>
+        <result column="number" property="number"/>
+        <result column="name" property="name"/>
+        <result column="time" property="time"/>
+        <result column="user" property="user"/>
+        <result column="projectName" property="projectName"/>
+        <result column="procInsId" property="procInsId"/>
+        <result column="taskArranger" property="taskArranger"/>
+        <result column="allmoney" property="allmoney"/>
+        <result column="status" property="status"/>
+        <result column="createBy" property="createBy"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateBy" property="updateBy"/>
+        <result column="updateDate" property="updateDate"/>
+        <result column="delFlag" property="delFlag"/>
+        <result column="isEdit" property="isEdit"/>
+        <result column="office" property="office"/>
+<!--        <collection property="costDetailDOS" ofType="com.alibaba.fastjson.JSONObject"-->
+<!--                    select="com.txdata.modules.reimbursement.dao.CostDetailDao.list" column="{entity.reimburseId = id}">-->
+<!--        </collection>-->
+    </resultMap>
+
+    <sql id="formData">
+        distinct(d.`id`) AS "id",
+        d.`number` AS "number",
+        d.`name` AS "name",
+        d.`time` AS "time",
+        d.`user` AS "user",
+        h.`name` AS "userName",
+--         d.`project_name` AS "projectName",
+        d.`proc_ins_id` AS "procInsId",
+        d.`task_arranger` AS "taskArranger",
+--         d.`allmoney` AS "allmoney",
+        d.`create_date` AS "createDate",
+        d.`create_by` AS "createBy",
+        d.`update_date` AS "updateDate",
+        d.`update_by` AS "updateBy",
+        d.`del_flag` AS "delFlag",
+        d.`status` AS "status",
+        office.`name`  AS "office"
+    </sql>
+
+    <sql id="leftjoin">
+
+    </sql>
+
+    <select id="approvalFormDataList" resultMap="formDataJSONObject">
+        SELECT
+        <include refid="formData"></include>
+        FROM
+        flow_process_node a
+        JOIN flow_process b ON a.process_id = b.id
+        JOIN flow_order c ON b.id = c.proc_id
+        JOIN t_reimburse d ON c.id = d.proc_ins_id
+        LEFT JOIN t_cost_detail e ON d.id = e.reimburse_id
+        LEFT JOIN flow_hi_circulation g ON g.node_id = a.id
+        LEFT JOIN flow_hi_circulation_detailed gg ON gg.circulation_id = g.id
+        LEFT JOIN sys_user h ON h.id = d.USER
+        LEFT JOIN sys_office office ON h.office_id = office.id
+        <where>
+            ( gg.type = '4' OR gg.type = '5' )
+            AND gg.user_id = #{userId}
+            AND c.id = g.order_id
+            <if test="entity.number != null and entity.number != ''">
+                AND d.number = #{entity.number}
+            </if>
+            <if test="entity.name != null and entity.name != ''">
+                AND d.name LIKE CONCAT('%',#{entity.name},'%')
+            </if>
+            <if test="entity.type !=null and entity.type != ''">
+                AND d.type = #{entity.type}
+            </if>
+            <choose>
+                <when test="entity.mark != null and entity.mark != ''">
+                    <if test="entity.mark == 1 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &gt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 2 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &lt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 3 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney = #{entity.allmoney}
+                    </if>
+                </when>
+            </choose>
+        </where>
+        GROUP BY
+        d.id,
+        h.id
+        ORDER BY
+        d.update_date DESC
+    </select>
+
+    <select id="notApprovalFormDataList" resultMap="formDataJSONObject">
+        SELECT
+            <include refid="formData"></include>
+        FROM
+        flow_process_node a
+        JOIN flow_process b ON a.process_id = b.id
+        JOIN flow_order c ON b.id = c.proc_id
+        JOIN t_reimburse d ON c.id = d.proc_ins_id
+        LEFT JOIN t_cost_detail e ON d.id = e.reimburse_id
+        JOIN flow_order_task g ON g.order_id = c.id
+        LEFT JOIN sys_user h ON h.id = d.USER
+        LEFT JOIN sys_office office ON h.office_id = office.id
+        <where>
+            FIND_IN_SET(c.id,#{orderIds})
+            AND g.node_id = a.id
+            <if test="entity.number != null and entity.number != ''">
+                AND d.number = #{entity.number}
+            </if>
+            <if test="entity.name != null and entity.name != ''">
+                AND d.name LIKE CONCAT('%',#{entity.name},'%')
+            </if>
+            <if test="entity.type !=null and entity.type != ''">
+                AND d.type = #{entity.type}
+            </if>
+            <choose>
+                <when test="entity.mark != null and entity.mark != ''">
+                    <if test="entity.mark == 1 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &gt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 2 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &lt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 3 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney = #{entity.allmoney}
+                    </if>
+                </when>
+            </choose>
+        </where>
+        ORDER BY d.update_date desc
+    </select>
+
+    <select id="copyToMeFormDataList" resultMap="formDataJSONObject">
+        SELECT
+        <include refid="formData"></include>
+        FROM
+        flow_process_node a
+        JOIN flow_process b ON a.process_id = b.id
+        JOIN flow_order c ON b.id = c.proc_id
+        JOIN t_reimburse d ON c.id = d.proc_ins_id
+        LEFT JOIN t_cost_detail e ON d.id = e.reimburse_id
+        LEFT JOIN flow_hi_circulation g ON g.node_id = a.id
+        LEFT JOIN flow_hi_circulation_detailed gg ON gg.circulation_id = g.id
+        LEFT JOIN sys_user h ON h.id = d.USER
+        LEFT JOIN sys_office office ON h.office_id = office.id
+        <where>
+            gg.type = '3'
+            AND gg.user_id = #{userId}
+            AND c.id = g.order_id
+            <if test="entity.number != null and entity.number != ''">
+                AND d.number = #{entity.number}
+            </if>
+            <if test="entity.name != null and entity.name != ''">
+                AND d.name LIKE CONCAT('%',#{entity.name},'%')
+            </if>
+            <if test="entity.type !=null and entity.type != ''">
+                AND d.type = #{entity.type}
+            </if>
+            <choose>
+                <when test="entity.mark != null and entity.mark != ''">
+                    <if test="entity.mark == 1 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &gt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 2 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney &lt; #{entity.allmoney}
+                    </if>
+                    <if test="entity.mark == 3 and (entity.allmoney != null and entity.allmoney != '')">
+                        and d.allmoney = #{entity.allmoney}
+                    </if>
+                </when>
+            </choose>
+        </where>
+        GROUP BY
+        d.id,
+        h.id
+        ORDER BY
+        d.update_date DESC
+    </select>
+</mapper>

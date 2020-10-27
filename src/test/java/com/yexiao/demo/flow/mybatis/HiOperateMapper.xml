@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.txdata.flow.dao.HiOperateDao">
+
+    <sql id="hiOperateColumns">
+    	a.`id` AS "id",
+    	a.`node_id` AS "nodeId",
+    	a.`user_id` AS "userId",
+    	a.`operate_type` AS "operateType",
+    	a.`approval_advice` AS "approvalAdvice",
+    	a.`his_file_path` AS "hisFilePath",
+    	a.`create_date` AS "createDate",
+    	a.`create_by` AS "createBy",
+    	a.`update_date` AS "updateDate",
+    	a.`update_by` AS "updateBy",
+    	a.`del_flag` AS "delFlag",
+    	a.`case_id` AS "caseId",
+    	a.`sort` AS "sort"
+    </sql>
+    
+    <sql id="leftJion">
+    </sql>
+    
+	<select id="get" resultType="HiOperateDO">
+		SELECT  
+		<include refid="hiOperateColumns"/>
+		FROM flow_hi_operate a
+		<include refid="leftJion"/>
+		WHERE a.id = #{value}
+	</select>
+
+	<select id="list" resultType="HiOperateDO">
+		SELECT 
+        <include refid="hiOperateColumns"/>
+        FROM flow_hi_operate a
+        <include refid="leftJion"/>
+        <where> 
+           <if test="entity.id != null and entity.id != ''"> 
+		  		AND a.id = #{entity.id}
+		   </if>		
+           <if test="entity.nodeId != null and entity.nodeId != ''"> 
+		  		AND a.node_id = #{entity.nodeId}
+		   </if>		
+           <if test="entity.userId != null and entity.userId != ''"> 
+		  		AND a.user_id = #{entity.userId}
+		   </if>		
+           <if test="entity.operateType != null and entity.operateType != ''"> 
+		  		AND a.operate_type = #{entity.operateType}
+		   </if>		
+           <if test="entity.approvalAdvice != null and entity.approvalAdvice != ''"> 
+		  		AND a.approval_advice = #{entity.approvalAdvice}
+		   </if>		
+           <if test="entity.hisFilePath != null and entity.hisFilePath != ''">
+		  		AND a.his_file_path = #{entity.hisFilePath}
+		   </if>		
+           <if test="entity.createDate != null and entity.createDate != ''"> 
+		  		AND a.create_date = #{entity.createDate}
+		   </if>		
+           <if test="entity.createBy != null and entity.createBy != ''"> 
+		  		AND a.create_by = #{entity.createBy}
+		   </if>		
+           <if test="entity.updateDate != null and entity.updateDate != ''"> 
+		  		AND a.update_date = #{entity.updateDate}
+		   </if>		
+           <if test="entity.updateBy != null and entity.updateBy != ''"> 
+		  		AND a.update_by = #{entity.updateBy}
+		   </if>		
+           <if test="entity.delFlag != null and entity.delFlag != ''"> 
+		  		AND a.del_flag = #{entity.delFlag}
+		   </if>
+		   <if test="entity.delFlag == null or entity.delFlag == ''"> 
+		  		AND a.del_flag = '0'
+		   </if>
+           <if test="entity.caseId != null and entity.caseId != ''"> 
+		  		AND a.case_id = #{entity.caseId}
+		   </if>		
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO flow_hi_operate
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+					<if test="id != null">`id`,</if>
+					<if test="nodeId != null">`node_id`,</if>
+					<if test="userId != null">`user_id`,</if>
+					<if test="operateType != null">`operate_type`,</if>
+					<if test="approvalAdvice != null">`approval_advice`,</if>
+					<if test="hisFilePath != null">`his_file_path`,</if>
+					<if test="createDate != null">`create_date`,</if>
+					<if test="createBy != null">`create_by`,</if>
+					<if test="updateDate != null">`update_date`,</if>
+					<if test="updateBy != null">`update_by`,</if>
+					<if test="delFlag != null">`del_flag`,</if>
+					<if test="caseId != null">`case_id`,</if>
+                    <if test="sort != null">`sort`,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">#{id},</if>
+			<if test="nodeId != null">#{nodeId},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="operateType != null">#{operateType},</if>
+			<if test="approvalAdvice != null">#{approvalAdvice},</if>
+			<if test="hisFilePath != null">#{hisFilePath},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="createBy != null">#{createBy},</if>
+			<if test="updateDate != null">#{updateDate},</if>
+			<if test="updateBy != null">#{updateBy},</if>
+			<if test="delFlag != null">#{delFlag},</if>
+			<if test="caseId != null">#{caseId},</if>
+            <if test="sort != null">#{sort},</if>
+		</trim>
+	</insert>
+	 
+	<update id="update">
+		UPDATE flow_hi_operate 
+		<set>
+				<if test="nodeId != null">`node_id` = #{nodeId},</if>
+				<if test="userId != null">`user_id` = #{userId},</if>
+				<if test="operateType != null">`operate_type` = #{operateType},</if>
+				<if test="approvalAdvice != null">`approval_advice` = #{approvalAdvice},</if>
+				<if test="hisFilePath != null">`his_file_path` = #{hisFilePath},</if>
+				<if test="createDate != null">`create_date` = #{createDate},</if>
+				<if test="createBy != null">`create_by` = #{createBy},</if>
+				<if test="updateDate != null">`update_date` = #{updateDate},</if>
+				<if test="updateBy != null">`update_by` = #{updateBy},</if>
+				<if test="delFlag != null">`del_flag` = #{delFlag},</if>
+				<if test="caseId != null">`case_id` = #{caseId}</if>
+                <if test="sort != null">`sort` = #{sort}</if>
+		</set>
+		WHERE id = #{id} 
+	</update>
+	
+	<update id="remove">
+		UPDATE flow_hi_operate 
+		SET `del_flag` = '1'
+		WHERE id = #{value}
+	</update>
+	
+	<update id="batchRemove">
+		UPDATE flow_hi_operate 
+		SET `del_flag` = '1'
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM flow_hi_operate 
+		WHERE id = #{value}
+	</delete>
+	
+	<delete id="batchDelete">
+		DELETE FROM flow_hi_operate 
+		WHERE id IN 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<insert id="batchInsert">
+		INSERT INTO flow_hi_operate
+		(
+			`id`,
+			`node_id`,
+			`user_id`,
+			`operate_type`,
+			`approval_advice`,
+			`file_path`,
+			`create_date`,
+			`create_by`,
+			`update_date`,
+			`update_by`,
+			`del_flag`,
+			`case_id`
+		)
+		VALUES
+		<foreach item="hiOperate" collection="list" separator=",">
+		(
+			#{hiOperate.id},
+			#{hiOperate.nodeId},
+			#{hiOperate.userId},
+			#{hiOperate.operateType},
+			#{hiOperate.approvalAdvice},
+			#{hiOperate.filePath},
+			#{hiOperate.createDate},
+			#{hiOperate.createBy},
+			#{hiOperate.updateDate},
+			#{hiOperate.updateBy},
+			#{hiOperate.delFlag},
+			#{hiOperate.caseId}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="batchUpdate">
+		<foreach item="hiOperate" collection="list" separator=";">
+			UPDATE flow_hi_operate 
+			<set>
+				<if test="hiOperate.nodeId != null">`node_id` = #{hiOperate.nodeId},</if>
+				<if test="hiOperate.userId != null">`user_id` = #{hiOperate.userId},</if>
+				<if test="hiOperate.operateType != null">`operate_type` = #{hiOperate.operateType},</if>
+				<if test="hiOperate.approvalAdvice != null">`approval_advice` = #{hiOperate.approvalAdvice},</if>
+				<if test="hiOperate.filePath != null">`file_path` = #{hiOperate.filePath},</if>
+				<if test="hiOperate.createDate != null">`create_date` = #{hiOperate.createDate},</if>
+				<if test="hiOperate.createBy != null">`create_by` = #{hiOperate.createBy},</if>
+				<if test="hiOperate.updateDate != null">`update_date` = #{hiOperate.updateDate},</if>
+				<if test="hiOperate.updateBy != null">`update_by` = #{hiOperate.updateBy},</if>
+				<if test="hiOperate.delFlag != null">`del_flag` = #{hiOperate.delFlag},</if>
+				<if test="hiOperate.caseId != null">`case_id` = #{hiOperate.caseId}</if>
+			</set>
+			WHERE id = #{hiOperate.id} 
+		</foreach>
+	</update>
+	
+	<update id="updateByWhere">
+		UPDATE flow_hi_operate 
+		<set>
+			<if test="param.nodeId != null">`node_id` = #{param.nodeId},</if>
+			<if test="param.userId != null">`user_id` = #{param.userId},</if>
+			<if test="param.operateType != null">`operate_type` = #{param.operateType},</if>
+			<if test="param.approvalAdvice != null">`approval_advice` = #{param.approvalAdvice},</if>
+			<if test="param.filePath != null">`file_path` = #{param.filePath},</if>
+			<if test="param.createDate != null">`create_date` = #{param.createDate},</if>
+			<if test="param.createBy != null">`create_by` = #{param.createBy},</if>
+			<if test="param.updateDate != null">`update_date` = #{param.updateDate},</if>
+			<if test="param.updateBy != null">`update_by` = #{param.updateBy},</if>
+			<if test="param.delFlag != null">`del_flag` = #{param.delFlag},</if>
+			<if test="param.caseId != null">`case_id` = #{param.caseId}</if>
+		</set>
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.operateType != null and where.operateType != ''"> 
+		  		AND operate_type = #{where.operateType}
+		   </if>
+           <if test="where.approvalAdvice != null and where.approvalAdvice != ''"> 
+		  		AND approval_advice = #{where.approvalAdvice}
+		   </if>
+           <if test="where.filePath != null and where.filePath != ''"> 
+		  		AND file_path = #{where.filePath}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+           <if test="where.caseId != null and where.caseId != ''"> 
+		  		AND case_id = #{where.caseId}
+		   </if>
+		</where>
+	</update>
+	
+	<update id="removeByWhere">
+		UPDATE flow_hi_operate 
+		SET `del_flag` = '1'
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.operateType != null and where.operateType != ''"> 
+		  		AND operate_type = #{where.operateType}
+		   </if>
+           <if test="where.approvalAdvice != null and where.approvalAdvice != ''"> 
+		  		AND approval_advice = #{where.approvalAdvice}
+		   </if>
+           <if test="where.filePath != null and where.filePath != ''"> 
+		  		AND file_path = #{where.filePath}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+           <if test="where.caseId != null and where.caseId != ''"> 
+		  		AND case_id = #{where.caseId}
+		   </if>
+		</where>
+	</update>
+	
+	<delete id="deleteByWhere">
+		DELETE FROM flow_hi_operate 
+		<where> 
+           <if test="where.id != null and where.id != ''"> 
+		  		AND id = #{where.id}
+		   </if>
+           <if test="where.nodeId != null and where.nodeId != ''"> 
+		  		AND node_id = #{where.nodeId}
+		   </if>
+           <if test="where.userId != null and where.userId != ''"> 
+		  		AND user_id = #{where.userId}
+		   </if>
+           <if test="where.operateType != null and where.operateType != ''"> 
+		  		AND operate_type = #{where.operateType}
+		   </if>
+           <if test="where.approvalAdvice != null and where.approvalAdvice != ''"> 
+		  		AND approval_advice = #{where.approvalAdvice}
+		   </if>
+           <if test="where.filePath != null and where.filePath != ''"> 
+		  		AND file_path = #{where.filePath}
+		   </if>
+           <if test="where.createDate != null and where.createDate != ''"> 
+		  		AND create_date = #{where.createDate}
+		   </if>
+           <if test="where.createBy != null and where.createBy != ''"> 
+		  		AND create_by = #{where.createBy}
+		   </if>
+           <if test="where.updateDate != null and where.updateDate != ''"> 
+		  		AND update_date = #{where.updateDate}
+		   </if>
+           <if test="where.updateBy != null and where.updateBy != ''"> 
+		  		AND update_by = #{where.updateBy}
+		   </if>
+           <if test="where.delFlag != null and where.delFlag != ''"> 
+		  		AND del_flag = #{where.delFlag}
+		   </if>
+           <if test="where.caseId != null and where.caseId != ''"> 
+		  		AND case_id = #{where.caseId}
+		   </if>
+		</where>
+	</delete>
+
+	<!-- 查询指定流程实例的流转历史操作列表 -->
+	<select id="queryPointProcessHistory" resultType="HiOperateDO">
+		SELECT
+		    <include refid="hiOperateColumns"/>,
+			b.`name` AS "userName",
+			e.`name` AS "operateName",
+			f.`name` AS "nodeName",
+			f.type AS "nodeType"
+		FROM
+			flow_hi_operate a
+		LEFT JOIN flow_hi_operate_detail d ON a.id = d.operate_id
+		LEFT JOIN sys_user b ON b.id = a.user_id OR d.user_id = b.id
+		LEFT JOIN flow_order c ON c.id = a.case_id
+		LEFT JOIN sys_dict e ON e.`value` = a.operate_type AND e.type = 'flow_hi_operate'
+		LEFT JOIN flow_process_node f ON f.id = a.node_id
+		<where>
+		    <if test="entity.delFlag == null or entity.delFlag == ''">
+				and a.del_flag = 0
+			</if>
+			<if test="entity.caseId != null and entity.caseId != ''">
+				AND a.case_id = #{entity.caseId}
+			</if>
+			<if test="entity.nodeId != null and entity.nodeId != ''">
+				AND a.node_id = #{entity.nodeId}
+			</if>
+			<if test="entity.operateType != null and entity.operateType != ''">
+				AND a.operate_type = #{entity.operateType}
+			</if>
+			<if test="entity.approvalAdvice != null and entity.approvalAdvice != ''">
+				AND a.approval_advice = #{entity.approvalAdvice}
+			</if>
+			<if test="entity.filePath != null and entity.filePath != ''">
+				AND a.file_path = #{entity.filePath}
+			</if>
+			<if test="entity.createDate != null and entity.createDate != ''">
+				AND a.create_date = #{entity.createDate}
+			</if>
+			<if test="entity.updateDate != null and entity.updateDate != ''">
+				AND a.update_date = #{entity.updateDate}
+			</if>
+		</where>
+		GROUP BY a.node_id
+		order by a.update_date
+	</select>
+
+    <select id="count" resultType="integer">
+        select count(*) from flow_hi_operate a
+        <where>
+            <if test="where.id != null and where.id != ''">
+                AND id = #{where.id}
+            </if>
+            <if test="where.nodeId != null and where.nodeId != ''">
+                AND node_id = #{where.nodeId}
+            </if>
+            <if test="where.userId != null and where.userId != ''">
+                AND user_id = #{where.userId}
+            </if>
+            <if test="where.operateType != null and where.operateType != ''">
+                AND operate_type = #{where.operateType}
+            </if>
+            <if test="where.approvalAdvice != null and where.approvalAdvice != ''">
+                AND approval_advice = #{where.approvalAdvice}
+            </if>
+            <if test="where.filePath != null and where.filePath != ''">
+                AND file_path = #{where.filePath}
+            </if>
+            <if test="where.createDate != null and where.createDate != ''">
+                AND create_date = #{where.createDate}
+            </if>
+            <if test="where.createBy != null and where.createBy != ''">
+                AND create_by = #{where.createBy}
+            </if>
+            <if test="where.updateDate != null and where.updateDate != ''">
+                AND update_date = #{where.updateDate}
+            </if>
+            <if test="where.updateBy != null and where.updateBy != ''">
+                AND update_by = #{where.updateBy}
+            </if>
+            <if test="where.delFlag != null and where.delFlag != ''">
+                AND del_flag = #{where.delFlag}
+            </if>
+            <if test="where.caseId != null and where.caseId != ''">
+                AND case_id = #{where.caseId}
+            </if>
+        </where>
+    </select>
+</mapper>
