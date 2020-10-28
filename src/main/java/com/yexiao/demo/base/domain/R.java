@@ -64,6 +64,17 @@ public class R<T> implements Serializable {
         return r;
     }
 
+    public static R success(BasePage basePage,Collection collection){
+        R r = new R();
+        Map<String,Object> jsonMap = new HashMap<>();
+        jsonMap.put("pageSize",basePage.getPageSize());
+        jsonMap.put("pageNo",basePage.getPageNo());
+        jsonMap.put("count",collection.size());
+        jsonMap.put("rows",collection);
+        r.data = jsonMap;
+        return r;
+    }
+
     public static R success(Map<String,Object> map){
         R r = new R();
         r.data = map;
