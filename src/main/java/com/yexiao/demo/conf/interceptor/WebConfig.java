@@ -21,9 +21,16 @@ public class WebConfig implements WebMvcConfigurer {
      *  */
     @Autowired
     private MyHandlerInterceptor myHandlerInterceptor;
+    @Autowired
+    private NoCacheHandler noCacheHandler;
 
+    /***
+     * 添加链式处理器
+     * 以添加拦截顺序来执行
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(noCacheHandler);
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(myHandlerInterceptor);
         // 设置不拦截的路径
         interceptorRegistration.excludePathPatterns("/error");
