@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yexiao.demo.domain.UserDO;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 /**
  * @author xuhf
  * @date 2020/8/20 10:59
@@ -28,4 +32,8 @@ public interface UserService extends IService<UserDO> {
 
     boolean register(UserDO userDO);
 
+    /**
+     * 获取在线人数
+     * */
+    List<UserDO> onlineUsers(HttpServletRequest request, HttpServletResponse response);
 }

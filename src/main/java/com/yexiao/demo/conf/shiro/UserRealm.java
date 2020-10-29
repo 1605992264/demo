@@ -75,8 +75,6 @@ public class UserRealm extends AuthorizingRealm {
         if(user == null){
             return null;
         }
-        // 设置token
-        user.setToken(UserUtils.newToken(user.getPassword()));
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 // 用户名（对象）
                 user,

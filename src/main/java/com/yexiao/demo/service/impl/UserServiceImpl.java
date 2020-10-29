@@ -1,20 +1,30 @@
 package com.yexiao.demo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
+import com.yexiao.demo.conf.redis.SessionRedisUtils;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author xuhf
@@ -23,6 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
+
+    @Autowired
+    private SessionRedisUtils sessionRedisUtils;
 
     /**
      * 查询列表
@@ -58,6 +71,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
         try {
             subject.login(token);
+            ((UserDO) subject.getPrincipal()).setToken(subject.getSession().getId().toString());
+            sessionRedisUtils.addUser((UserDO) subject.getPrincipal());
         }catch (IncorrectCredentialsException e){
             throw new RuntimeException("用户名或密码错误！");
         }
@@ -67,6 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
+        sessionRedisUtils.deleteUser(subject.getSession().getId().toString());
         subject.logout();
     }
 
@@ -98,6 +114,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             }
         }
         return false;
+    }
+
+    /**
+     * 获取当前在线用户
+     * */
+    @Override
+    public List<UserDO> onlineUsers(HttpServletRequest request, HttpServletResponse response) {
+        //todo: 需要的功能 分页  定时删除
+        List<UserDO> userDOList = new LinkedList<>();
+        return sessionRedisUtils.getAllSession();
     }
 
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
 import com.yexiao.demo.base.utils.HttpRequestUtils;
 import com.yexiao.demo.base.utils.UserUtils;
+import com.yexiao.demo.conf.elasticsearch.ElasticSearchUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
 import com.yexiao.demo.domain.LogDO;
 import com.yexiao.demo.domain.UserDO;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import sun.net.util.IPAddressUtil;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -34,6 +36,8 @@ public class LogAspect {
 
     @Autowired
     private LogService logService;
+    @Autowired
+    private ElasticSearchUtils elasticSearchUtils;
 
     @Pointcut("@annotation(com.yexiao.demo.base.annotation.Log)")
     public void addAdvice(){
@@ -142,6 +146,11 @@ public class LogAspect {
             logDO.setMethod(methodSignature.toShortString());
             logDO.setIp(HttpRequestUtils.getClientIPAddress());
             logService.save(logDO);
+            try {
+                elasticSearchUtils.save("log_test",logDO);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return returnResult;
     }

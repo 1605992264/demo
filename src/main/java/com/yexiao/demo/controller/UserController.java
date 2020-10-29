@@ -9,8 +9,13 @@ import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author xuhf
@@ -23,6 +28,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("getOnlineUsers")
+    public R onlineUsers(HttpServletRequest request, HttpServletResponse response){
+        List<UserDO> userDOList = userService.onlineUsers(request,response);
+        return R.success(userDOList);
+    }
+    
     @PostMapping("/register")
     public R register(UserDO userDO){
         if( userService.register(userDO) ){
