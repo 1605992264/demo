@@ -1,14 +1,13 @@
 package com.yexiao.demo.conf.shiro;
 
-//import org.apache.shiro.cache.CacheManager;
-import com.yexiao.demo.conf.shiro.UserRealm;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +16,7 @@ import java.util.LinkedHashMap;
 
 /**
  * shiro 配置
+ * @author xuhf
  * */
 @Configuration
 public class ShiroConfig {
@@ -38,11 +38,23 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
+    @Bean
+    public SessionDAO sessionDAO(){
+        return new MemorySessionDAO();
+    }
+
+    @Bean
+    public SessionManager sessionManager(SessionDAO sessionDAO){
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(sessionDAO);
+        return sessionManager;
+    }
 
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
+        securityManager.setSessionManager(sessionManager(sessionDAO()));
         securityManager.setRealm(userRealm());
         return securityManager;
     }

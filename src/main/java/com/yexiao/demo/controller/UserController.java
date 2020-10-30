@@ -28,10 +28,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequiresRoles("admin")
     @PostMapping("getOnlineUsers")
-    public R onlineUsers(HttpServletRequest request, HttpServletResponse response){
-        List<UserDO> userDOList = userService.onlineUsers(request,response);
+    public R onlineUsers(){
+        List<UserDO> userDOList = userService.onlineUsers();
         return R.success(userDOList);
+    }
+
+    @RequiresRoles("admin")
+    @PostMapping("forcedLogout")
+    public R forcedLogout(String sessionId){
+        userService.forcedLogout(sessionId);
+        return R.success();
     }
     
     @PostMapping("/register")

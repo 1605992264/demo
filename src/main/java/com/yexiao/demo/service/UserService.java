@@ -35,5 +35,11 @@ public interface UserService extends IService<UserDO> {
     /**
      * 获取在线人数
      * */
-    List<UserDO> onlineUsers(HttpServletRequest request, HttpServletResponse response);
+    List<UserDO> onlineUsers();
+
+    /**
+     * 强制登出
+     * @param sessionId 要登出的用户token
+     * */
+    void forcedLogout(String sessionId);
 }

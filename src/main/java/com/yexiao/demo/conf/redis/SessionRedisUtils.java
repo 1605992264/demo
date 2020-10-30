@@ -26,21 +26,20 @@ public class SessionRedisUtils {
 
     private static String pre = "sessionId";
 
-    public List<UserDO> getAllSession(){
+    public List<String> getAllSessionId(){
         Set keys = redisTemplate.keys( pre + "*");
-        List<UserDO> list = new LinkedList<>();
+        List<String> list = new LinkedList<>();
         keys.forEach(key->{
-            Object o = redisTemplate.opsForValue().get(key);
-            list.add(JSONObject.parseObject(JSONObject.toJSONString(o),UserDO.class));
+            list.add(redisTemplate.opsForValue().get(key).toString());
         });
         return list;
     }
 
-    public void addUser(UserDO session){
-        redisTemplate.opsForValue().set(pre + session.getToken() , session,30, TimeUnit.MINUTES);
+    public void addSession(String sessionId){
+        redisTemplate.opsForValue().set(pre + sessionId , sessionId,30, TimeUnit.MINUTES);
     }
 
-    public void deleteUser(String sessionId){
+    public void deleteSession(String sessionId){
         redisTemplate.delete(pre + sessionId);
     }
 

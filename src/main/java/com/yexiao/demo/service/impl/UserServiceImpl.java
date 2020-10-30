@@ -9,11 +9,14 @@ import com.yexiao.demo.conf.redis.SessionRedisUtils;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
+import org.apache.catalina.security.SecurityUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
@@ -36,7 +39,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Autowired
     private SessionRedisUtils sessionRedisUtils;
-
+    @Autowired
+    private SessionDAO sessionDAO;
     /**
      * 查询列表
      * @return*/
@@ -72,7 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         try {
             subject.login(token);
             ((UserDO) subject.getPrincipal()).setToken(subject.getSession().getId().toString());
-            sessionRedisUtils.addUser((UserDO) subject.getPrincipal());
+            /**
+             * 把session存入redis中
+             * */
+            sessionRedisUtils.addSession(subject.getSession().getId().toString());
         }catch (IncorrectCredentialsException e){
             throw new RuntimeException("用户名或密码错误！");
         }
@@ -82,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
-        sessionRedisUtils.deleteUser(subject.getSession().getId().toString());
+        sessionRedisUtils.deleteSession(subject.getSession().getId().toString());
         subject.logout();
     }
 
@@ -120,10 +127,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
      * 获取当前在线用户
      * */
     @Override
-    public List<UserDO> onlineUsers(HttpServletRequest request, HttpServletResponse response) {
+    public List<UserDO> onlineUsers() {
         //todo: 需要的功能 分页  定时删除
         List<UserDO> userDOList = new LinkedList<>();
-        return sessionRedisUtils.getAllSession();
+        Collection<Session> activeSessions = sessionDAO.getActiveSessions();
+        activeSessions.forEach(session -> {
+            Object obj = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+            SimplePrincipalCollection coll = (SimplePrincipalCollection) obj;
+            userDOList.add((UserDO)coll.getPrimaryPrincipal());
+        });
+        return userDOList;
     }
+
+    /**
+     * 强制登出
+     * @param sessionId 要登出用户的sessionId(token)
+     * */
+    @Override
+    public void forcedLogout(String sessionId) {
+        //todo: 需要的功能 分页  定时删除
+        Session session = sessionDAO.readSession(sessionId);
+        sessionDAO.delete(session);
+        sessionRedisUtils.deleteSession(sessionId);
+    }
+
 
 }
