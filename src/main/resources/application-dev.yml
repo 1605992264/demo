@@ -8,6 +8,8 @@ server:
     uri-encoding: utf-8
 
 spring:
+  application:
+    name: test
   datasource: #数据库配置
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -31,6 +33,19 @@ spring:
         max-active: 100
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1
+  rabbitmq:
+    ###开启消息确认机制 confirms
+    publisher-confirms: true
+    publisher-returns: true
+    listener:
+      simple:
+        retry.enabled: true #是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
+#  boot:
+#    admin:
+#      # 可视化管控台界面的 context-path
+#      context-path: /monitor
+#      client:
+#        url: http://localhost:${server.port}/${server.servlet.context-path}/${spring.boot.admin.context-path}
 
 param:
   elasticsearch:

@@ -5,17 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
-import com.yexiao.demo.conf.redis.SessionRedisUtils;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
-import org.apache.catalina.security.SecurityUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.DefaultSessionKey;
-import org.apache.shiro.session.mgt.SessionKey;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -24,9 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -37,8 +30,6 @@ import java.util.*;
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
-    @Autowired
-    private SessionRedisUtils sessionRedisUtils;
     @Autowired
     private SessionDAO sessionDAO;
     /**
@@ -76,10 +67,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         try {
             subject.login(token);
             ((UserDO) subject.getPrincipal()).setToken(subject.getSession().getId().toString());
-            /**
-             * 把session存入redis中
-             * */
-            sessionRedisUtils.addSession(subject.getSession().getId().toString());
         }catch (IncorrectCredentialsException e){
             throw new RuntimeException("用户名或密码错误！");
         }
@@ -89,7 +76,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
-        sessionRedisUtils.deleteSession(subject.getSession().getId().toString());
         subject.logout();
     }
 
@@ -148,7 +134,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         //todo: 需要的功能 分页  定时删除
         Session session = sessionDAO.readSession(sessionId);
         sessionDAO.delete(session);
-        sessionRedisUtils.deleteSession(sessionId);
     }
 
 
