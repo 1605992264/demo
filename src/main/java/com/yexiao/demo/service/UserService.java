@@ -16,6 +16,8 @@ public interface UserService extends IService<UserDO> {
 
     IPage<UserDO> page(IPage<UserDO> basePage, UserDO userDO);
 
+    UserDO findUserInfo(String id);
+
     /**
      * 物理删除
      * */

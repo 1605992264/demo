@@ -26,11 +26,11 @@ import java.util.concurrent.TimeUnit;
 public class DemoApplicationTests {
 
     @Autowired
-    private RabbitmqSend rabbitmqSend;
+    private RabbitTemplate rabbitTemplate;
     @Test
     public void contextLoads() {
         for(int i=0;i<20;i++){
-            rabbitmqSend.sendDirectMsg("yexiao", String.valueOf(i));
+            rabbitTemplate.convertAndSend("yexiao",i);
         }
     }
 

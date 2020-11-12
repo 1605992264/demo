@@ -54,6 +54,12 @@ public class ExeclUtils {
         return jsonObjectList;
     }
 
+    /**
+     * 获取行数据并进行封装
+     * @param sheet 当前sheet
+     * @param nowRow 当前行
+     * @param title 标题
+     * */
     public static JSONObject getRowData(Integer nowRow, Sheet sheet, List<String> title){
         JSONObject jsonObject = new JSONObject();
         Row row = sheet.getRow(nowRow);

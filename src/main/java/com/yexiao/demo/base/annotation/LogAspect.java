@@ -146,11 +146,6 @@ public class LogAspect {
             logDO.setMethod(methodSignature.toShortString());
             logDO.setIp(HttpRequestUtils.getClientIPAddress());
             logService.save(logDO);
-            try {
-                elasticSearchUtils.save("log_test",logDO);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return returnResult;
     }

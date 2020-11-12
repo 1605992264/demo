@@ -40,6 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
         interceptorRegistration.excludePathPatterns("/test/**");
         interceptorRegistration.excludePathPatterns("/generator/**");
         interceptorRegistration.excludePathPatterns("/monitor/**");
+        interceptorRegistration.excludePathPatterns("/mq/**");
         // 设置拦截路径
         interceptorRegistration.addPathPatterns("/**");
     }

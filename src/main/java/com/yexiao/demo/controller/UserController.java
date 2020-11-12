@@ -57,8 +57,14 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public R list(String id){
+    public R get(String id){
         UserDO user = userService.getById(id);
+        return R.success(user);
+    }
+
+    @GetMapping("/findUserInfo")
+    public R findUserInfo(String id){
+        UserDO user = userService.findUserInfo(id);
         return R.success(user);
     }
 

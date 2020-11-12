@@ -19,7 +19,7 @@ import java.util.List;
 public class EsRestHighLevelClientConfig {
 
 
-    @Value("${param.elasticsearch.rest.ip-address:127.0.0.1:8200}")
+    @Value("${param.elasticsearch.rest.ip-address:127.0.0.1:9200}")
     private List<String> ipAddressList;
 
     @Bean
@@ -34,7 +34,6 @@ public class EsRestHighLevelClientConfig {
      */
     private HttpHost[] createHttpHost() {
         Asserts.check(!CollectionUtils.isEmpty(ipAddressList), "ElasticSearch cluster ip address cannot empty");
-
         HttpHost[] httpHosts = new HttpHost[ipAddressList.size()];
         for (int i = 0, len = ipAddressList.size(); i < len; i++) {
             String ipAddress = ipAddressList.get(i);

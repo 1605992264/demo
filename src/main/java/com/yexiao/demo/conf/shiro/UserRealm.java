@@ -50,10 +50,12 @@ public class UserRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 获取用户所有的角色和权限 把它们添加到SimpleAuthorizationInfo中
         UserDO user = (UserDO) principals.getPrimaryPrincipal();
-        List<RoleDO> roleList = roleService.getRoleList(user.getId());
-        for(RoleDO roleDO : roleList){
+        UserDO userInfo = userService.findUserInfo(user.getId());
+        // 为用户添加角色
+        for(RoleDO roleDO : userInfo.getRoleList()){
             authorizationInfo.addRole(roleDO.getName());
-            for(PermissionDO permissionDO : permissionService.getPermissionList(roleDO.getId())){
+            // 为用户添加权限
+            for(PermissionDO permissionDO : roleDO.getPermissionList()){
                 authorizationInfo.addStringPermission(permissionDO.getName());
             }
         }

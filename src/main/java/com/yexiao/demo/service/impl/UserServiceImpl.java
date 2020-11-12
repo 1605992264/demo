@@ -32,6 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Autowired
     private SessionDAO sessionDAO;
+
     /**
      * 查询列表
      * @return*/
@@ -40,6 +41,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         QueryWrapper<UserDO> wrapper = new QueryWrapper(userDO);
         IPage<UserDO> userDOIPage = baseMapper.selectPage(basePage, wrapper);
         return userDOIPage;
+    }
+
+    @Override
+    public UserDO findUserInfo(String id) {
+        UserDO userInfo = baseMapper.findUserInfo(id);
+        return userInfo;
     }
 
     /**

@@ -1,24 +1,36 @@
 package com.yexiao.demo.conf.rabbitmq;
 
+import com.yexiao.demo.domain.LogDO;
+import com.yexiao.demo.service.LogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author xuhf
  * @date 2020/10/30 15:56
+ *
  **/
 @Configuration
-public class RabbitmqConfig {
+@Slf4j
+public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemplate.ReturnCallback{
+
+    @Autowired
+    private RabbitTemplate template;
+
 
     /**
      * 声明交换机
      * RabbitMQ常用的Exchange Type有
-     * direct(默认):    完全匹配 routing key
+     * direct(默认):    完全匹配 routing key 一条message只会进入一个queue
      * topic:           direct的升级版 支持模糊查询 *用于匹配一个单词，# 用于匹配多个单词（可以是零个）
      * fanout:          无视 routing key
      * headers:         无视 routing key  根据 headers属性进行匹配
@@ -27,14 +39,88 @@ public class RabbitmqConfig {
     private static final String FANOUT_EXCHANGE = "fanout-exchange";
     private static final String HEADERS_EXCHANGE = "headers-exchange";
 
-    private static final String QUEUE_NAME = "yexiao";
+    private static final String QUEUE_1 = "yexiao";
+    private static final String DEAD_QUEUE= "deadQueue";
+    private static final String QUEUE_3 = "xiaoye";
+
+    @PostConstruct
+    public void init() {
+        // 消息发送成功/失败监控
+        template.setConfirmCallback(this);
+        // 队列不存在，会进行重试
+        template.setReturnCallback(this);
+        template.setMandatory(true);
+    }
+
+    /**
+     * 消息发送成功/失败监控
+     * 每一条发出的消息都会调用ConfirmCallback
+     * @param correlationData 相关数据 send时可以传
+     * @param ack 是否进入exchange
+     * @param failMessage 失败原因
+     * */
+    @Override
+    public void confirm(CorrelationData correlationData, boolean ack, String failMessage) {
+        System.out.println("correlationData=" + correlationData + "原因:" + failMessage);
+        if(ack){
+            System.out.println("成功");
+        }else {
+            //todo: 如果失败如何处理？
+            System.out.println("失败");
+
+        }
+    }
+
+    /**
+     * 当路由不到队列时返回给消息发送者
+     * 只有在消息进入exchange但没有进入queue时才会调用
+     * @param message 发送的消息
+     * @param reason  失败原因
+     * @param routingKey 寻找queue的key
+     * @
+     * */
+    @Override
+    public void returnedMessage(Message message, int i, String reason, String s1, String routingKey) {
+        //todo: 消息发送到服务器失败，如何处理？重新发送？记录？
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n").append("消息丢失!").append(message.toString())
+                .append("\n").append("失败原因:").append(reason)
+                .append("\n").append("routingKey = ").append(routingKey);
+        log.error(builder.toString());
+    }
 
     /**
      * 声明队列
      * */
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_NAME);
+        return new Queue(QUEUE_1);
+    }
+    /**
+     * 声明死信队列
+     * dead letter exchange
+     * 这个与spring-amqp无关，是rabbitmq的设置。
+     * 将一个queue设置了x-dead-letter-exchange及x-dead-letter-routing-key两个参数后，
+     * 这个queue里丢弃的消息将会进入dead letter exchange，并route到相应的queue里去。
+     * 丢弃的消息:
+     * The message is rejected (basic.reject or basic.nack) with requeue=false,
+     * The TTL for the message expires;
+     * The queue length limit is exceeded.
+     * */
+    @Bean
+    public Queue deadQueue() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("x-dead-letter-exchange","");
+        map.put("x-dead-letter-routing-key","");
+        return new Queue(DEAD_QUEUE,true,false,false,map);
+    }
+
+    /**
+     * 声明队列
+     * */
+    @Bean
+    public Queue queue3() {
+        return new Queue(QUEUE_3);
     }
 
     /**
@@ -51,7 +137,7 @@ public class RabbitmqConfig {
      * */
     @Bean
     Binding topicBinding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with(queue.getName());
+        return BindingBuilder.bind(queue).to(topicExchange).with("*xiao*");
     }
 
     /**

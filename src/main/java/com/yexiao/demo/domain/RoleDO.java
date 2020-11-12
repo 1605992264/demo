@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author xuhf
@@ -30,5 +31,8 @@ public class RoleDO extends UserInfoBaseEntity {
     @ApiModelProperty(value = "别名")
     @TableField("alias")
     private String alias;
+
+    @TableField(exist = false)
+    private List<PermissionDO> permissionList;
 
 }

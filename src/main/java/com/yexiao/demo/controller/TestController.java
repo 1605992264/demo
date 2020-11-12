@@ -8,6 +8,7 @@ import com.yexiao.demo.domain.DictDO;
 import com.yexiao.demo.service.DictService;
 import com.yexiao.demo.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,10 @@ public class TestController {
     @Autowired
     private DictService dictService;
 
+    @InitBinder
+    public void  init(){
+        System.out.println("初始化");
+    }
 
     @RequestMapping("/list")
     public R list(Page<DictDO> page){

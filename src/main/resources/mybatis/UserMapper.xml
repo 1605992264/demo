@@ -3,6 +3,21 @@
 
 <mapper namespace="com.yexiao.demo.mapper.UserMapper">
 
+    <resultMap id="userInfo" type="com.yexiao.demo.domain.UserDO" autoMapping="true">
+        <id property="id" column="id"></id>
+        <collection property="roleList"  ofType="com.yexiao.demo.domain.RoleDO">
+            <id column="roleId" property="id"></id>
+            <result column="roleName" property="name"></result>
+            <result column="roleAlias" property="alias"></result>
+            <collection property="permissionList"  ofType="com.yexiao.demo.domain.PermissionDO">
+                <id column="permissionId" property="id"></id>
+                <result column="permissionName" property="name"></result>
+                <result column="permissionAlias" property="alias"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+
     <select id="verificationUserName" resultType="int">
         select count(*) from sys_user where username = #{value}
     </select>
@@ -12,7 +27,7 @@
         delete from sys_user where id = #{value}
     </delete>
 
-    <select id="findUserInfo" resultType="com.yexiao.demo.domain.UserDO">
+    <select id="findUserInfo" resultMap="userInfo">
         SELECT
             u.id,
             u.username,
@@ -20,10 +35,12 @@
             u.NAME,
             u.sex,
             u.mobile,
+            r.id AS roleId,
             r.`name` AS roleName,
             r.alias AS roleAlias,
+            p.id AS permissionId,
             p.`name` AS permissionName,
-            p.alias ASpermissionalias
+            p.alias AS permissionAlias
         FROM
             sys_user u
             LEFT JOIN sys_user_role ur ON u.id = ur.user_id

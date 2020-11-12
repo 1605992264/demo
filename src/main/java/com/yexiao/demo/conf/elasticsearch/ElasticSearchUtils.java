@@ -34,6 +34,8 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
+import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -95,8 +97,6 @@ public class ElasticSearchUtils {
 
     /**
      * 删除索引
-
-
      * @param index 索引
      * @return 返回 true，表示删除成功
      */

@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @author xuhf
  * @date 2020/8/20 10:49
@@ -54,5 +56,9 @@ public class UserDO extends UserInfoBaseEntity {
     @TableField(value = "delete_flag")
     @TableLogic(value = "0",delval = "1")
     private Integer deleteFlag;
+
+    @ApiModelProperty(value = "用户拥有的角色")
+    @TableField(exist = false)
+    private List<RoleDO> roleList;
 
 }
