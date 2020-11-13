@@ -1,10 +1,7 @@
 package com.yexiao.demo.base.cache;
 
-
-import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author xuhf
@@ -16,7 +13,7 @@ public class CacheUtils {
 
     }
 
-    private static Map<String,CacheDO> cacheMap = new HashMap<>();
+    private static ConcurrentHashMap<String,CacheDO> cacheMap = new ConcurrentHashMap<>();
 
     public static void put(String key,Object value,Integer timeout){
         CacheDO cacheDO = new CacheDO(value,timeout);
