@@ -1,8 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.modules.reimburse.domain.ReimburseDO;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程节点表
@@ -14,23 +13,23 @@
 //public class ProcessNodeDO extends DataEntity<ProcessNodeDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String name;  //名称
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String displayName;  //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String processId;  //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String prevId;  //父级节点
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String isBranch;  //是否存在支线
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String type;  //类型：1开始节点、2审批节点、3条件节点、4抄送节点、9结束节点
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String auditType;  //审批类型:1指定用户、2角色、3部门
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String counterSign;  //审批方式1或签、2会签、3依次审批
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String rejectType;  //驳回类型 驳回至1 父节点、2发起人节点
 //	private Integer priority;  //
 //	private Integer sort;  //排序
@@ -39,8 +38,7 @@
 //
 //    private String orderId; // 实例id
 //    private String initiator; // 发起人
-//    // 实体类
-//    private ReimburseDO formData;
+//
 //    // 表单权限
 //    private String formRole;
 //
@@ -58,14 +56,6 @@
 //
 //    public void setFormRole(String formRole) {
 //        this.formRole = formRole;
-//    }
-//
-//    public ReimburseDO getFormData() {
-//        return formData;
-//    }
-//
-//    public void setFormData(ReimburseDO formData) {
-//        this.formData = formData;
 //    }
 //
 //    public String getOrderId() {

@@ -72,8 +72,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//         processChooseDao.delete(id);
+//    public int delete(String id){
+//        return processChooseDao.delete(id);
 //    }
 //
 //    /**
@@ -162,7 +162,7 @@
 //     * @param nodeId 节点id
 //     * @param actorIdList 已审批了的id
 //     * */
-//    List<ProcessChooseDO> findOtherActor( List<String> actorIdList, String nodeId){
+//    List<ProcessChooseDO> findOtherActor(List<String> actorIdList, String nodeId){
 //        return processChooseDao.findOtherActor(actorIdList,nodeId);
 //    }
 //}

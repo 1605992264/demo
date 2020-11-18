@@ -72,8 +72,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//        hiOperateDetailDao.delete(id);
+//    public int delete(String id){
+//        return hiOperateDetailDao.delete(id);
 //    }
 //
 //    /**

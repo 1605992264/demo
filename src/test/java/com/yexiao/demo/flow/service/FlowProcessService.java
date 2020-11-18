@@ -13,7 +13,6 @@
 //import com.txdata.flow.utils.ConstantEnum;
 //import com.txdata.flow.utils.ConstantMethod;
 //import com.txdata.flow.utils.ProcessDefinitionType;
-//import com.txdata.modules.reimburse.service.ReimburseService;
 //import org.apache.shiro.util.CollectionUtils;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
@@ -49,8 +48,6 @@
 //	private OrderService orderService;
 //	@Autowired
 //	private OrderTaskService orderTaskService;
-//	@Autowired
-//	private ReimburseService reimbursementService;
 //	@Autowired
 //	private ControlFlowService controlFlowService;
 //
@@ -104,8 +101,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//        processDao.delete(id);
+//    public int delete(String id){
+//        return processDao.delete(id);
 //    }
 //
 //    /**
@@ -347,7 +344,7 @@
 //		if (!CollectionUtils.isEmpty(orderTaskDOList)){
 //			activeNodeId = orderTaskDOList.get(0).getNodeId();
 //		}
-//		nodePath = controlFlowService.nodePath(processId,activeNodeId);
+//		//nodePath = controlFlowService.nodePath(processId,activeNodeId,);
 //		//查看流程图JSON
 //		JSONObject structuralData = JSON.parseObject(originalData);
 //		jsonMap.put("structuralData", structuralData);
@@ -379,7 +376,7 @@
 //	}
 //
 //	@Transactional(readOnly = true)
-//	public FlowProcessDO form(String processCode,int version){
+//	public FlowProcessDO form(String processCode, int version){
 //		return processDao.form(processCode,version);
 //	}
 //
@@ -413,4 +410,11 @@
 //	public int updateOtherProcessState(String processCode){
 //		return processDao.updateOtherProcessState(processCode);
 //	}
+//
+//    /**
+//     * 获取流程id
+//     * */
+//    public String queryNewIdByCode(String processCode){
+//        return processDao.queryNewIdByCode(processCode);
+//    }
 //}

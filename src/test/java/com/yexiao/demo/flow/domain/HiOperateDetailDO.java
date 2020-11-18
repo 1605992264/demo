@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程历史操作明细表
@@ -13,9 +13,9 @@
 //public class HiOperateDetailDO extends DataEntity<HiOperateDetailDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String operateId;  //流转历史主表id
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String userId;  //抄送人id
 //
 //	public void setOperateId(String operateId) {

@@ -1,24 +1,10 @@
 //package com.yexiao.demo.flow.service;
 //
 //import cn.hutool.core.util.StrUtil;
-//import com.alibaba.fastjson.JSON;
-//import com.alibaba.fastjson.JSONObject;
-//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+//import com.txdata.flow.dao.ControlFlowDao;
 //import com.txdata.flow.dao.ProcessNodeDao;
 //import com.txdata.flow.domain.*;
 //import com.txdata.flow.utils.ConstantEnum;
-//import com.txdata.flow.utils.ProcessNotifyType;
-//import com.txdata.modules.reimburse.dao.ReimburseDao;
-//import com.txdata.modules.reimburse.dao.ReimbursementDao;
-//import com.txdata.modules.reimburse.domain.ReimburseDO;
-//import com.txdata.modules.reimburse.domain.ReimbursementDO;
-//import com.txdata.oa.domain.NotifyDO;
-//import com.txdata.oa.service.NotifyService;
-//import com.txdata.system.dao.OfficeDao;
-//import com.txdata.system.dao.UserDao;
-//import com.txdata.system.dao.UserRoleDao;
-//import com.txdata.system.domain.UserDO;
-//import com.txdata.system.utils.UserUtils;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +13,6 @@
 //
 //import java.lang.reflect.Field;
 //import java.math.BigDecimal;
-//import java.time.LocalDateTime;
-//import java.time.format.DateTimeFormatter;
 //import java.util.*;
 //
 ///**
@@ -41,6 +25,8 @@
 //
 //    protected Logger logger = LoggerFactory.getLogger(getClass());
 //
+//    @Autowired
+//    private ControlFlowDao controlFlowDao;
 //    @Autowired
 //    private FlowProcessService flowProcessService;
 //    @Autowired
@@ -56,44 +42,24 @@
 //    @Autowired
 //    private HiTaskService hiTaskService;
 //    @Autowired
-//    private ProcessChooseService processChooseService;
-//    @Autowired
 //    private TaskActorService taskActorService;
 //    @Autowired
 //    private HiActorService hiActorService;
-////    @Autowired
-////    private HiOperateService hiOperateService;
-////    @Autowired
-////    private HiOperateDetailService hiOperateDetailService;
 //    @Autowired
 //    private HiCirculationService hiCirculationService;
 //    @Autowired
-//    HiCirculationDetailedService hiCirculationDetailedService;
+//    private HiCirculationDetailedService hiCirculationDetailedService;
 //    @Autowired
-//    private NotifyService notifyService;
-//    @Autowired
-//    private UserRoleDao userRoleDao;
-//    @Autowired
-//    private ReimbursementDao reimbursementService;
-//    @Autowired
-//    private UserDao userDao;
-//    @Autowired
-//    private OfficeDao officeDao;
-//    @Autowired
-//    private ReimburseDao reimburseDao;
+//    private FuserService userService;
+////    @Autowired
+////    private NotifyService notifyService;
+//
 //
 //    /**
-//     * 查看当前任务
-//     * @param orderId 流程实例id
+//     * 获取当前实例任务
 //     * */
-//    public OrderTaskDO task(String orderId){
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("orderId",orderId);
-//        List<OrderTaskDO> list = orderTaskService.list(map);
-//        if(list != null && list.size() > 0){
-//            return list.get(0);
-//        }
-//        return null;
+//    public OrderTaskDO nowTask(String orderId){
+//        return orderTaskService.getOrderTaskByOrderId(orderId);
 //    }
 //
 //    /**
@@ -101,14 +67,14 @@
 //     *  @param orderId 实例id
 //     *  @return 节点路径
 //     * */
-//    public List<ProcessNodeDO> falseProcessPath(String orderId){
+//    public List<ProcessNodeDO> falseProcessPath(String orderId,String systemCode){
 //        // 虚拟节点流程
 //        List<ProcessNodeDO> fictitiousNodePath = new ArrayList<>();
 //        ProcessNodeDO startNode = processNodeDao.getStartNode(orderId);
 //        ProcessNodeDO node = startNode;
 //        do {
 //            fictitiousNodePath.add(node);
-//            node = fictitiousNextNode(node,orderId);
+//            node = fictitiousNextNode(node,orderId,systemCode);
 //        }while (node != null);
 //        return fictitiousNodePath;
 //    }
@@ -117,9 +83,9 @@
 //     *获取虚拟流程节点路径
 //     * 用， 分割 nodeId,nodeId...
 //     * */
-//    public String nodePath(String orderId,String nowNodeId){
+//    public String nodePath(String orderId,String nowNodeId,String userId){
 //        StringBuilder builder = new StringBuilder();
-//        for(ProcessNodeDO nodeDO : falseProcessPath(orderId)){
+//        for(ProcessNodeDO nodeDO : falseProcessPath(orderId,userId)){
 //            if(nodeDO.getId().equals(nowNodeId)){
 //                if(ConstantEnum.START_NODE.equals(nodeDO.getType())){
 //                    builder.append(",");
@@ -134,94 +100,134 @@
 //    /**
 //     * 查看待审核列表接口
 //     * */
-//    public Page<JSONObject> notApprovedList(Page<JSONObject> page, Map<String, Object> map){
+//    public List<BaseFlowDataDO> notApprovedList(String userId,String systemCode,String processCode){
 //        // 当前用户可以审批的流程节点
-//        StringBuilder orderIDBuilder = new StringBuilder();
-//        String nowUserId = UserUtils.getUser().getId();
-//        /**
-//         * 1.用户 3.角色 4.All 5.部门 6.发起人自己
-//         *用orderTaskService.getOrderIdByUser(nowUserId) 可获取能审批的流程
-//         * 2.部门领导  单独处理
-//         * 去掉上一步以获取的审批流程
-//         * 用剩下的执行任务流程判断 部门领导和发起人
-//         * */
-//        // 获取能审批的
-//        String orderIdByUser = orderTaskService.getOrderIdByUser(nowUserId);
-//        orderIDBuilder.append(orderIdByUser).append(",");
-//        // 获取当前部门领导的任务节点
-//        List<ProcessNodeDO> nodeList = orderTaskService.findNodeLeaderByUserId(nowUserId);
-//        for(ProcessNodeDO node : nodeList){
-//            // 获取该节点所有能审批的人
-//            Set<String> userIdList = getUserIdListByNode(node,node.getInitiator());
-//            if(userIdList.size() > 0  && userIdList.contains(nowUserId)){
-//                orderIDBuilder.append(node.getOrderId()).append(",");
-//            }
-//        }
-//        // 返回前端所需要的的参数
-//        Page<JSONObject> processNodeDOList;
-//        if("".equals(orderIDBuilder.toString())) {
-//            // 没有需要审批的
-//            processNodeDOList = reimbursementService.notApprovalFormDataList(page, map, "");
-//        } else {
-//            processNodeDOList = reimbursementService.notApprovalFormDataList(page, map, orderIDBuilder.substring(0, orderIDBuilder.length() - 1));
-//        }
-//        // 为每个列表添加下个审批人
-//        List<JSONObject> records = processNodeDOList.getRecords();
-//        for(JSONObject formData : records){
-//            formData.put("auditName",getNowApprover(formData.getString("procInsId")));
-//        }
-//        return processNodeDOList;
+//        String orderIds = controlFlowDao.notApprovalList(userId, systemCode,processCode);
+//
+//        List<BaseFlowDataDO> baseFlowData = controlFlowDao.getBaseFlowData(orderIds, systemCode);
+//        return baseFlowData;
 //    }
 //
 //    /**
 //     * 查看已审核接口
 //     * */
-//    public Page<JSONObject> approvedList(Page<JSONObject> page, Map<String, Object> map){
-//        Page<JSONObject> jsonObjectPage = reimbursementService.approvalFormDataList(page,map, UserUtils.getUser().getId());
-//        // 为每个列表添加下个审批人
-//        List<JSONObject> records = jsonObjectPage.getRecords();
-//        for(JSONObject formData : records){
-//            formData.put("auditName",getNowApprover(formData.getString("procInsId")));
-//        }
-//        return jsonObjectPage;
+//    public List<BaseFlowDataDO> approvedList(String userId,String systemCode,String processCode){
+//
+//        //todo: 根据实例id 返回封装的数据 orderId,auditStatus,auditActor;
+//        String orderIds = controlFlowDao.approvalList(userId, systemCode, processCode);
+//        List<BaseFlowDataDO> baseFlowData = controlFlowDao.getBaseFlowData(orderIds, systemCode);
+//        return baseFlowData;
 //    }
 //
 //    /**
-//     * 查看抄送给我的
+//     * 流转历史
 //     * */
-//    public Page<JSONObject> copyToMe(Page<JSONObject> page, Map<String, Object> map){
-//        Page<JSONObject> jsonObjectPage = reimbursementService.copyToMeFormDataList(page,map, UserUtils.getUser().getId());
-//        // 为每个列表添加下个审批人
-//        List<JSONObject> records = jsonObjectPage.getRecords();
-//        for(JSONObject formData : records){
-//            formData.put("auditName",getNowApprover(formData.getString("procInsId")));
-//        }
-//        return jsonObjectPage;
+//    public List<HiCirculationDO> flowHistory(String systemCode,String orderId){
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("orderId",orderId);
+//        List<HiCirculationDO> list = hiCirculationService.list(map,systemCode);
+//        return list;
 //    }
 //
 //    /**
-//     * 获取当前流程的审批人
-//     * @param orderId 实例id
-//     * @return 返回已 ，分割的人名
+//     * 启动/重启 流程
+//     *
+//     * @param userId 调用接口的用户
+//     * @param processCode 流程code
+//     * @param systemCode 系统code
+//     * @param orderId 实例id  第一次启动为空, 驳回时重启传orderId
+//     *
+//     * @return orderId 实例id
 //     * */
-//    public String getNowApprover(String orderId){
-//        OrderTaskDO task = task(orderId);
-//        // 当前任务已结束
-//        if(task == null){
-//            return "";
-//        }
-//        // 获取当前审批节点
-//        ProcessNodeDO nowNode = processNodeDao.get(task.getNodeId());
-//        if(nowNode != null && !ConstantEnum.START_NODE.equals(nowNode.getType())){
-//            // 获取审批人
-//            Set<String> userIdListByNode = getUserIdListByNode(nowNode, orderService.get(orderId).getCreateBy());
-//            if(userIdListByNode != null && userIdListByNode.size() > 0) {
-//                // 返回
-//                return userDao.findUserNamesByIDS(userIdListByNode);
+//    @Transactional
+//    public String newProcessFlow(String userId,String processCode,String systemCode,String orderId){
+//        String processId = flowProcessService.queryNewIdByCode(processCode);
+//        ProcessNodeDO startNode = processNodeDao.getStartNodeByProcessId(processId);
+//        BaseFlowDataDO actorByNodeId = controlFlowDao.getActorByNodeId(startNode.getId(), systemCode);
+//        String actorIds = actorByNodeId.getActorIds();
+//        List<String> list = Arrays.asList(actorIds.split(","));
+//        if(!list.contains(userId)){
+//            return null;
+//        }else {
+//            if(StrUtil.isEmpty(orderId)){
+//                // 新增流程
+//                OrderDO orderDO = new OrderDO();
+//                orderDO.setProcId(processId);
+//                orderDO.setCreateBy(userId);
+//                orderService.save(orderDO);
+//                OrderTaskDO orderTaskDO = new OrderTaskDO();
+//                orderTaskDO.setOrderId(orderDO.getId());
+//                orderTaskDO.setNodeId(startNode.getId());
+//                orderTaskDO.setTaskName(startNode.getName());
+//                orderTaskService.save(orderTaskDO);
+//                orderId = orderDO.getId();
+//                HiCirculationDO hiCirculationDO = getHiCirculationDO(orderId, startNode.getId(), startNode.getName());
+//                hiCirculationService.save(hiCirculationDO);
+//                hiCirculationDetailedService.save(getHiCirculationUser(userId, ConstantEnum.OPERATE_TYPE_START,
+//                        hiCirculationDO.getId(),null));
+//            }else {
+//                //重启流程
+//                OrderTaskDO orderTask= orderTaskService.getOrderTaskByOrderId(orderId);
+//                String createBy = orderService.get(orderId).getCreateBy();
+//                if(!orderTask.getNodeId().equals(startNode.getId()) || !createBy.equals(userId)){
+//                    // 不是在驳回状态(开始节点)重启流程 或者 重启流程者不是发起人
+//                    return null;
+//                }
 //            }
+//            Map<String,Object> map = new HashMap<>();
+//            map.put("orderId",orderId);
+//            completeTask(map, systemCode, userId);
+//            return orderId;
 //        }
-//        return "";
+//        // todo: 1.判断当前用户是否可以发起该流程
+//        // todo: 获取流程的发起节点 查询当前用户是否符合
+//        // todo: 2.通过processCode发起流程 即保存order 和 order_task
+//        // todo: 3.保存发起人到流转历史中
 //    }
+//
+//    /**
+//     * 查询该节点的参与人
+//     * */
+//    public BaseFlowDataDO  getActorByNodeId(String nodeId,String systemCode){
+//        return  controlFlowDao.getActorByNodeId(nodeId,systemCode);
+//    }
+//
+////    /**
+////     * 查看抄送给我的
+////     * */
+////    public Page<JSONObject> copyToMe(Page<JSONObject> page,Map<String, Object> map){
+////        Page<JSONObject> jsonObjectPage = reimbursementService.copyToMeFormDataList(page,map, UserUtils.getUser().getId());
+////        // 为每个列表添加下个审批人
+////        List<JSONObject> records = jsonObjectPage.getRecords();
+////        for(JSONObject formData : records){
+////            formData.put("auditName",getNowApprover(formData.getString("procInsId")));
+////        }
+////        return jsonObjectPage;
+////    }
+//
+////    /**
+////     * 获取当前流程的审批人
+////     * @param orderId 实例id
+////     * @return 返回已 ，分割的人名
+////     * */
+////    public String getNowApprover(String orderId){
+////        OrderTaskDO task = task(orderId);
+////        // 当前任务已结束
+////        if(task == null){
+////            return "";
+////        }
+////        // 获取当前审批节点
+////        ProcessNodeDO nowNode = processNodeDao.get(task.getNodeId());
+////        if(nowNode != null && !ConstantEnum.START_NODE.equals(nowNode.getType())){
+////            // 获取审批人
+////            Set<String> userIdListByNode = getUserIdListByNode(nowNode, orderService.get(orderId).getCreateBy());
+////            if(userIdListByNode != null && userIdListByNode.size() > 0) {
+////                // 返回
+////               return userDao.findUserNamesByIDS(userIdListByNode);
+////            }
+////        }
+////        return "";
+////    }
 //
 //    /**
 //     * 完成节点任务 （审批节点或发起人节点）
@@ -229,7 +235,7 @@
 //     * 返回下一个执行节点
 //     */
 //    @Transactional
-//    public ProcessNodeDO completeTask(Map<String,Object> param){
+//    public ProcessNodeDO completeTask(Map<String,Object> param,String systemCode,String userId){
 //        Map<String,Object> map = new HashMap<>();
 //        Object orderId = param.remove("orderId");
 //        if(orderId == null || "".equals(orderId)){
@@ -245,93 +251,74 @@
 //        ProcessNodeDO processNodeDO = processNodeDao.get(taskDO.getNodeId());
 //        // 根据当前节点类型 执行不同的处理
 //        if (ConstantEnum.APPROVAL_NODE.equals(processNodeDO.getType())){
-//            if( !getApproverList(processNodeDO,taskDO.getOrderId()).contains(UserUtils.getUser().getId())){
+//            if( !getApproverList(processNodeDO,taskDO.getOrderId(),systemCode).contains(userId)){
 //                throw new RuntimeException("当前用户没有审批权限");
 //            }
-//            // 更新表数据
-//            JSONObject formData = JSON.parseObject(param.get("formData").toString());
-//            ReimburseDO reimbursementDO = formData.toJavaObject(ReimburseDO.class);
-//            reimburseDao.update(reimbursementDO);
+//
 //            //完成审批节点并返回下一个审批节点
-//            ProcessNodeDO nextNode = processNodeHandler(processNodeDO,orderId.toString(),taskDO, param);
+//            ProcessNodeDO nextNode = processNodeHandler(processNodeDO,orderId.toString(),taskDO, param,systemCode,userId);
 //            if(!processNodeDO.equals(nextNode)){
 //                // 会签只执行一遍
-//                nextNode = advancedSettingHandler(nextNode, taskDO.getOrderId());
+//                nextNode = advancedSettingHandler(nextNode, taskDO.getOrderId(),systemCode,userId);
 //            }
 //            // 如果驳回到开始节点
 //            if(nextNode == null){
 //                // 处理流程结束
 //                processFinishHandler(orderId.toString());
-//                // 流程结束
-//                reimbursementDO.setStatus("2"); // 结束
-//                reimburseDao.update(reimbursementDO);
-//            } else if( ConstantEnum.START_NODE.equals(nextNode.getType())) {
-//                // 如果驳回到了开始节点
-//                // 设置为可编辑状态
-//                reimbursementDO.setStatus("3"); // 驳回
-//                reimbursementDO.setIsEdit("1"); // 可编辑
-//                reimburseDao.update(reimbursementDO);
 //            }
-//            notifyHandler(nextNode, orderId.toString(), param.get("flag") == null ? "1" : param.get("flag").toString());
+//            //notifyHandler(nextNode, orderId.toString(), param.get("flag") == null ? "1" : param.get("flag").toString());
 //            return nextNode;
 //        }else if(ConstantEnum.START_NODE.equals(processNodeDO.getType())){
 //            //验证流程是否正确
-//            falseProcessPath(orderId.toString());
+//            falseProcessPath(orderId.toString(),userId);
 //            // 重新提交
 //            HiCirculationDO nowHiCirculationByOrder = hiCirculationService.getNowHiCirculationByOrder(orderId.toString());
 //            if(nowHiCirculationByOrder != null && nowHiCirculationByOrder.getSort() != 0){
-//                hiCirculationDetailedService.save(getHiCirculationUser(UserUtils.getUser().getId(),ConstantEnum.OPERATE_TYPE_START,nowHiCirculationByOrder.getId(),null));
+//                hiCirculationDetailedService.save(getHiCirculationUser(userId,
+//                        ConstantEnum.OPERATE_TYPE_START,nowHiCirculationByOrder.getId(),null));
 //            }
 //            //完成发起人节点并返回下一个审批节点
-//            ProcessNodeDO auditNode = processNodeHandler(processNodeDO, taskDO.getOrderId(),null,null);
-//            auditNode = advancedSettingHandler(auditNode, String.valueOf(orderId));
+//            ProcessNodeDO auditNode = processNodeHandler(processNodeDO, taskDO.getOrderId(),
+//                    null,null,systemCode,userId);
+//            auditNode = advancedSettingHandler(auditNode, String.valueOf(orderId),systemCode,userId);
 //            if(auditNode == null){
 //                // 处理流程结束
 //                processFinishHandler(orderId.toString());
-//                // 流程结束
-//                try {
-//                    JSONObject formData = JSON.parseObject(param.get("formData").toString());
-//                    ReimbursementDO reimbursementDO = formData.toJavaObject(ReimbursementDO.class);
-//                    reimbursementDO.setStatus("2"); //结束
-//                    reimbursementService.update(reimbursementDO);
-//                }catch (Exception e){
-//                    throw new RuntimeException("保存时流程就直接结束了,需要传实体改变审批状态！");
-//                }
 //            }
-//            notifyHandler(auditNode,orderId.toString(),"1");
+//            //notifyHandler(auditNode,orderId.toString(),"1");
 //            return auditNode;
 //        }
 //        return null;
 //    }
 //
-//    /**
-//     * 需要通知时调用
-//     * @param nextNode 当前节点（发起节点或审批节点）
-//     * @param orderId 当前实例id
-//     * @param flag 是否为通过 1 是   0 不是
-//     * */
-//    private void notifyHandler(ProcessNodeDO nextNode, String orderId, String flag){
-//        if(nextNode == null){
-//            // 流程结束通知
-//            String createBy = orderService.get(orderId).getCreateBy();
-//            // 发送给发起人
-//            sendUser(createBy,orderId,ProcessNotifyType.FINISH);
-//        }else if(ConstantEnum.START_NODE.equals(nextNode.getType())){
-//            // 如果驳回到了发起节点
-//            // 获取发起人
-//            String createBy = orderService.get(orderId).getCreateBy();
-//            // 发送给发起人
-//            sendUser(createBy,orderId,ProcessNotifyType.START);
-//        }else {
-//            // 审批通知
-//            if("0".equals(flag)) {
-//                // 驳回通知
-//                sendNotifyByAuditNode(nextNode, orderId, ProcessNotifyType.REJECT);
-//            } else {
-//                sendNotifyByAuditNode(nextNode, orderId, ProcessNotifyType.PASS);
-//            }
-//        }
-//    }
+////    /**
+////     * 需要通知时调用
+////     * @param nextNode 当前节点（发起节点或审批节点）
+////     * @param orderId 当前实例id
+////     * @param flag 是否为通过 1 是   0 不是
+////     * */
+////    private void notifyHandler(ProcessNodeDO nextNode, String orderId, String flag){
+////        if(nextNode == null){
+////            // 流程结束通知
+////            String createBy = orderService.get(orderId).getCreateBy();
+////            // 发送给发起人
+////            sendUser(createBy,orderId,ProcessNotifyType.FINISH);
+////        }else if(ConstantEnum.START_NODE.equals(nextNode.getType())){
+////            // 如果驳回到了发起节点
+////            // 获取发起人
+////            String createBy = orderService.get(orderId).getCreateBy();
+////            // 发送给发起人
+////            sendUser(createBy,orderId,ProcessNotifyType.START);
+////        }else {
+////            // 审批通知
+////            if("0".equals(flag)) {
+////                // 驳回通知
+////                sendNotifyByAuditNode(nextNode, orderId, ProcessNotifyType.REJECT);
+////            } else {
+////                sendNotifyByAuditNode(nextNode, orderId, ProcessNotifyType.PASS);
+////            }
+////        }
+////    }
 //
 //
 //
@@ -340,7 +327,7 @@
 //     * @param processNodeDO 当前审批节点
 //     * @param orderId 当前流程
 //     * */
-//    private ProcessNodeDO advancedSettingHandler(ProcessNodeDO processNodeDO, String orderId){
+//    private ProcessNodeDO advancedSettingHandler(ProcessNodeDO processNodeDO, String orderId,String systemCode,String userId){
 //        if(processNodeDO == null || ConstantEnum.START_NODE.equals(processNodeDO.getType())){
 //            // 流程结束 或者 驳回到了开始节点
 //            return processNodeDO;
@@ -353,19 +340,19 @@
 //            /**
 //             * 同一个审批人在流程中出现多次，仅保留第一个
 //             * */
-//            ProcessNodeDO nextNode = processInstanceDeduplicationHandler(processNodeDO,orderId);
+//            ProcessNodeDO nextNode = processInstanceDeduplicationHandler(processNodeDO,orderId,systemCode,userId);
 //            //已自动通过到下一审批节点
 //            if(!processNodeDO.equals(nextNode)){
-//                processNodeDO = advancedSettingHandler(nextNode,orderId);
+//                processNodeDO = advancedSettingHandler(nextNode,orderId,systemCode,userId);
 //            }
 //        }else if("2".equals(flowProcessDO.getAutoRepeat())){
 //            /**
 //             * 同一个审批人仅在连续出现时，自动去重
 //             * */
-//            ProcessNodeDO nextNode = continuousDeduplicationHandler(processNodeDO,orderId);
+//            ProcessNodeDO nextNode = continuousDeduplicationHandler(processNodeDO,orderId,systemCode,userId);
 //            //已自动通过到下一审批节点
 //            if(!processNodeDO.equals(nextNode)){
-//                processNodeDO = advancedSettingHandler(nextNode,orderId);
+//                processNodeDO = advancedSettingHandler(nextNode,orderId,systemCode,userId);
 //            }
 //        }
 //        if(processNodeDO == null){
@@ -375,10 +362,10 @@
 //        //发起人审批时自动通过。设置为发起人自己的审批节点不会自动通过
 //        if("1".equals(flowProcessDO.getMyAuditAutoPass()) && !ConstantEnum.AUDIT_ONESELF.equals(processNodeDO.getAuditType())){
 //            // 发起人
-//            ProcessNodeDO nextNode = createByAuditHandler(processNodeDO,orderId);
+//            ProcessNodeDO nextNode = createByAuditHandler(processNodeDO,orderId,systemCode,userId);
 //            //已自动通过到下一审批节点
 //            if(!processNodeDO.equals(nextNode)){
-//                processNodeDO = advancedSettingHandler(nextNode,orderId);
+//                processNodeDO = advancedSettingHandler(nextNode,orderId,systemCode,userId);
 //            }
 //        }
 //        return processNodeDO;
@@ -390,11 +377,11 @@
 //     * @param orderId 实例id
 //     * @return 下一审批节点
 //     * */
-//    private ProcessNodeDO getAuditByAutoPass(ProcessNodeDO nodeDO, String orderId){
+//    private ProcessNodeDO getAuditByAutoPass(ProcessNodeDO nodeDO, String orderId,String systemCode,String userId){
 //        HiTaskDO hiTaskDO = getHiTaskDO(nodeDO.getId(), orderId, "1");
 //        hiTaskService.save(hiTaskDO);
 //        //获取下一节点
-//        ProcessNodeDO processNodeDO = nextNode(nodeDO, orderId);
+//        ProcessNodeDO processNodeDO = nextNode(nodeDO, orderId,systemCode);
 //        if(processNodeDO == null){
 //            // 结束
 //            return null;
@@ -404,7 +391,7 @@
 //            updateTaskNode(processNodeDO,orderId);
 //            return processNodeDO;
 //        }
-//        return processNodeHandler(processNodeDO,orderId,null,null);
+//        return processNodeHandler(processNodeDO,orderId,null,null,systemCode,userId);
 //
 //    }
 //
@@ -416,10 +403,11 @@
 //     * @param deduplicationUserIdList 已审批过该流程的人
 //     * @return 返回审批节点
 //     * */
-//    private ProcessNodeDO autoPassHandler(ProcessNodeDO nodeDO, String orderId, Set<String> userIdList, Set<String> deduplicationUserIdList){
+//    private ProcessNodeDO autoPassHandler(ProcessNodeDO nodeDO, String orderId, Set<String> userIdList,
+//                                          Set<String> deduplicationUserIdList,String systemCode,String userId){
 //        String hiId = hiCirculationService.getNowHiCirculationByOrder(orderId).getId();
 //        // 需要流转记录   把每个审批人存入历史流转表中
-//        for(String userId : deduplicationUserIdList) {
+//        for(String item : deduplicationUserIdList) {
 //                /*
 //                HiOperateDO hiOperateDO = getHiOperateDO(nodeDO.getId(), orderId);
 //                hiOperateDO.setUserId(userId);
@@ -427,7 +415,7 @@
 //                hiOperateDO.setApprovalAdvice(userDao.get(userId).getName() + " 自动通过");
 //                hiOperateService.save(hiOperateDO);
 //                 */
-//            HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(userId, ConstantEnum.OPERATE_TYPE_AUTO_COMMIT, hiId, null);
+//            HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(item, ConstantEnum.OPERATE_TYPE_AUTO_COMMIT, hiId, null);
 //            hiCirculationDetailedService.save(hiCirculationUser);
 //        }
 //
@@ -436,11 +424,11 @@
 //            // 获取当前流转历史id
 //            // 如果审批人以前已审批过 则自动通过
 //            if(userIdList.size() == deduplicationUserIdList.size()){
-//                return getAuditByAutoPass(nodeDO,orderId);
+//                return getAuditByAutoPass(nodeDO,orderId,systemCode,userId);
 //            }else {
 //                // 过滤掉要去重的人
-//                for(String userId : deduplicationUserIdList) {
-//                    TaskActorDO taskActorDO = getTaskActorDo(userId, task(orderId).getId(),"1");
+//                for(String item : deduplicationUserIdList) {
+//                    TaskActorDO taskActorDO = getTaskActorDo(item,orderTaskService.getOrderTaskByOrderId(orderId).getId(),"1");
 //                    taskActorService.save(taskActorDO);
 //                }
 //            }
@@ -455,11 +443,11 @@
 //                hiOperateDO.setApprovalAdvice(nodeDO.getName()+" 节点自动通过");
 //                hiOperateService.save(hiOperateDO);
 //                 */
-//                return getAuditByAutoPass(nodeDO,orderId);
+//                return getAuditByAutoPass(nodeDO,orderId,systemCode,userId);
 //            }else {
 //                // 过滤掉要去重的人
-//                for(String userId : deduplicationUserIdList) {
-//                    TaskActorDO taskActorDO = getTaskActorDo(userId, task(orderId).getId(),"1");
+//                for(String item : deduplicationUserIdList) {
+//                    TaskActorDO taskActorDO = getTaskActorDo(item,orderTaskService.getOrderTaskByOrderId(orderId).getId(),"1");
 //                    taskActorService.save(taskActorDO);
 //                }
 //            }
@@ -473,11 +461,11 @@
 //     * @param orderId 实例id
 //     * @return 审批节点
 //     * */
-//    private ProcessNodeDO createByAuditHandler(ProcessNodeDO node, String orderId){
+//    private ProcessNodeDO createByAuditHandler(ProcessNodeDO node, String orderId,String systemCode,String userId){
 //        // 获取发起人
 //        String createBy = orderService.get(orderId).getCreateBy();
 //        // 获取当前节点有审批权限的人
-//        Set<String> userIdList = getUserIdListByNode(node, createBy);
+//        Set<String> userIdList = getUserIdListByNode(node, createBy,systemCode);
 //        if(userIdList == null ||userIdList.size() == 0){
 //            return node;
 //        }
@@ -487,7 +475,7 @@
 //            Set<String> approvedUserIdList = taskActorService.userIdListByOrderId(orderId);
 //            if(approvedUserIdList.size() <= 0 || !approvedUserIdList.contains(createBy)){
 //                // 保存到已审批审批人中
-//                taskActorService.save(getTaskActorDo(createBy,task(orderId).getId(),"1"));
+//                taskActorService.save(getTaskActorDo(createBy,orderTaskService.getOrderTaskByOrderId(orderId).getId(),"1"));
 //                // 会签
 //                String hiId = hiCirculationService.getNowHiCirculationByOrder(orderId).getId();
 //                HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(createBy, ConstantEnum.OPERATE_TYPE_AUTO_COMMIT, hiId, null);
@@ -497,7 +485,7 @@
 //            approvedUserIdList = taskActorService.userIdListByOrderId(orderId);
 //            if(userIdList.size() == approvedUserIdList.size()){
 //                // 自动通过
-//                return getAuditByAutoPass(node,orderId);
+//                return getAuditByAutoPass(node,orderId,systemCode,userId);
 //            }
 //        }
 //        /**
@@ -540,11 +528,11 @@
 //     * @param orderId 实例id
 //     * @return 审批节点
 //     * */
-//    private ProcessNodeDO processInstanceDeduplicationHandler(ProcessNodeDO nodeDO, String orderId){
+//    private ProcessNodeDO processInstanceDeduplicationHandler(ProcessNodeDO nodeDO, String orderId,String systemCode,String userId){
 //        // 获取发起人
 //        String createBy = orderService.get(orderId).getCreateBy();
 //        // 获取当前节点有审批权限的人
-//        Set<String> userIdList = getUserIdListByNode(nodeDO, createBy);
+//        Set<String> userIdList = getUserIdListByNode(nodeDO, createBy,systemCode);
 //        if(userIdList == null ||userIdList.size() == 0){
 //            return nodeDO;
 //        }
@@ -553,7 +541,7 @@
 //        whereMap.put("orderId",orderId);
 //        // 当前节点要去重的人
 //        Set<String> deduplicationUserIdList = getDeduplicationUserIdList(userIdList,whereMap);
-//        return autoPassHandler(nodeDO,orderId,userIdList,deduplicationUserIdList);
+//        return autoPassHandler(nodeDO,orderId,userIdList,deduplicationUserIdList,systemCode,userId);
 //    }
 //
 //    /**
@@ -563,11 +551,11 @@
 //     * @param orderId 实例id
 //     * @return 审批节点
 //     * */
-//    private ProcessNodeDO continuousDeduplicationHandler(ProcessNodeDO nodeDO, String orderId){
+//    private ProcessNodeDO continuousDeduplicationHandler(ProcessNodeDO nodeDO, String orderId,String systemCode,String userId){
 //        // 获取发起人
 //        String createBy = orderService.get(orderId).getCreateBy();
 //        // 获取当前节点有审批权限的人
-//        Set<String> userIdList = getUserIdListByNode(nodeDO, createBy);
+//        Set<String> userIdList = getUserIdListByNode(nodeDO, createBy,systemCode);
 //        if(userIdList == null ||userIdList.size() == 0){
 //            return nodeDO;
 //        }
@@ -583,7 +571,7 @@
 //        whereMap.put("nodeId",prevNodeId);
 //        // 当前节点要去重的人
 //        Set<String> deduplicationUserIdList = getDeduplicationUserIdList(userIdList,whereMap);
-//        return autoPassHandler(nodeDO,orderId,userIdList,deduplicationUserIdList);
+//        return autoPassHandler(nodeDO,orderId,userIdList,deduplicationUserIdList,systemCode,userId);
 //    }
 //
 //    /**
@@ -594,13 +582,13 @@
 //     * @param params 审批参数
 //     * @return 返回下一审批节点
 //     * */
-//    private ProcessNodeDO processNodeHandler(ProcessNodeDO nodeDO, String orderId, OrderTaskDO taskDO, Map<String,Object> params){
+//    private ProcessNodeDO processNodeHandler(ProcessNodeDO nodeDO, String orderId, OrderTaskDO taskDO, Map<String,Object> params,String systemCode,String userId){
 //        ProcessNodeDO returnNode = null;
 //        //完成节点操作
 //        switch (nodeDO.getType()){
 //            case ConstantEnum.COPY_NODE:
 //                // 完成抄送节点
-//                returnNode = completeCopyNode(nodeDO,orderId);
+//                returnNode = completeCopyNode(nodeDO,orderId,systemCode);
 //                break;
 //            case ConstantEnum.APPROVAL_NODE:
 //                // 完成审批节点
@@ -610,7 +598,7 @@
 //                 * 返回null 完成当前审批节点
 //                 * 返回其他审批节点 即驳回了
 //                 * */
-//                returnNode = completeApproveNode(taskDO, params);
+//                returnNode = completeApproveNode(taskDO, params,systemCode,userId);
 //                break;
 //            case "8": // 空节点
 //                break;
@@ -621,13 +609,13 @@
 //        ProcessNodeDO nextNode;
 //        if(returnNode == null){ // 审批结束
 //            // 找到下一节点
-//            nextNode = nextNode(nodeDO, orderId);
+//            nextNode = nextNode(nodeDO, orderId,systemCode);
 //            // 如果是审批节点或是开始节点 存入审批记录中
 //            if(ConstantEnum.START_NODE.equals(nodeDO.getType())
 //                    || ConstantEnum.APPROVAL_NODE.equals(nodeDO.getType())){
 //                HiTaskDO hiTaskDO = getHiTaskDO(nodeDO.getId(),orderId,"0");
 //                hiTaskService.save(hiTaskDO);
-//                saveHiActor(task(orderId).getId(),hiTaskDO.getId());
+//                saveHiActor(orderTaskService.getOrderTaskByOrderId(orderId).getId(),hiTaskDO.getId());
 //            }
 //        }else if(ConstantEnum.APPROVAL_NODE.equals(nodeDO.getType())){
 //            if(!returnNode.equals(nodeDO)) {
@@ -662,7 +650,7 @@
 //            }
 //        } else {
 //            // 其他
-//            nextNode = nextNode(returnNode, orderId);
+//            nextNode = nextNode(returnNode, orderId,systemCode);
 //        }
 //
 //        if(nextNode == null){
@@ -678,7 +666,7 @@
 //            updateTaskNode(nextNode,orderId);
 //            return nextNode;
 //        }else {
-//            return processNodeHandler(nextNode,orderId,taskDO,params);
+//            return processNodeHandler(nextNode,orderId,taskDO,params,systemCode,userId);
 //        }
 //    }
 //
@@ -708,7 +696,7 @@
 //     * @param node 节点
 //     * @param createBy 发起人
 //     * */
-//    public Set<String> getUserIdListByNode(ProcessNodeDO node, String createBy){
+//    public Set<String> getUserIdListByNode(ProcessNodeDO node, String createBy,String systemCode){
 //        Set<String> userIdList = new HashSet<>();
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("nodeId", node.getId());
@@ -719,52 +707,17 @@
 //                    // 指定的人
 //                    userIdList.add(item.getValue());
 //                    break;
-//               /* case ConstantEnum.ACTOR_DEPT_LEADER:
-//                    //2部门领导
-//                    // 发起人
-//                    UserDO userDO = userDao.get(createBy);
-//                    //获取当前能审批的领导
-//                    String officeId= userDO.getOfficeId();
-//                    for(int i=1; i < Integer.parseInt(item.getValue()) ; i++){
-//                        // 没有上级部门
-//                        if(StrUtil.isEmpty(officeId) || "0".equals(officeId)){
-//                            throw new RuntimeException("该流程部门领导节点查询错误，请联系管理员！");
-//                        }
-//                        officeId = officeDao.get(officeId).getParentId();
-//                    }
-//                    String userId = officeDao.getLeaderIdByOfficeId(officeId);
-//                    if(StrUtil.isNotEmpty(userId)) {
-//                        userIdList.add(userId);
-//                        return userIdList;
-//                    }else {
-//                        // 最多有5级领导
-//                        for(int i = Integer.parseInt(item.getValue()); i < 5; i++){
-//                            // 没有上级部门
-//                            if(StrUtil.isEmpty(officeId) || "0".equals(officeId)){
-//                                throw new RuntimeException("该流程部门领导节点查询错误，请联系管理员！");
-//                            }
-//                            // 获取
-//                            officeId = officeDao.get(officeId).getParentId();
-//                            userId = officeDao.getLeaderIdByOfficeId(officeId);
-//                            // 存在就添加
-//                            if(StrUtil.isNotEmpty(userId)) {
-//                                userIdList.add(userId);
-//                                return userIdList;
-//                            }
-//                        }
-//                    }
-//                    break;*/
 //                case ConstantEnum.ACTOR_ROLE:
 //                    // 3角色
-//                    userIdList.addAll(userRoleDao.findUserIdSetByRoleId(item.getValue()));
+//                    userIdList.addAll(userService.findUserIdSetByRoleId(item.getValue(),systemCode));
 //                    break;
 //                case ConstantEnum.ACTOR_ALL_CLIENT:
 //                    // 所有人
-//                    userIdList.addAll(userDao.findAllUserByOfficeId(null));
+//                    userIdList.addAll(userService.findAllUserByOfficeId(null,systemCode));
 //                    return userIdList;
 //                case ConstantEnum.ACTOR_DEPT_CLIENT:
 //                    // 5部门
-//                    userIdList.addAll(userDao.findAllUserByOfficeId(item.getValue()));
+//                    userIdList.addAll(userService.findAllUserByOfficeId(item.getValue(),systemCode));
 //                    break;
 //                case ConstantEnum.ACTOR_MYSELF:
 //                    // 发起人自己审批
@@ -802,11 +755,11 @@
 //     * @param node 当前节点
 //     * @return 返回下一节点
 //     * */
-//    private ProcessNodeDO nextNode(ProcessNodeDO node, String orderId){
+//    private ProcessNodeDO nextNode(ProcessNodeDO node, String orderId,String systemCode){
 //        ProcessNodeDO nextNode = null;
 //        if(ConstantEnum.EXIST_BRANCH.equals(node.getIsBranch())) {
 //            //如果存在分支 调用条件节点的解析
-//            return nextNode(completeConditionNode(node, orderId),orderId);
+//            return nextNode(completeConditionNode(node, orderId,systemCode),orderId,systemCode);
 //        }else{
 //            // 如果不存在分支 直接找下一个节点
 //            nextNode = processNodeDao.getNextProcessNode(node.getId());
@@ -842,11 +795,11 @@
 //     * @param node 当前节点
 //     * @return 返回下一节点
 //     * */
-//    private ProcessNodeDO fictitiousNextNode(ProcessNodeDO node, String orderId){
+//    private ProcessNodeDO fictitiousNextNode(ProcessNodeDO node, String orderId,String systemCode){
 //        ProcessNodeDO nextNode = null;
 //        if(ConstantEnum.EXIST_BRANCH.equals(node.getIsBranch())) {
 //            //如果存在分支 调用条件节点的解析
-//            return completeConditionNode(node,orderId);
+//            return completeConditionNode(node,orderId,systemCode);
 //        }else {
 //            nextNode = processNodeDao.getNextProcessNode(node.getId());
 //        }
@@ -863,7 +816,7 @@
 //     * @param orderId 流程实例id
 //     * @return 审批人id列表
 //     * */
-//    private Set<String> getApproverList(ProcessNodeDO node, String orderId){
+//    private Set<String> getApproverList(ProcessNodeDO node, String orderId,String systemCode){
 //        // 获取发起人
 //        String createBy = orderService.get(orderId).getCreateBy();
 //        if(ConstantEnum.AUDIT_OPTIONAL.equals(node.getAuditType())){
@@ -873,7 +826,7 @@
 //        }else {
 //            // 不是自选 则找参与人表
 //            // 获取当前节点能审批的所有人
-//            Set<String> userIdList = getUserIdListByNode(node,createBy);
+//            Set<String> userIdList = getUserIdListByNode(node,createBy,systemCode);
 //
 //            Set<String> approvedUserId = taskActorService.userIdListByOrderId(orderId);
 //            //去掉已审批的人
@@ -889,7 +842,7 @@
 //     * @param orderId 实例id
 //     * @return 历史审批节点路径
 //     * */
-//    private List<ProcessNodeDO> getFictitiousNodePath(String orderId){
+//    private List<ProcessNodeDO> getFictitiousNodePath(String orderId,String systemCode){
 //        // 虚拟节点流程
 //        List<ProcessNodeDO> fictitiousNodePath = new ArrayList<>();
 //        ProcessNodeDO startNode = processNodeDao.getStartNode(orderId);
@@ -897,7 +850,7 @@
 //        // 获取有序的审批节点
 //        do {
 //            fictitiousNodePath.add(node);
-//            node = getFictitiousNode(node,orderId);
+//            node = getFictitiousNode(node,orderId,systemCode);
 //        }while (node != null);
 //        return fictitiousNodePath;
 //    }
@@ -907,9 +860,9 @@
 //     * @param node 当前节点
 //     * @param orderId 实例id
 //     * */
-//    private ProcessNodeDO getFictitiousNode(ProcessNodeDO node, String orderId){
+//    private ProcessNodeDO getFictitiousNode(ProcessNodeDO node, String orderId,String systemCode){
 //        // 获取下一节点
-//        ProcessNodeDO nextNode = fictitiousNextNode(node, orderId);
+//        ProcessNodeDO nextNode = fictitiousNextNode(node, orderId,systemCode);
 //        if(nextNode == null) {
 //            return null;
 //        }
@@ -917,7 +870,7 @@
 //        if(ConstantEnum.APPROVAL_NODE.equals(nextNode.getType())){
 //            return nextNode;
 //        }else {
-//            return getFictitiousNode(nextNode,orderId);
+//            return getFictitiousNode(nextNode,orderId,systemCode);
 //        }
 //    }
 //
@@ -1122,14 +1075,14 @@
 //     * 返回null 完成当前审批节点
 //     * 返回其他节点 即驳回了
 //     * */
-//    private ProcessNodeDO completeApproveNode(OrderTaskDO taskDO, Map<String,Object> param){
+//    private ProcessNodeDO completeApproveNode(OrderTaskDO taskDO, Map<String,Object> param,String systemCode,String userId){
 //        // 找到正在执行的节点
 //        ProcessNodeDO processNodeDO = processNodeDao.get(taskDO.getNodeId());
 //        // 保存至审批记录中
-//        taskActorService.save(getTaskActorDo(UserUtils.getUser().getId(), taskDO.getId(),"0"));
+//        taskActorService.save(getTaskActorDo(userId, taskDO.getId(),"0"));
 //
 //        String hiId = hiCirculationService.getNowHiCirculationByOrder(taskDO.getOrderId()).getId();
-//        HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(UserUtils.getUser().getId(),"",hiId , param);
+//        HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(userId,"",hiId , param);
 //
 //        Boolean flag = true;  // true 为通过 false 为驳回
 //        if("0".equals(param.get("flag"))) {
@@ -1171,7 +1124,7 @@
 //        // 会签 所有审批人都要审批
 //        if(ConstantEnum.AND_SIGN_METHOD.equals(processNodeDO.getCounterSign())){
 //            // 调用会签处理
-//            ProcessNodeDO nodeDO = countersignHandler(processNodeDO, taskDO);
+//            ProcessNodeDO nodeDO = countersignHandler(processNodeDO, taskDO,systemCode);
 //            // 不为null 则会签未完成
 //            return nodeDO;
 //        }
@@ -1184,7 +1137,7 @@
 //     * @param processNodeDO 当前节点
 //     * @param taskDO 当前实例
 //     * */
-//    private ProcessNodeDO countersignHandler(ProcessNodeDO processNodeDO, OrderTaskDO taskDO){
+//    private ProcessNodeDO countersignHandler(ProcessNodeDO processNodeDO, OrderTaskDO taskDO,String systemCode){
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("taskId", taskDO.getId());
 //        Map<String,Object> nodeMap = new HashMap<>();
@@ -1198,7 +1151,7 @@
 //        }else {
 //            String createBy = orderService.get(taskDO.getOrderId()).getCreateBy();
 //            // 获取所有要参与的人
-//            Set<String> userIdList= getUserIdListByNode(processNodeDO, createBy);
+//            Set<String> userIdList= getUserIdListByNode(processNodeDO, createBy,systemCode);
 //            // 遍历每个人
 //            Map<String,Object> taskMap = new HashMap<>();
 //            taskMap.put("taskId",taskDO.getId());
@@ -1265,96 +1218,54 @@
 //        return hiTaskService.count(map);
 //    }
 //
-//    /**
-//     * 判断是否是当前用户是否可以审批
-//     * @param auditorType 审批人类型  1用户 2部门领导 3角色 4ALL 5部门 6发起人自己'
-//     * @param value 审批值（根据审批人类型区分）
-//     * @param createBy 发起人id
-//     * */
-//    private Boolean currentAuditor(String auditorType,String value,String createBy){
-//        switch (auditorType) {
-//            case ConstantEnum.ACTOR_CLIENT:
-//                // 指定的人
-//                if(UserUtils.getUser().getId().equals(value)) {
-//                    return true;
-//                }
-//                break;
-//            case ConstantEnum.ACTOR_DEPT_LEADER:
-//                //2部门领导
-//                // 发起人
-//                UserDO userDO = userDao.get(createBy);
-//                //获取当前能审批的领导
-//                String officeId= userDO.getOfficeId();
-//                for(int i=1; i < Integer.parseInt(value) ; i++){
-//                    officeId = officeDao.get(officeId).getParentId();
-//                    // 没有上级部门
-//                    if(StrUtil.isNotEmpty(officeId)){
-//                        return false;
-//                    }
-//                }
-//                String leaderIdByOfficeId = officeDao.getLeaderIdByOfficeId(officeId);
-//                if(StrUtil.isNotEmpty(leaderIdByOfficeId)) {
-//                    // 如果当前用户是可以审批的领导
-//                    if (UserUtils.getUser().getId().equals(leaderIdByOfficeId)) {
-//                        // 允许放行
-//                        return true;
-//                    }
-//                }else {
-//                    // 最多有5级领导
-//                    for(int i = Integer.parseInt(value); i < 5; i++){
-//                        // 获取上级部门
-//                        officeId = officeDao.get(officeId).getParentId();
-//                        // 没有上级部门
-//                        if(StrUtil.isNotEmpty(officeId)){
-//                            return false;
-//                        }
-//                        // 获取领导id
-//                        leaderIdByOfficeId = officeDao.getLeaderIdByOfficeId(officeId);
-//                        // 有领导时 便由这个领导待审批
-//                        if(StrUtil.isNotEmpty(leaderIdByOfficeId)) {
-//                            if (UserUtils.getUser().getId().equals(leaderIdByOfficeId)) {
-//                                // 允许放行
-//                                return true;
-//                            }
-//                            return false;
-//                        }
-//                    }
-//                }
-//                break;
-//            case ConstantEnum.ACTOR_ROLE:
-//                // 3角色
-//                Map<String,Object> map = new HashMap<>();
-//                map.put("userId", UserUtils.getUser().getId());
-//                map.put("roleId",value);
-//                if(userRoleDao.count(map) > 0){
-//                    return true;
-//                }
-//                break;
-//            case ConstantEnum.ACTOR_ALL_CLIENT:
-//                // 所有人
-//                return true;
-//            case ConstantEnum.ACTOR_DEPT_CLIENT:
-//                // 5部门
-//                if(value.equals(UserUtils.getUser().getOfficeId())){
-//                    return true;
-//                }
-//                break;
-//            case ConstantEnum.ACTOR_MYSELF:
-//                // 6发起人自己
-//                if(createBy.equals(UserUtils.getUser().getId())){
-//                    return true;
-//                }
-//                break;
-//        }
-//        return false;
-//    }
+////    /**
+////     * 判断是否是当前用户是否可以审批
+////     * @param auditorType 审批人类型  1用户 2部门领导 3角色 4ALL 5部门 6发起人自己'
+////     * @param value 审批值（根据审批人类型区分）
+////     * @param createBy 发起人id
+////     * */
+////    private Boolean currentAuditor(String auditorType,String value,String createBy){
+////        switch (auditorType) {
+////            case ConstantEnum.ACTOR_CLIENT:
+////                // 指定的人
+////                if(UserUtils.getUser().getId().equals(value)) {
+////                    return true;
+////                }
+////                break;
+////            case ConstantEnum.ACTOR_ROLE:
+////                // 3角色
+////                Map<String,Object> map = new HashMap<>();
+////                map.put("userId", UserUtils.getUser().getId());
+////                map.put("roleId",value);
+////                if(userRoleDao.count(map) > 0){
+////                    return true;
+////                }
+////                break;
+////            case ConstantEnum.ACTOR_ALL_CLIENT:
+////                // 所有人
+////                return true;
+////            case ConstantEnum.ACTOR_DEPT_CLIENT:
+////                // 5部门
+////                if(value.equals(UserUtils.getUser().getOfficeId())){
+////                    return true;
+////                }
+////                break;
+////            case ConstantEnum.ACTOR_MYSELF:
+////                // 6发起人自己
+////                if(createBy.equals(UserUtils.getUser().getId())){
+////                    return true;
+////                }
+////                break;
+////        }
+////        return false;
+////    }
 //
 //    /**
 //     * 变量条件处理
 //     * @param orderId 实例id
 //     * @param nodeDO 条件节点
 //     * */
-//    public boolean variableHandler(Object formData, ProcessNodeDO nodeDO, String orderId){
+//    private boolean variableHandler(Object formData, ProcessNodeDO nodeDO, String orderId){
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("nodeId", nodeDO.getId());
 //        // 获取条件节点的所有条件
@@ -1379,7 +1290,7 @@
 //     * @param orderId 实例id
 //     * @param nodeDO 条件节点
 //     * */
-//    public boolean actorHandler(ProcessNodeDO nodeDO, String orderId){
+//    private boolean actorHandler(ProcessNodeDO nodeDO, String orderId,String systemCode){
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("nodeId", nodeDO.getId());
 //        //获取发起人id
@@ -1401,7 +1312,7 @@
 //                        break;
 //                    case ConstantEnum.ACTOR_DEPT_CLIENT :
 //                        // 判断是否是该部门下的人
-//                        if(userDao.findAllUserByOfficeId(item.getValue()).contains(createBy)){
+//                        if(userService.findAllUserByOfficeId(item.getValue(),systemCode).contains(createBy)){
 //                            return true;
 //                        }
 //                        break;
@@ -1419,15 +1330,15 @@
 //     * @param orderId 流程实例id
 //     * @return 返回条件节点
 //     * */
-//    private ProcessNodeDO completeConditionNode(ProcessNodeDO nodeDO, String orderId){
+//    private ProcessNodeDO completeConditionNode(ProcessNodeDO nodeDO, String orderId,String systemCode){
 //        List<ProcessNodeDO> conditionNodeList = processNodeDao.conditionNodeList(nodeDO.getId());
 //        for(ProcessNodeDO processNodeDO : conditionNodeList) {
 //            boolean flag = true; // flag =true 为条件符合 false为不符合
-//            flag = variableHandler(reimbursementService.getByProcInsId(orderId),processNodeDO,orderId);
-//            if(flag == false){
-//                continue;
-//            }
-//            flag = actorHandler(processNodeDO,orderId);
+////            flag = variableHandler(reimbursementService.getByProcInsId(orderId),processNodeDO,orderId);
+////            if(flag == false){
+////                continue;
+////            }
+//            flag = actorHandler(processNodeDO,orderId,systemCode);
 //            if(flag == false){
 //                // 如果参与人不符合 则进行下个条件节点比较
 //                continue;
@@ -1444,7 +1355,7 @@
 //     * @param orderId 实例id
 //     * @return 返回抄送节点
 //     * */
-//    private ProcessNodeDO completeCopyNode(ProcessNodeDO processNodeDO, String orderId){
+//    private ProcessNodeDO completeCopyNode(ProcessNodeDO processNodeDO, String orderId,String systemCode){
 //
 //
 //        // 存入流转历史中
@@ -1459,7 +1370,7 @@
 //        if(ConstantEnum.ACTOR_MYSELF.equals(processNodeDO.getAuditType())){
 //            // 如果是发起人自选
 //        }
-//        Set<String> userIdList = getUserIdListByNode(processNodeDO, orderService.get(orderId).getCreateBy());
+//        Set<String> userIdList = getUserIdListByNode(processNodeDO, orderService.get(orderId).getCreateBy(),systemCode);
 //        for(String userId : userIdList){
 //            // 保存进历史明细表中
 //                /* 因流转历史改造 弃用
@@ -1470,77 +1381,77 @@
 //                */
 //            HiCirculationDetailedDO hiCirculationUser = getHiCirculationUser(userId, ConstantEnum.OPERATE_TYPE_COPY, hiCirculationDO.getId(), null);
 //            hiCirculationDetailedService.save(hiCirculationUser);
-//            sendUser(userId,orderId,ProcessNotifyType.COPY);
+//            //sendUser(userId,orderId,ProcessNotifyType.COPY);
 //        }
 //        // 返回抄送节点
 //        return processNodeDO;
 //    }
 //
-//    /**
-//     * 根据节点发送通知
-//     * @param orderId 实例流程id
-//     * @param node 节点
-//     * @param processNotifyType 通知类型
-//     * */
-//    private void sendNotifyByAuditNode(ProcessNodeDO node, String orderId, String processNotifyType){
-//        // 获取所有需要抄送的人
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("nodeId", node.getId());
-//        // 要审批的用户
-//        Set<String> approverList = getApproverList(node, orderId);
-//        // 发送通知
-//        for(String userId : approverList){
-//            sendUser(userId,orderId,processNotifyType);
-//        }
-//    }
-//
-//
-//
-//    /**
-//     * 发送通知给相应的人
-//     * @param userId 用户id
-//     * @param orderId 实例id
-//     * @param processNotifyType 通知类型 0开始 1抄送 2审批 3驳回 4通过
-//     * */
-//    private void sendUser(String userId,String orderId,String processNotifyType){
-//        // 获取发起人的姓名
-//        String username = userDao.get(orderService.get(orderId).getCreateBy()).getName();
-//        // 设置通知信息
-//        NotifyDO notifyDO = new NotifyDO();
-//        notifyDO.setType("4"); // 其他通告
-//        notifyDO.setStatus(NotifyDO.STATUS_PUBLISH);
-//        // 根据不同得通知类型 改变通知内容
-//        LocalDateTime localDateTime = LocalDateTime.now();
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        switch (processNotifyType){
-//            case ProcessNotifyType.START :
-//                notifyDO.setTitle("驳回提醒");
-//                notifyDO.setContent(username + ",你报销单于" + localDateTime.format(dateTimeFormatter) + "被驳回，请重新编辑！");
-//                break;
-//            case ProcessNotifyType.COPY :
-//                // 设置抄送内容
-//                notifyDO.setTitle("抄送提醒");
-//                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "以抄送给您，请注意查收！");
-//                break;
-//            case ProcessNotifyType.PASS :
-//                notifyDO.setTitle("审批提醒");
-//                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "以抄送给您，请审批！");
-//                break;
-//            case ProcessNotifyType.REJECT :
-//                notifyDO.setTitle("驳回提醒");
-//                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "被"+ UserUtils.getUser().getName()+"驳回，请重新审批！");
-//                break;
-//            case ProcessNotifyType.FINISH :
-//                notifyDO.setTitle("通过提醒");
-//                notifyDO.setContent(username + "，你报销单于" + localDateTime.format(dateTimeFormatter) + "已通过！");
-//                break;
-//        }
-//        //设置通知人
-//        //notifyDO.setUserIds(userId);
-//        notifyDO.setOaNotifyRecordIds(new String[]{userId});
-//        // 发送通知
-//        notifyService.save(notifyDO);
-//    }
+////    /**
+////     * 根据节点发送通知
+////     * @param orderId 实例流程id
+////     * @param node 节点
+////     * @param processNotifyType 通知类型
+////     * */
+////    private void sendNotifyByAuditNode(ProcessNodeDO node, String orderId, String processNotifyType){
+////        // 获取所有需要抄送的人
+////        Map<String, Object> map = new HashMap<>();
+////        map.put("nodeId", node.getId());
+////        // 要审批的用户
+////        Set<String> approverList = getApproverList(node, orderId);
+////        // 发送通知
+////        for(String userId : approverList){
+////            sendUser(userId,orderId,processNotifyType);
+////        }
+////    }
+////
+////
+////
+////    /**
+////     * 发送通知给相应的人
+////     * @param userId 用户id
+////     * @param orderId 实例id
+////     * @param processNotifyType 通知类型 0开始 1抄送 2审批 3驳回 4通过
+////     * */
+////    private void sendUser(String userId,String orderId,String processNotifyType){
+////        // 获取发起人的姓名
+////        String username = userDao.get(orderService.get(orderId).getCreateBy()).getName();
+////        // 设置通知信息
+////        NotifyDO notifyDO = new NotifyDO();
+////        notifyDO.setType("4"); // 其他通告
+////        notifyDO.setStatus(NotifyDO.STATUS_PUBLISH);
+////        // 根据不同得通知类型 改变通知内容
+////        LocalDateTime localDateTime = LocalDateTime.now();
+////        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+////        switch (processNotifyType){
+////            case ProcessNotifyType.START :
+////                notifyDO.setTitle("驳回提醒");
+////                notifyDO.setContent(username + ",你报销单于" + localDateTime.format(dateTimeFormatter) + "被驳回，请重新编辑！");
+////                break;
+////            case ProcessNotifyType.COPY :
+////                // 设置抄送内容
+////                notifyDO.setTitle("抄送提醒");
+////                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "以抄送给您，请注意查收！");
+////                break;
+////            case ProcessNotifyType.PASS :
+////                notifyDO.setTitle("审批提醒");
+////                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "以抄送给您，请审批！");
+////                break;
+////            case ProcessNotifyType.REJECT :
+////                notifyDO.setTitle("驳回提醒");
+////                notifyDO.setContent(username + "的报销单于" + localDateTime.format(dateTimeFormatter) + "被"+ UserUtils.getUser().getName()+"驳回，请重新审批！");
+////                break;
+////            case ProcessNotifyType.FINISH :
+////                notifyDO.setTitle("通过提醒");
+////                notifyDO.setContent(username + "，你报销单于" + localDateTime.format(dateTimeFormatter) + "已通过！");
+////                break;
+////        }
+////        //设置通知人
+////        //notifyDO.setUserIds(userId);
+////        notifyDO.setOaNotifyRecordIds(new String[]{userId});
+////        // 发送通知
+////        notifyService.save(notifyDO);
+////    }
 //
 //    /**
 //     * 通过反射获取值

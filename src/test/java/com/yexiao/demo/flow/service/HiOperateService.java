@@ -86,8 +86,8 @@
 //	 * 通过id物理删除
 //	 */
 //	@Transactional(readOnly = false)
-//	public void delete(String id) {
-//		 hiOperateDao.delete(id);
+//	public int delete(String id) {
+//		return hiOperateDao.delete(id);
 //	}
 //
 //	/**
@@ -202,7 +202,7 @@
 //	 * @param map
 //	 * @return
 //	 */
-//	public List<HiOperateDO> queryPointProcessHistory(Map<String, Object> map) {
+//	public List<HiOperateDO> queryPointProcessHistory(Map<String, Object> map,String systemCode) {
 //		List<HiOperateDO> newHiOperateDOList = new ArrayList<>();
 //		List<HiOperateDO> hiOperateDOList = hiOperateDao.queryPointProcessHistory(map);
 //		//获取发起人id
@@ -212,7 +212,7 @@
 //			if (ConstantEnum.APPROVAL_NODE.equals(hiOperateDO.getNodeType())){
 //				 List<String> userNameList = new ArrayList<>();
 //				 ProcessNodeDO processNodeDO = processNodeService.get(hiOperateDO.getNodeId());
-//				 Set<String> userSet = controlFlowService.getUserIdListByNode(processNodeDO,createBy);
+//				 Set<String> userSet = controlFlowService.getUserIdListByNode(processNodeDO,createBy,systemCode);
 //				 for (String str : userSet){
 //				 	 if (str.equals(hiOperateDO.getUserId())){
 //				 	 	UserDO newUserDO =userService.get(hiOperateDO.getUserId());

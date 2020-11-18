@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程节点表单权限表
@@ -13,7 +13,6 @@
 //public class FormReloDO extends DataEntity<FormReloDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
 //	private String nodeId;  //
 //	private String form;  //
 //

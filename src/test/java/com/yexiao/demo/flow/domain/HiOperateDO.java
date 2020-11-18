@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流转历史操作表
@@ -13,16 +13,16 @@
 //public class HiOperateDO extends DataEntity<HiOperateDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String nodeId;  //主键
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String userId;  //操作人id
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String operateType;  //操作类型(1=开始、2=提交、3=抄送、4=通过、5=驳回、6=结束)
-//	@ValidByData(dataType="varchar",character="1024")
+//
 //	private String approvalAdvice;  //审批意见
 //	private String hisFilePath;  //附件
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String caseId;  //流程实例id
 //    private Integer sort; //排序
 //

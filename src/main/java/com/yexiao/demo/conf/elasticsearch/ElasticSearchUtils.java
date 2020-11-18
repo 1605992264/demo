@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yexiao.demo.base.domain.BaseEntity;
-import com.yexiao.demo.base.domain.BasePage;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -20,6 +18,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
@@ -34,8 +34,6 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
-import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -93,6 +91,29 @@ public class ElasticSearchUtils {
         getIndexRequest.includeDefaults(false);
 
         return restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
+     * 计数
+     * @param index 索引
+     * @return 总条数
+     * */
+    public Long count(String index) throws IOException {
+        CountRequest request = new CountRequest(index);
+        CountResponse count = restHighLevelClient.count(request, RequestOptions.DEFAULT);
+        return count.getCount();
+    }
+
+    /**
+     * 计数 条件查询
+     * @param index 索引
+     * @param sourceBuilder 条件查询
+     * @return 总条数
+     * */
+    public Long count(String index,SearchSourceBuilder sourceBuilder) throws IOException {
+        CountRequest request = new CountRequest(new String[]{index},sourceBuilder);
+        CountResponse count = restHighLevelClient.count(request, RequestOptions.DEFAULT);
+        return count.getCount();
     }
 
     /**
@@ -161,7 +182,6 @@ public class ElasticSearchUtils {
      */
     public void delete(String index, String id) throws IOException {
         DeleteRequest deleteRequest = new DeleteRequest(index, id);
-
         restHighLevelClient.delete(deleteRequest, RequestOptions.DEFAULT);
     }
 
@@ -214,7 +234,7 @@ public class ElasticSearchUtils {
      * 条件查询
      *
      * @param index         索引
-     * @param sourceBuilder 条件查询构建起
+     * @param sourceBuilder 条件查询构建器
      * @param <T>           数据类型
      * @return T 类型的集合
      */
@@ -238,7 +258,12 @@ public class ElasticSearchUtils {
     }
 
     /**
-     * 创建查询
+     * 创建条件查询构建器
+     *
+     * @param page 分页
+     * @param jsonObject 查询参数
+     *
+     * @return 查询构建器
      * */
     public SearchSourceBuilder createQuery(Page page, JSONObject jsonObject){
         SearchSourceBuilder builder = new SearchSourceBuilder();
@@ -249,6 +274,7 @@ public class ElasticSearchUtils {
             // 查询类的初始化 用于拼接
             BoolQueryBuilder boolQueryBuilder = boolQuery();
             for(String key : jsonObject.keySet()){
+                // 默认模糊查询
                 if(StrUtil.isNotEmpty(jsonObject.getString(key))){
                     boolQueryBuilder.must(matchQuery(key,jsonObject.getString(key)));
                 }

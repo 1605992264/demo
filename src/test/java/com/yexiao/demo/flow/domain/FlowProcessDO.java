@@ -1,5 +1,8 @@
 //package com.yexiao.demo.flow.domain;
 //
+//import com.txdata.common.domain.DataEntity;
+//
+//
 ///**
 // * 流程定义表
 // *
@@ -7,7 +10,7 @@
 // * @email 3xdata@3xdata.cn
 // * @date 2020-06-29 14:11:14
 // */
-//public class FlowProcessDO  {
+//public class FlowProcessDO extends DataEntity<FlowProcessDO> {
 //	private static final long serialVersionUID = 1L;
 //
 //	private String name;  //名称

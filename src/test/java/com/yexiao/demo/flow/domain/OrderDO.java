@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程实例表
@@ -13,9 +13,9 @@
 //public class OrderDO extends DataEntity<OrderDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String procId;  //
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String state;  //
 //	private Integer sort;  //排序
 //

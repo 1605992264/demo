@@ -78,8 +78,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//        orderTaskDao.delete(id);
+//    public int delete(String id){
+//        return orderTaskDao.delete(id);
 //    }
 //
 //    /**
@@ -198,5 +198,11 @@
 //        return orderTaskDao.findOrderLeaderByUserId(userList);
 //    }
 //
+//    /**
+//     * 获取当前流程正在执行的任务
+//     * */
+//    public OrderTaskDO getOrderTaskByOrderId(String orderId){
+//        return orderTaskDao.getOrderTaskByOrderId(orderId);
+//    }
 //
 //}

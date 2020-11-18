@@ -6,11 +6,9 @@
 //import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 //import com.txdata.common.persistence.CrudService;
 //import com.txdata.common.utils.ShiroUtils;
-//import com.txdata.common.utils.StringUtils;
 //import com.txdata.flow.dao.ProcessNodeDao;
 //import com.txdata.flow.domain.*;
 //import com.txdata.flow.utils.ConstantEnum;
-//import com.txdata.system.domain.UserDO;
 //import com.txdata.system.service.UserService;
 //import org.apache.shiro.util.CollectionUtils;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -101,8 +99,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//         processNodeDao.delete(id);
+//    public int delete(String id){
+//        return processNodeDao.delete(id);
 //    }
 //
 //    /**
@@ -454,7 +452,7 @@
 //	 * @param assigneeType
 //	 * @param processNodeDO
 //	 */
-//	public void resolveAssigneeType(String assigneeType, ProcessNodeDO processNodeDO){
+//	public void resolveAssigneeType(String assigneeType,ProcessNodeDO processNodeDO){
 //		switch (assigneeType){
 //			case "user":
 //				processNodeDO.setAuditType(ConstantEnum.AUDIT_APPOINT_CLIENT);
@@ -482,7 +480,7 @@
 //	 * @param optionalRange
 //	 * @param processChooseDO
 //	 */
-//	public void resolveOptionalRange(String optionalRange,ProcessChooseDO processChooseDO){
+//	public void resolveOptionalRange(String optionalRange, ProcessChooseDO processChooseDO){
 //		switch (optionalRange){
 //			case "user":
 //				processChooseDO.setType(ConstantEnum.ACTOR_CLIENT);
@@ -504,7 +502,7 @@
 //	 * @param assigneeType
 //	 * @param processActorDO
 //	 */
-//	public void auditTypeToActor(String assigneeType, ProcessActorDO processActorDO){
+//	public void auditTypeToActor(String assigneeType,ProcessActorDO processActorDO){
 //		switch (assigneeType){
 //			case ConstantEnum.AUDIT_NEW_APPOINT_CLIENT:
 //				processActorDO.setType(ConstantEnum.ACTOR_CLIENT);
@@ -578,29 +576,27 @@
 //		return jsonObjectList;
 //	}
 //
-//	/**
-//	 * 根据发起人id与节点id查询具体用户
-//	 * @param user
-//	 * @param nodeId
-//	 * @return
-//	 */
-//	public String queryParticularUsers(String user,String nodeId){
-//		//查询当前的nodeId
-//		ProcessNodeDO processNodeDO = processNodeDao.get(nodeId);
-//		Set<String> userSet = controlFlowService.getUserIdListByNode(processNodeDO,user);
-//		List<String> userNameArrays = new ArrayList<>();
-//		String userNameChain = null;
-//		if (!CollectionUtils.isEmpty(userSet)){
-//			for (String str : userSet){
-//				UserDO userDO = userService.get(str);
-//				if(userDO != null) {
-//                    userNameArrays.add(userDO.getName());
-//                }
-//			}
-//			userNameChain = StringUtils.join(userNameArrays.toArray(),",");
-//		}
-//		return userNameChain;
-//	}
+////	/**
+////	 * 根据发起人id与节点id查询具体用户
+////	 * @param user
+////	 * @param nodeId
+////	 * @return
+////	 */
+////	public String queryParticularUsers(String user,String nodeId){
+////		//查询当前的nodeId
+////		ProcessNodeDO processNodeDO = processNodeDao.get(nodeId);
+////		Set<String> userSet = controlFlowService.getUserIdListByNode(processNodeDO,user);
+////		List<String> userNameArrays = new ArrayList<>();
+////		String userNameChain = null;
+////		if (!CollectionUtils.isEmpty(userSet)){
+////			for (String str : userSet){
+////				UserDO userDO = userService.get(str);
+////				userNameArrays.add(userDO.getName());
+////			}
+////			userNameChain = StringUtils.join(userNameArrays.toArray(),",");
+////		}
+////		return userNameChain;
+////	}
 //
 //
 //	/**递归存在局限性(已启用)
@@ -651,11 +647,4 @@
 //	/*public void setClear(){
 //		jsonObjectSet.clear();
 //	}*/
-//
-//	/**
-//     * 獲取開始节点
-//     * */
-//	public ProcessNodeDO getStartNode(String orderId){
-//	    return processNodeDao.getStartNode(orderId);
-//    }
 //}

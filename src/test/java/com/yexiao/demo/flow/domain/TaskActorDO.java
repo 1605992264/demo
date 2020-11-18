@@ -1,7 +1,6 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
 //
 ///**
 // * 流程审批记录表
@@ -13,11 +12,9 @@
 //public class TaskActorDO extends DataEntity<TaskActorDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String taskId;  //流程执行节点id
-//	@ValidByData(dataType="varchar",character="500")
 //	private String varable;  //
-//	@ValidByData(dataType="varchar",character="250")
 //	private String url;  //
 //    private String actorId;// 审批人表的id
 //

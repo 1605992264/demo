@@ -16,10 +16,6 @@
 //
 //import java.util.Map;
 //
-////import com.txdata.common.log.annotation.Log;
-////import com.txdata.common.log.annotation.OperationType;
-////import com.txdata.common.log.annotation.ParamType;
-//
 ///**
 // * 流程节点条件表
 // *
@@ -34,7 +30,6 @@
 //	private NodeVariableService nodeVariableService;
 //
 //	@PostMapping("/list")
-//	//@Log(value = "#{@user}用户查询了[流程节点条件表]列表，查询参数为:", paramaType = ParamType.MAP, operationType = OperationType.VIEW)
 //	public R list(@RequestParam Map<String, Object> params){
 //		//查询列表数据
 //        Query query = new Query(params);
@@ -50,8 +45,7 @@
 //	}
 //
 //    @PostMapping("/form")
-//	//@Log(value = "#{@user}用户查询了[流程节点条件表]数据，查询参数为:", operationType = OperationType.VIEW, paramaType = ParamType.FORM)
-//    public R form(@RequestParam(required = true)String id){
+//	public R form(@RequestParam(required = true)String id){
 //        NodeVariableDO nodeVariable = nodeVariableService.get(id);
 //        JSONObject jsonMap = new JSONObject();
 //        jsonMap.put("formObject", nodeVariable);
@@ -59,8 +53,6 @@
 //    }
 //
 //	@PostMapping("/save")
-//	//@Log(value = "#{@user}用户#{nodeVariable.operationType}了[流程节点条件表]数据，#{nodeVariable.operationType}参数为:",
-//	//	operationType = OperationType.SAVE, paramaType = ParamType.BEAN)
 //	public R save(@Validated NodeVariableDO nodeVariable){
 //		if (nodeVariableService.save(nodeVariable) > 0){
 //			return R.success();
@@ -69,7 +61,6 @@
 //	}
 //
 //	@PostMapping("/remove")
-//	//@Log(value = "#{@user}用户删除了[流程节点条件表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R remove(String id){
 //		if (nodeVariableService.remove(id) > 0){ //逻辑删除
 //		    return R.success();
@@ -78,28 +69,26 @@
 //	}
 //
 //	@PostMapping("/batchRemove")
-//	//@Log(value = "#{@user}用户批量删除了[流程节点条件表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R batchRemove(@RequestParam("ids[]") String[] ids){
 //		nodeVariableService.batchRemove(ids);//批量逻辑删除
 //		return R.success();
 //	}
 //
 //	@PostMapping("/delete")
-//	//@Log(value = "#{@user}用户删除了[流程节点条件表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R delete(String id){
-//		nodeVariableService.delete(id);//物理删除
+//		if (nodeVariableService.delete(id) > 0){//物理删除
 //		    return R.success();
+//		}
+//		return R.error();
 //	}
 //
 //	@PostMapping("/batchDelete")
-//	//@Log(value = "#{@user}用户删除了[流程节点条件表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R batchDelete(@RequestParam("ids[]") String[] ids){
 //		nodeVariableService.batchDelete(ids);//批量物理删除
 //		return R.success();
 //	}
 //
 //	@PostMapping("/copy")
-//	//@Log(value = "#{@user}用户复制了[流程节点条件表]数据，使用参数为:", paramaType = ParamType.FORM)
 //	public R copy(String id){
 //		if (nodeVariableService.copy(id) > 0){
 //			return R.success();

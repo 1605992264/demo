@@ -66,6 +66,12 @@
 //    ProcessNodeDO getStartNode(String orderId);
 //
 //    /**
+//     * 获取发起人节点
+//     * @param processId 流程id
+//     * */
+//    ProcessNodeDO getStartNodeByProcessId(String processId);
+//
+//    /**
 //     * 获取所有流程的当前任务
 //     * */
 //    List<ProcessNodeDO> findLeaderTaskNode();

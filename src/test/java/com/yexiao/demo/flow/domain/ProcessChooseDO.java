@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程发起人自选人员表
@@ -13,14 +13,14 @@
 //public class ProcessChooseDO extends DataEntity<ProcessChooseDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String nodeId;  //节点id
-//	@ValidByData(dataType="varchar",character="500")
+//
 //	private String value;  //值 一般是id
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String type;  // 类型 1用户2部门领导3角色4ALL
 //	private Integer sort;  //排序
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String orderId;  //流程实例id
 //
 //	public void setNodeId(String nodeId) {

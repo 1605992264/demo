@@ -4,12 +4,11 @@
 //import com.txdata.common.persistence.CrudService;
 //import com.txdata.common.utils.StringUtils;
 //import com.txdata.flow.dao.HiCirculationDao;
+//import com.txdata.flow.domain.FuserDO;
 //import com.txdata.flow.domain.HiCirculationDO;
 //import com.txdata.flow.domain.HiCirculationDetailedDO;
 //import com.txdata.flow.domain.ProcessNodeDO;
 //import com.txdata.flow.utils.ConstantEnum;
-//import com.txdata.system.domain.UserDO;
-//import com.txdata.system.service.UserService;
 //import org.apache.shiro.util.CollectionUtils;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@
 //    @Autowired
 //	private ControlFlowService controlFlowService;
 //    @Autowired
-//	private UserService userService;
+//	private FuserService userService;
 //
 //    /**
 //	 * 通过id查找数据
@@ -55,7 +54,7 @@
 //    /**
 //	 * 查询列表
 //	 */
-//    public List<HiCirculationDO> list(Map<String, Object> map){
+//    public List<HiCirculationDO> list(Map<String, Object> map,String systemCode){
 //    	List<HiCirculationDO> circulationDOList = hiCirculationDao.list(map);
 //    	List<HiCirculationDO> newCirculationDOList = new ArrayList<>();
 //    	//获取发起人的id
@@ -68,23 +67,21 @@
 //				String[] commentsArray = solveString(hiCirculationDO.getComments());
 //				List<String> commentsList = new ArrayList<>();
 //				ProcessNodeDO processNodeDO = processNodeService.get(hiCirculationDO.getNodeId());
-//				Set<String> strings = controlFlowService.getUserIdListByNode(processNodeDO, createBy);
+//				Set<String> strings = controlFlowService.getUserIdListByNode(processNodeDO, createBy,systemCode);
 //				List<String> allUsers = new ArrayList<>(strings);
 //				String[] arrays = hiCirculationDO.getUserIds().split(",");
 //				List<String> userNameList = new ArrayList<>();
 //					if (allUsers.removeAll(Arrays.asList(arrays))){
 //						for (int i = 0 ; i < arrays.length ; i++){
-//							UserDO userDO = userService.get(arrays[i]);
+//                            FuserDO userDO = userService.get(arrays[i], systemCode);
 //							userNameList.add(userDO.getName()+electType(types[i]));
 //							fileUrlsList.add(fileUrlsArray.length == 0 ? "": (i == fileUrlsArray.length ? "" : fileUrlsArray[i]));
 //							commentsList.add(commentsArray.length == 0 ? "": (i == commentsArray.length ? "" : commentsArray[i]));
 //						}
 //						if (!CollectionUtils.isEmpty(allUsers)){
 //							for(int k = 0 ; k < allUsers.size() ; k++){
-//								UserDO userDO = userService.get(allUsers.get(k));
-//								if(userDO != null) {
-//                                    userNameList.add(userDO.getName());
-//                                }
+//                                FuserDO userDO = userService.get(allUsers.get(k),systemCode);
+//								userNameList.add(userDO.getName());
 //							}
 //						}
 //					}
@@ -95,7 +92,7 @@
 //				hiCirculationDO.setUserNames(StringUtils.join(userNameList.toArray(), ","));
 //				//对起始节点进行处理
 //			}else if (ConstantEnum.START_NODE.equals(hiCirculationDO.getState())){
-//				hiCirculationDO.setUserNames(userService.get(createBy).getName());
+//				//hiCirculationDO.setUserNames("");
 //				hiCirculationDO.setTypeName(electType(types[0]));
 //			}else {
 //				hiCirculationDO.setTypeName(electType(types[0]));
@@ -133,8 +130,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//         hiCirculationDao.delete(id);
+//    public int delete(String id){
+//        return hiCirculationDao.delete(id);
 //    }
 //
 //    /**
@@ -237,7 +234,7 @@
 //		Map<String, Object> map = new HashMap<>();
 //		map.put("processId", processId);
 //		map.put("type", ConstantEnum.START_NODE);
-//		String startNodeId = processNodeService.getStartNode(orderId).getId();
+//		String startNodeId = processNodeService.list(map).get(0).getId();
 //		HiCirculationDO hiCirculationDO = new HiCirculationDO();
 //		hiCirculationDO.setTaskName("发起人");
 //		hiCirculationDO.setSort(0);

@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程实例历史记录表
@@ -13,11 +13,11 @@
 //public class HiCirculationDO extends DataEntity<HiCirculationDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String orderId;  //实例id
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String taskName;  //任务名称
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String nodeId;  //节点id
 //	private Integer sort;  //排序
 //

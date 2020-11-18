@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程流转历史操作人表
@@ -13,15 +13,15 @@
 //public class HiCirculationDetailedDO extends DataEntity<HiCirculationDetailedDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String circulationId;  //流转历史id
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String userId;  //操作人
-//	@ValidByData(dataType="varchar",character="500")
+//
 //	private String type;  //操作类型(1=开始、2=自动通过、3=抄送、4=通过、5=驳回、6=结束)
-//	@ValidByData(dataType="varchar",character="500")
+//
 //	private String commnet;  //描述
-//	@ValidByData(dataType="varchar",character="250")
+//
 //	private String fileUrl;  //附件
 //
 //	public void setCirculationId(String circulationId) {

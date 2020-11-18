@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程实例历史记录表
@@ -13,15 +13,15 @@
 //public class HiTaskDO extends DataEntity<HiTaskDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String orderId;  //
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String taskName;  //
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String displayName;  //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String nodeId;  //
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String state;  //
 //
 //    private Integer sort; // 排序号

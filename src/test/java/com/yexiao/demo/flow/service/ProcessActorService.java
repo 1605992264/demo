@@ -3,12 +3,18 @@
 //
 //import com.alibaba.fastjson.JSONArray;
 //import com.alibaba.fastjson.JSONObject;
-//import org.apache.shiro.util.CollectionUtils;
+//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+//import com.txdata.common.persistence.CrudService;
+//import com.txdata.common.utils.StringUtils;
+//import com.txdata.flow.dao.ProcessActorDao;
+//import com.txdata.flow.domain.ProcessActorDO;
+//import com.txdata.flow.domain.ProcessNodeDO;
+//import com.txdata.flow.utils.ConstantEnum;
+//import com.txdata.system.dao.UserDao;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import java.util.ArrayList;
 //import java.util.List;
 //import java.util.Map;
 //
@@ -78,8 +84,8 @@
 //	 * 通过id物理删除
 //	 */
 //    @Transactional(readOnly=false)
-//    public void delete(String id){
-//         processActorDao.delete(id);
+//    public int delete(String id){
+//        return processActorDao.delete(id);
 //    }
 //
 //    /**
@@ -204,34 +210,34 @@
 //		return processActorDao.queryStartCondition(processCode);
 //	}
 //
-//	/**
-//	 * 根据流程实例id查询所有部门或者指定人员或者all的用户集合
-//	 * @param processInsId
-//	 */
-//	public List<String> explainUserAndOffice(String processInsId) {
-//		JSONArray startActors = queryStartCondition(processInsId);
-//		List<String> totalUserIds = new ArrayList<>();
-//		String type = null;
-//		String value = null;
-//		if (!CollectionUtils.isEmpty(startActors)) {
-//			//判断起始节点的条件的类型为“所有人”
-//			if (startActors.size() == 1 && ConstantEnum.ACTOR_ALL_CLIENT.equals(startActors.getJSONObject(0).getString("type"))) {
-//				totalUserIds =  userDao.findUserId(null);
-//			}else {
-//				for (int i = 0 ; i < startActors.size() ; i++){
-//					type = startActors.getJSONObject(i).getString("type");
-//					value = startActors.getJSONObject(i).getString("value");
-//					//如果type是“指定员工”
-//					if (ConstantEnum.ACTOR_CLIENT.equals(type)){
-//						totalUserIds.add(value);
-//					}else if (ConstantEnum.ACTOR_DEPT_CLIENT.equals(type)){
-//						totalUserIds.addAll(userDao.findAllUserByOfficeId(value));
-//					}
-//				}
-//			}
-//		} else {
-//			//throw new RuntimeException("该流程起始节点没有条件");
-//		}
-//		return totalUserIds;
-//	}
+////	/**
+////	 * 根据流程实例id查询所有部门或者指定人员或者all的用户集合
+////	 * @param processInsId
+////	 */
+////	public List<String> explainUserAndOffice(String processInsId) {
+////		JSONArray startActors = queryStartCondition(processInsId);
+////		List<String> totalUserIds = new ArrayList<>();
+////		String type = null;
+////		String value = null;
+////		if (!CollectionUtils.isEmpty(startActors)) {
+////			//判断起始节点的条件的类型为“所有人”
+////			if (startActors.size() == 1 && ConstantEnum.ACTOR_ALL_CLIENT.equals(startActors.getJSONObject(0).getString("type"))) {
+////				totalUserIds =  userDao.findUserId(null);
+////			}else {
+////				for (int i = 0 ; i < startActors.size() ; i++){
+////					type = startActors.getJSONObject(i).getString("type");
+////					value = startActors.getJSONObject(i).getString("value");
+////					//如果type是“指定员工”
+////					if (ConstantEnum.ACTOR_CLIENT.equals(type)){
+////						totalUserIds.add(value);
+////					}else if (ConstantEnum.ACTOR_DEPT_CLIENT.equals(type)){
+////						totalUserIds.addAll(userDao.findAllUserByOfficeId(value));
+////					}
+////				}
+////			}
+////		} else {
+////			//throw new RuntimeException("该流程起始节点没有条件");
+////		}
+////		return totalUserIds;
+////	}
 //}

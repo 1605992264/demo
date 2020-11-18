@@ -75,8 +75,10 @@
 //
 //	@PostMapping("/delete")
 //	public R delete(String id){
-//		processActorService.delete(id);//物理删除
-//        return R.success();
+//		if (processActorService.delete(id) > 0){//物理删除
+//		    return R.success();
+//		}
+//		return R.error();
 //	}
 //
 //	@PostMapping("/batchDelete")

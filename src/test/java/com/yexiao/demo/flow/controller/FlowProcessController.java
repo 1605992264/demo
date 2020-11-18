@@ -11,16 +11,10 @@
 //import com.txdata.flow.service.OrderService;
 //import com.txdata.flow.service.OrderTaskService;
 //import com.txdata.flow.service.ProcessNodeService;
-//import com.txdata.modules.reimburse.domain.ReimburseDO;
-//import com.txdata.modules.reimburse.service.ReimburseService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.*;
 //
 //import java.util.Map;
-//
-////import com.txdata.common.log.annotation.Log;
-////import com.txdata.common.log.annotation.OperationType;
-////import com.txdata.common.log.annotation.ParamType;
 //
 ///**
 // * 流程定义表
@@ -40,8 +34,6 @@
 //	private OrderService orderService;
 //	@Autowired
 //	private OrderTaskService orderTaskService;
-//	@Autowired
-//	private ReimburseService reimbursementService;
 //
 //
 //	@PostMapping("/list")
@@ -104,28 +96,26 @@
 //	}
 //
 //	@PostMapping("/batchRemove")
-//	//@Log(value = "#{@user}用户批量删除了[流程定义表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R batchRemove(@RequestParam("ids[]") String[] ids){
 //		processService.batchRemove(ids);//批量逻辑删除
 //		return R.success();
 //	}
 //
 //	@PostMapping("/delete")
-//	//@Log(value = "#{@user}用户删除了[流程定义表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R delete(String id){
-//		processService.delete(id);//物理删除
-//        return R.success();
+//		if (processService.delete(id) > 0){//物理删除
+//		    return R.success();
+//		}
+//		return R.error();
 //	}
 //
 //	@PostMapping("/batchDelete")
-//	//@Log(value = "#{@user}用户删除了[流程定义表]数据，删除参数为:", operationType = OperationType.DELETE, paramaType = ParamType.FORM)
 //	public R batchDelete(@RequestParam("ids[]") String[] ids){
 //		processService.batchDelete(ids);//批量物理删除
 //		return R.success();
 //	}
 //
 //	@PostMapping("/copy")
-//	//@Log(value = "#{@user}用户复制了[流程定义表]数据，使用参数为:", paramaType = ParamType.FORM)
 //	public R copy(String id){
 //		if (processService.copy(id) > 0){
 //			return R.success();
@@ -149,41 +139,6 @@
 ////		}
 //		processNodeService.ruleSave(structuralData,processId);
 //		return R.success();
-//	}
-//
-//	/**
-//	 * 数据列表
-//	 * @param params
-//	 * @return
-//	 */
-//	@PostMapping("/getDataList")
-//	@ResponseBody
-//	public R getDataList(@RequestParam Map<String, Object> params){
-//		//查询列表数据
-//		Query query = new Query(params);
-//		Page<ReimburseDO> page = new Page<ReimburseDO>(query.getPageNo(), query.getPageSize());
-//		page = reimbursementService.page(page, query);
-//		// 封装分页数据
-//		JSONObject jsonMap = new JSONObject();
-//		jsonMap.put("rows", page.getRecords());
-//		jsonMap.put("pageSize", page.getSize());
-//		jsonMap.put("pageNo", page.getCurrent());
-//		jsonMap.put("count", page.getTotal());
-//		return R.success(jsonMap);
-//	}
-//
-//	/**
-//	 * 保存报销数据
-//	 * @param reimbursementDO
-//	 * @return
-//	 */
-//	@PostMapping("/save")
-//	@ResponseBody
-//	public R save(ReimburseDO reimbursementDO){
-//		if (reimbursementService.save(reimbursementDO) > 0){
-//			return R.success();
-//		}
-//		return R.error();
 //	}
 //
 //	/**

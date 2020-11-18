@@ -1,7 +1,7 @@
 //package com.yexiao.demo.flow.domain;
 //
 //import com.txdata.common.domain.DataEntity;
-//import com.txdata.system.valid.ValidByData;
+//
 //
 ///**
 // * 流程节点条件表
@@ -13,17 +13,17 @@
 //public class NodeVariableDO extends DataEntity<NodeVariableDO> {
 //	private static final long serialVersionUID = 1L;
 //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String nodeId;  //
-//	@ValidByData(dataType="varchar",character="64")
+//
 //	private String formId;  //字段id
-//	@ValidByData(dataType="varchar",character="100")
+//
 //	private String name;  //字段名
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String cmpType;  //比较类型   1大于2小于3等于4包含于5不包含于
-//	@ValidByData(dataType="char",character="0")
+//
 //	private String variableType;  //变量类型 1 int,2 string,3 float
-//	@ValidByData(dataType="varchar",character="124")
+//
 //	private String conditionvalue;  //变量值
 //	private Integer sort;  //排序
 //
