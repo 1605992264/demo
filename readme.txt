@@ -11,3 +11,5 @@
 9.基于spring的自定义注解
 10.阿里支付
 11.微信公众号
+12.集成elasticsearch
+13.集成rabbitmq

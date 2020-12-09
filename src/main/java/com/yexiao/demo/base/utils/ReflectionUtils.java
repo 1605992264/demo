@@ -65,6 +65,7 @@ public class ReflectionUtils {
             }
             aClass = aClass.getSuperclass();
         }
+        return map;
     }
 
 
