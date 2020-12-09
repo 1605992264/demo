@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
  **/
 public class HttpRequestUtils {
 
+    /**
+     * 获取调用者的ip
+     * */
     public static String getClientIPAddress(){
         HttpServletRequest httpServletRequest = getHttpServletRequest();
         String ipAddr = getIpAddr(httpServletRequest);

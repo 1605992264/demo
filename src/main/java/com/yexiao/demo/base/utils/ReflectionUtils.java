@@ -50,7 +50,7 @@ public class ReflectionUtils {
     /**
      * 反射获取全字段的值
      * */
-    public static<T extends Object> void getAllFieIdValue(T o){
+    public static<T extends Object> Map<String,Object> getAllFieIdValue(T o){
         Map<String,Object> map = new HashMap<>();
         Class aClass = o.getClass();
         while (!"java.lang.Object".equals(aClass.getName())){
