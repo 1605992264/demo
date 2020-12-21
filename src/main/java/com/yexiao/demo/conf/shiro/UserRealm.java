@@ -34,10 +34,6 @@ public class UserRealm extends AuthorizingRealm {
     private RedisTemplate redisTemplate;
     @Autowired
     private UserService userService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private PermissionService permissionService;
 
 
     /**

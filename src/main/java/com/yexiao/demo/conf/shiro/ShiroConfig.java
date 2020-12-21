@@ -41,7 +41,7 @@ public class ShiroConfig {
 
     @Bean
     public SessionDAO sessionDAO(){
-        return new MemorySessionDAO();
+        return new RedisSessionDAO();
     }
 
     @Bean
@@ -52,10 +52,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
-        securityManager.setSessionManager(sessionManager(sessionDAO()));
+        securityManager.setSessionManager(sessionManager);
         securityManager.setRealm(userRealm());
         return securityManager;
     }
@@ -83,10 +83,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+    public MethodInvokingFactoryBean methodInvokingFactoryBean(SecurityManager securityManager) {
         MethodInvokingFactoryBean bean = new MethodInvokingFactoryBean();
         bean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
-        bean.setArguments(securityManager());
+        bean.setArguments(securityManager);
         return bean;
     }
 
