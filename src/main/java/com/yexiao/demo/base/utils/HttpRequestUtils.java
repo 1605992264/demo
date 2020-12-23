@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author xuhf
  * @date 2020/10/23 16:48
+ *
+ * 静态获取httpRequest
  **/
 public class HttpRequestUtils {
 
