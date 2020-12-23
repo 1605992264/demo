@@ -17,7 +17,11 @@ public class UserUtils {
      * 获取当前用户登入的信息
      * */
     public static UserDO getUser(){
-        return (UserDO) SecurityUtils.getSubject().getPrincipal();
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        if(principal != null && principal instanceof  UserDO) {
+            ((UserDO) principal).setToken(SecurityUtils.getSubject().getSession().getId().toString());
+        }
+        return (UserDO) principal;
     }
 
     /**
