@@ -73,11 +73,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
         try {
             subject.login(token);
-            ((UserDO) subject.getPrincipal()).setToken(subject.getSession().getId().toString());
+            // 把sessionId 存到redis中
         }catch (IncorrectCredentialsException e){
             throw new RuntimeException("用户名或密码错误！");
         }
-        return (UserDO) subject.getPrincipal();
+        return UserUtils.getUser();
     }
 
     @Override

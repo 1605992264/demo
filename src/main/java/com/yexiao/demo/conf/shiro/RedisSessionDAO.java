@@ -1,9 +1,13 @@
 package com.yexiao.demo.conf.shiro;
 
+import com.yexiao.demo.domain.UserDO;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
@@ -27,8 +31,12 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Value("${session.redis.expireTime:1800}")
+    private Long expireTime ;
 
-    private Long expireTime = 1800L;
+    public void setExpireTime(Long expireTime) {
+        this.expireTime = expireTime;
+    }
 
     private static final String redisShiroPrefix = "redisShiro:";
 
@@ -40,6 +48,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         return session.getId();    }
 
     private void saveSession(Session session){
+        session.setTimeout(expireTime * 1000);
         byte[] serialize = SerializationUtils.serialize(session);
         redisTemplate.execute((RedisCallback<Boolean>) connection->{
             return connection.setEx((redisShiroPrefix + session.getId().toString()).getBytes(),
@@ -54,7 +63,6 @@ public class RedisSessionDAO extends AbstractSessionDAO {
             byte[] bytes = connection.get(key);
             return bytes;
         });
-
         return (Session) SerializationUtils.deserialize(execute);
     }
 
