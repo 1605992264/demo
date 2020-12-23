@@ -40,13 +40,13 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SessionDAO sessionDAO(){
-        return new RedisSessionDAO();
+    public SessionDAO sessionDAO(RedisSessionDAO redisSessionDAO){
+        return redisSessionDAO;
     }
 
     @Bean
     public SessionManager sessionManager(SessionDAO sessionDAO){
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        DefaultWebSessionManager sessionManager = new WebSessionManager();
         sessionManager.setSessionDAO(sessionDAO);
         return sessionManager;
     }
