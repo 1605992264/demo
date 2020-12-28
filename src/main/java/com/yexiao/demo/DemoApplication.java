@@ -1,7 +1,7 @@
 package com.yexiao.demo;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
-import lombok.extern.slf4j.Slf4j;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
  * */
 @SpringBootApplication
 @MapperScan({"com.yexiao.demo.mapper","com.yexiao.demo.**.mapper","com.yexiao.demo.xxx.schedule"})
-@Slf4j
 //@EnableAdminServer
 public class DemoApplication extends SpringBootServletInitializer {
 

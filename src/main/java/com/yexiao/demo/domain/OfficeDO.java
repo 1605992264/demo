@@ -6,16 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
+
 
 /**
 * @author xuhf
 * @date 2020-10-26 15:38:18.574
 **/
 @ApiModel(value = "Office对象", description = "机构表")
-@Data
-@Accessors(chain = true)
+
 @TableName("sys_office")
 public class OfficeDO extends UserInfoBaseEntity{
 
@@ -62,5 +60,51 @@ public class OfficeDO extends UserInfoBaseEntity{
     @TableLogic(value = "0",delval = "1")
     private Integer deleteFlag;
 
+    public String getParentId() {
+        return parentId;
+    }
 
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentIds() {
+        return parentIds;
+    }
+
+    public void setParentIds(String parentIds) {
+        this.parentIds = parentIds;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
 }

@@ -2,7 +2,7 @@ package com.yexiao.demo.base.generator.domain;
 
 import com.yexiao.demo.base.domain.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author xuhf
  * @date 2020/8/27 14:56
  **/
-@Data
+
 public class Table extends BaseEntity {
 
     @ApiModelProperty("表名")
@@ -43,5 +43,67 @@ public class Table extends BaseEntity {
     @ApiModelProperty("是否继承UserInfoBaseEntity")
     private boolean isExtendsUserInfoBaseEntity;
 
+    public String getTableName() {
+        return tableName;
+    }
 
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(String tableComment) {
+        this.tableComment = tableComment;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<Column> columns) {
+        this.columns = columns;
+    }
+
+    public LocalDate getDATE() {
+        return DATE;
+    }
+
+    public void setDATE(LocalDate DATE) {
+        this.DATE = DATE;
+    }
+
+    public LocalTime getTIME() {
+        return TIME;
+    }
+
+    public void setTIME(LocalTime TIME) {
+        this.TIME = TIME;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public boolean isExtendsUserInfoBaseEntity() {
+        return isExtendsUserInfoBaseEntity;
+    }
+
+    public void setExtendsUserInfoBaseEntity(boolean extendsUserInfoBaseEntity) {
+        isExtendsUserInfoBaseEntity = extendsUserInfoBaseEntity;
+    }
 }

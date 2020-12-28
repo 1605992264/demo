@@ -8,10 +8,6 @@ import com.yexiao.demo.base.domain.BaseEntity;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,8 +15,7 @@ import java.util.List;
  * @date 2020/8/20 10:49
  **/
 @ApiModel(value = "Role对象", description = "角色表")
-@Data
-@Accessors(chain = true)
+
 @TableName("sys_role")
 public class RoleDO extends UserInfoBaseEntity {
 
@@ -35,4 +30,27 @@ public class RoleDO extends UserInfoBaseEntity {
     @TableField(exist = false)
     private List<PermissionDO> permissionList;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public List<PermissionDO> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<PermissionDO> permissionList) {
+        this.permissionList = permissionList;
+    }
 }

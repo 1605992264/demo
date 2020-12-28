@@ -23,5 +23,10 @@ mybatis-plus:
   global-config:
     refresh: true
 
+session:
+  redis:
+    expireTime: 1800
+
 logging:
   config: classpath:logback.xml
+

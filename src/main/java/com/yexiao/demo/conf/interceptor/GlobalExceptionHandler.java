@@ -1,6 +1,6 @@
 package com.yexiao.demo.conf.interceptor;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @date 2020/8/26 15:36
  * 全局异常处理器
  **/
-@Slf4j
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

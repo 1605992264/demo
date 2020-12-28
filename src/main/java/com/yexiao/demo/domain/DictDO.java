@@ -6,16 +6,12 @@ import com.yexiao.demo.base.domain.BaseEntity;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
 * @author xuhf
 * @date 2020-08-28 17:30:47.717
 **/
 @ApiModel(value = "Dict对象", description = "字典表")
-@Data
-@Accessors(chain = true)
 @TableName("sys_dict")
 public class DictDO extends UserInfoBaseEntity {
 
@@ -68,5 +64,59 @@ public class DictDO extends UserInfoBaseEntity {
     @TableField("value")
     private String value;
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

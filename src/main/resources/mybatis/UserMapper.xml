@@ -54,4 +54,27 @@
         </where>
     </select>
 
+    <select id="findUserByName" resultMap="userInfo">
+        SELECT
+        u.id,
+        u.username,
+        u.PASSWORD,
+        u.NAME,
+        u.sex,
+        u.mobile,
+        r.id AS roleId,
+        r.`name` AS roleName,
+        r.alias AS roleAlias,
+        p.id AS permissionId,
+        p.`name` AS permissionName,
+        p.alias AS permissionAlias
+        FROM
+        sys_user u
+        LEFT JOIN sys_user_role ur ON u.id = ur.user_id
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        LEFT JOIN sys_role_permission rp ON r.id = rp.role_id
+        LEFT JOIN sys_permission p ON rp.permission_id = p.id
+        where u.username = #{value}
+    </select>
+
 </mapper>

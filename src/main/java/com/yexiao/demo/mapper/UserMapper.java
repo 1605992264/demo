@@ -27,4 +27,6 @@ public interface UserMapper extends BaseMapper<UserDO> {
 
     UserDO findUserInfo(@Param("userId") String userId);
 
+    UserDO findUserByName(String name);
+
 }

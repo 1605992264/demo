@@ -1,6 +1,6 @@
 package com.yexiao.demo.base.tree;
 
-import lombok.Data;
+
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author xuhf
  * @date 2020/8/20 15:33
  **/
-@Data
+
 public class TreeNode {
 
     /**
@@ -31,4 +31,35 @@ public class TreeNode {
      * */
     private List<TreeNode> children;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TreeNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TreeNode> children) {
+        this.children = children;
+    }
 }

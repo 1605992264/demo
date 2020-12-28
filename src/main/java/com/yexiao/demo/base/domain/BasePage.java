@@ -2,13 +2,11 @@ package com.yexiao.demo.base.domain;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 /**
  * @author xuhf
  * @date 2020/9/2 10:01
  **/
-@Data
 public class BasePage<T> {
 
     @ApiModelProperty(value = "一页多少条数据")
@@ -26,4 +24,19 @@ public class BasePage<T> {
         return page;
     }
 
+    public Long getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Long pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Long getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Long pageSize) {
+        this.pageSize = pageSize;
+    }
 }

@@ -2,7 +2,7 @@ package com.yexiao.demo.service.impl;
 
 
 import com.yexiao.demo.base.utils.FileUtils;
-import com.yexiao.demo.base.utils.UserUtils;
+import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -18,6 +18,8 @@ public interface UserService extends IService<UserDO> {
 
     UserDO findUserInfo(String id);
 
+    UserDO findUserByUserName(String name);
+
     /**
      * 物理删除
      * */

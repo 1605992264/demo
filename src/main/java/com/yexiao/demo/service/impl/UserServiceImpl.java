@@ -3,11 +3,11 @@ package com.yexiao.demo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
+import com.yexiao.demo.utils.UserUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -49,6 +49,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         return userInfo;
     }
 
+    @Override
+    public UserDO findUserByUserName(String username) {
+         return baseMapper.findUserByName(username);
+    }
+
     /**
      * 物理删除
      * */
@@ -63,6 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public UserDO login(String username, String password) {
         // 由前端一起加密更为安全
+        UserDO userByUserName = findUserByUserName(username);
         String newPassword = UserUtils.newPassword(password, username);
         // 登入
         UsernamePasswordToken token = new UsernamePasswordToken(username,newPassword);

@@ -1,9 +1,8 @@
-package com.yexiao.demo.base.utils;
+package com.yexiao.demo.utils;
 
 import com.yexiao.demo.domain.UserDO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 

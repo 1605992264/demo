@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -16,8 +14,7 @@ import java.util.List;
  * @date 2020/8/20 10:49
  **/
 @ApiModel(value = "User对象", description = "用户表")
-@Data
-@Accessors(chain = true)
+
 @TableName("sys_user")
 public class UserDO extends UserInfoBaseEntity {
 
@@ -61,4 +58,75 @@ public class UserDO extends UserInfoBaseEntity {
     @TableField(exist = false)
     private List<RoleDO> roleList;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Long getBirth() {
+        return birth;
+    }
+
+    public void setBirth(Long birth) {
+        this.birth = birth;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public List<RoleDO> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<RoleDO> roleList) {
+        this.roleList = roleList;
+    }
 }

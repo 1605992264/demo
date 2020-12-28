@@ -2,8 +2,6 @@ package com.yexiao.demo.base.domain;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import java.util.Map;
  * @date 2020/8/27 9:29
  * 统一返回格式
  **/
-@Data
 public class R<T> implements Serializable {
 
     private Integer code;
@@ -111,6 +108,27 @@ public class R<T> implements Serializable {
         return r;
     }
 
+    public Integer getCode() {
+        return code;
+    }
 
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }

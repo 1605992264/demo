@@ -1,8 +1,8 @@
 package com.yexiao.demo.conf.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.domain.UserDO;
+import com.yexiao.demo.utils.UserUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 

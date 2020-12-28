@@ -1,15 +1,13 @@
 package com.yexiao.demo.base.annotation;
 
 
-import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.HttpUtil;
 import com.yexiao.demo.base.utils.HttpRequestUtils;
-import com.yexiao.demo.base.utils.UserUtils;
 import com.yexiao.demo.conf.elasticsearch.ElasticSearchUtils;
 import com.yexiao.demo.conf.interceptor.ErrorMethodException;
 import com.yexiao.demo.domain.LogDO;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.LogService;
+import com.yexiao.demo.utils.UserUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -17,12 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import sun.net.util.IPAddressUtil;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @author xuhf

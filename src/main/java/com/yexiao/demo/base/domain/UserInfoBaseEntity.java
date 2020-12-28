@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+
 
 /**
  * @author xuhf
@@ -12,7 +12,7 @@ import lombok.Data;
  * 表必须有这些字段
  * 记录创建人，修改人等
  **/
-@Data
+
 public class UserInfoBaseEntity extends BaseEntity {
 
     @ApiModelProperty(value = "创建人id")
@@ -31,4 +31,35 @@ public class UserInfoBaseEntity extends BaseEntity {
     @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE,strategy = FieldStrategy.NOT_NULL)
     private Long updateDate;
 
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Long createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Long getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Long updateDate) {
+        this.updateDate = updateDate;
+    }
 }
