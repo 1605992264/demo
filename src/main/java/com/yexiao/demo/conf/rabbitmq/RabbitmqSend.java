@@ -1,15 +1,10 @@
 package com.yexiao.demo.conf.rabbitmq;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Message;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -17,7 +12,7 @@ import java.util.Map;
  * @date 2020/10/30 16:09
  **/
 @Component
-@Slf4j
+
 public class RabbitmqSend {
 
     @Autowired

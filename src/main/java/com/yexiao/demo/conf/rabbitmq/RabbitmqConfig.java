@@ -1,8 +1,6 @@
 package com.yexiao.demo.conf.rabbitmq;
 
-import com.yexiao.demo.domain.LogDO;
-import com.yexiao.demo.service.LogService;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
@@ -20,12 +18,10 @@ import java.util.Map;
  *
  **/
 @Configuration
-@Slf4j
-public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemplate.ReturnCallback{
+public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemplate.ReturnCallback {
 
     @Autowired
     private RabbitTemplate template;
-
 
     /**
      * 声明交换机
@@ -38,8 +34,9 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
     private static final String TOPIC_EXCHANGE = "topic-exchange";
     private static final String FANOUT_EXCHANGE = "fanout-exchange";
     private static final String HEADERS_EXCHANGE = "headers-exchange";
+    private static final String DEAD_EXCHANGE = "dead_exchange";
 
-    private static final String QUEUE_1 = "yexiao";
+    private static final String QUEUE_LASTING = "lasting";
     private static final String DEAD_QUEUE= "deadQueue";
     private static final String QUEUE_3 = "xiaoye";
 
@@ -86,7 +83,6 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
         builder.append("\n").append("消息丢失!").append(message.toString())
                 .append("\n").append("失败原因:").append(reason)
                 .append("\n").append("routingKey = ").append(routingKey);
-        log.error(builder.toString());
     }
 
     /**
@@ -94,8 +90,9 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
      * */
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_1);
+        return new Queue(QUEUE_LASTING,true,true,false);
     }
+
     /**
      * 声明死信队列
      * dead letter exchange
@@ -109,10 +106,18 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
      * */
     @Bean
     public Queue deadQueue() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("x-dead-letter-exchange","");
-        map.put("x-dead-letter-routing-key","");
-        return new Queue(DEAD_QUEUE,true,false,false,map);
+        return new Queue(DEAD_QUEUE,true,false,false);
+    }
+
+    @Bean
+    public DirectExchange deadExchange(){
+        DirectExchange directExchange = new DirectExchange(DEAD_EXCHANGE);
+        return directExchange;
+    }
+
+    @Bean
+    public Binding deadBinding(DirectExchange deadExchange,Queue deadQueue){
+        return BindingBuilder.bind(deadQueue).to(deadExchange).withQueueName();
     }
 
     /**
@@ -120,7 +125,10 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
      * */
     @Bean
     public Queue queue3() {
-        return new Queue(QUEUE_3);
+        Map<String,Object> map = new HashMap<>();
+        map.put("x-dead-letter-exchange",DEAD_EXCHANGE);
+        map.put("x-dead-letter-routing-key",DEAD_QUEUE);
+        return new Queue(QUEUE_3,true,true,false,map);
     }
 
     /**
