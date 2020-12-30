@@ -18,7 +18,11 @@
         <appender-ref ref="Console"/>
     </logger>
 
-    <root level="debug">
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="error">
+        <appender-ref ref="Console"/>
+    </logger>
+
+    <root level="info">
         <appender-ref ref="Console"/>
     </root>
 </configuration>
