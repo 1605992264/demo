@@ -128,7 +128,7 @@ public class RabbitmqConfig implements RabbitTemplate.ConfirmCallback,RabbitTemp
         Map<String,Object> map = new HashMap<>();
         map.put("x-dead-letter-exchange",DEAD_EXCHANGE);
         map.put("x-dead-letter-routing-key",DEAD_QUEUE);
-        return new Queue(QUEUE_3,true,true,false,map);
+        return new Queue(QUEUE_3,true,false,false,map);
     }
 
     /**

@@ -1,21 +1,9 @@
 package com.yexiao.demo.conf.rabbitmq;
 
-import cn.hutool.core.util.StrUtil;
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.MessageProperties;
-import com.rabbitmq.client.impl.AMQImpl;
-import org.apache.coyote.http2.ByteUtil;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.support.PublisherCallbackChannelImpl;
-import org.springframework.amqp.support.AmqpHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,9 +14,6 @@ import java.io.IOException;
  **/
 @Component
 public class RabbitmqReceiver {
-
-    @Value("${rabbitmq.listener.simple.retry.max-attempts:3}")
-    private Integer retryCount;
 
     @RabbitHandler
     @RabbitListener(queues = "lasting")
