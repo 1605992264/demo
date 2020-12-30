@@ -68,16 +68,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public UserDO login(String username, String password) {
         // 由前端一起加密更为安全
-        UserDO userByUserName = findUserByUserName(username);
-        String newPassword = UserUtils.newPassword(password, username);
         // 登入
-        UsernamePasswordToken token = new UsernamePasswordToken(username,newPassword);
         Subject subject = SecurityUtils.getSubject();
         UserDO userDO = (UserDO) subject.getPrincipal();
         if(userDO != null){
             throw new ErrorMethodException("请先退出原用户");
         }
         try {
+            UsernamePasswordToken token = new UsernamePasswordToken(username,password);
             subject.login(token);
             // 把sessionId 存到redis中
         }catch (IncorrectCredentialsException e){

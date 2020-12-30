@@ -1,5 +1,8 @@
 package com.yexiao.demo.conf.shiro;
 
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
@@ -64,7 +67,14 @@ public class ShiroConfig {
     @Bean
     UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
+        userRealm.setCredentialsMatcher(credentialsMatcher());
         return userRealm;
+    }
+
+    @Bean
+    public CredentialsMatcher credentialsMatcher() {
+        CredentialsMatcher credentialsMatcher = new MyCredentialsMatcher();
+        return credentialsMatcher;
     }
 
     /**
