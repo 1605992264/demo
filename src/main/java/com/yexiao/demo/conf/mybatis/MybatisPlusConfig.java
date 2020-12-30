@@ -16,7 +16,7 @@ public class MybatisPlusConfig {
      * */
     @Bean
     public ISqlInjector sqlInjector() {
-        return new LogicSqlInjector();
+        return new MyLogicSqlInjector();
     }
 
 	/**
