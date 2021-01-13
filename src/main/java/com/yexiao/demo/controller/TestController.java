@@ -1,6 +1,8 @@
 package com.yexiao.demo.controller;
 
 import cn.hutool.http.HttpUtil;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.service.DictService;
 import org.springframework.beans.factory.InitializingBean;
@@ -27,7 +29,7 @@ public class TestController implements InitializingBean {
     
     @InitBinder
     public void  init(){
-        System.out.println("每次调用接口都会调用");
+        System.out.println("每次调用接口(方法)都会调用");
     }
 
     @RequestMapping("/list")

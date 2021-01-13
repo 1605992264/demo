@@ -54,31 +54,6 @@ public class ElasticSearchUtils {
     private RestHighLevelClient restHighLevelClient;
 
     /**
-     * 创建 ES 索引
-     *
-     * @param index      索引
-     * @param properties 文档属性集合
-     * @return 返回 true，表示创建成功
-     * @throws IOException
-     */
-    public boolean createIndex(String index, Map<String, Map<String, Object>> properties) throws IOException {
-        XContentBuilder builder = XContentFactory.jsonBuilder();
-        // ES 7.0 后的版本中，已经弃用 type
-        builder.startObject()
-                .startObject("mappings")
-                .field("properties", properties)
-                .endObject()
-                .startObject("settings")
-                .endObject()
-                .endObject();
-
-        CreateIndexRequest request = new CreateIndexRequest(index).source(builder);
-        CreateIndexResponse response = restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);
-
-        return response.isAcknowledged();
-    }
-
-    /**
      * 判断索引是否存在
      *
      * @param index 索引

@@ -2,18 +2,17 @@ package com.yexiao.demo.conf.shiro;
 
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.utils.UserUtils;
-import org.apache.catalina.User;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
-import java.util.LinkedHashMap;
-
 /**
  * @author xuhf
  * @date 2020/12/30 11:13
+ *
+ * 自定义shiro 登入验证
  **/
 public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
 

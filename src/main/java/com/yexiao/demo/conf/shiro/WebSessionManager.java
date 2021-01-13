@@ -17,6 +17,9 @@ public class WebSessionManager extends DefaultWebSessionManager {
 
     public static final String token = "Authorization";
 
+    /**
+     * 定义shiro如何获取sessionId
+     * */
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
