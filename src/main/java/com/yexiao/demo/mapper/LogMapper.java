@@ -6,10 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author xuhf
-* @date 2020-10-23 15:14:47.743
+* @date 2021-02-04 15:15:55.730
 **/
 @Mapper
 public interface LogMapper extends BaseMapper<LogDO> {
 
-
+    /**
+    * 物理删除
+    * */
+    Integer removeById(String id);
 }

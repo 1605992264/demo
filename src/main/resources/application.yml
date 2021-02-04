@@ -23,6 +23,7 @@ mybatis-plus:
   global-config:
     refresh: true
 
+
 session:
   redis:
     expireTime: 1800

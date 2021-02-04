@@ -3,7 +3,7 @@ package com.yexiao.demo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yexiao.demo.conf.interceptor.ErrorMethodException;
+import com.yexiao.demo.conf.interceptor.exception.CustomizeException;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
@@ -72,14 +72,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         Subject subject = SecurityUtils.getSubject();
         UserDO userDO = (UserDO) subject.getPrincipal();
         if(userDO != null){
-            throw new ErrorMethodException("请先退出原用户");
+            throw new CustomizeException("请先退出原用户");
         }
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username,password);
             subject.login(token);
             // 把sessionId 存到redis中
         }catch (IncorrectCredentialsException e){
-            throw new RuntimeException("用户名或密码错误！");
+            throw new CustomizeException("用户名或密码错误！");
         }
         return UserUtils.getUser();
     }

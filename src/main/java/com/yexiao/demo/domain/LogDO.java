@@ -6,49 +6,32 @@ import com.yexiao.demo.base.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-
-import java.nio.channels.Pipe;
 import java.util.Date;
 
 /**
 * @author xuhf
-* @date 2020-10-23 15:14:47.743
+* @date 2021-02-04 15:15:55.730
 **/
 @ApiModel(value = "Log对象", description = "操作日志表")
-
 @TableName("sys_log")
 public class LogDO extends BaseEntity{
 
-    public final static String SUCCESS = "1";
     public final static String ERROR = "0";
+    public final static String SUCCESS = "1";
 
     /**
-     * 操作状态 0-失败 1-成功
+     * 用户id
      */
-    @ApiModelProperty("操作状态 0-失败 1-成功")
-    @TableField("status")
-    private String status;
+    @ApiModelProperty("用户id")
+    @TableField("user_id")
+    private String userId;
 
     /**
-     * 异常信息
+     * 用户名
      */
-    @ApiModelProperty("异常信息")
-    @TableField("exception_info")
-    private String exceptionInfo;
-
-    /**
-     * 访问者IP地址
-     */
-    @ApiModelProperty("访问者IP地址")
-    @TableField("ip")
-    private String ip;
-
-    /**
-     * 错误行号
-     */
-    @ApiModelProperty("错误行号")
-    @TableField("line_number")
-    private Integer lineNumber;
+    @ApiModelProperty("用户名")
+    @TableField("user_name")
+    private String userName;
 
     /**
      * 操作详情
@@ -65,63 +48,40 @@ public class LogDO extends BaseEntity{
     private String method;
 
     /**
-     * 传入参数
+     * 访问者IP地址
      */
-    @ApiModelProperty("传入参数")
-    @TableField("params")
-    private String params;
+    @ApiModelProperty("访问者IP地址")
+    @TableField("ip")
+    private String ip;
 
     /**
-     * 花费时间
-     */
-    @ApiModelProperty("花费时间")
-    @TableField("time")
-    private Integer time;
-
-    /**
-     * 用户id
-     */
-    @ApiModelProperty("用户id")
-    @TableField("user_id")
-    private String userId;
-
-    /**
-     * 用户id
+     * 操作时间
      */
     @ApiModelProperty("操作时间")
     @TableField("create_date")
-    private long createDate;
+    private Date createDate;
 
-    public String getStatus() {
-        return status;
+    /**
+     * 操作类型 0-失败 1-成功
+     */
+    @ApiModelProperty("操作类型 0-失败 1-成功")
+    @TableField("type")
+    private String type;
+
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getExceptionInfo() {
-        return exceptionInfo;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setExceptionInfo(String exceptionInfo) {
-        this.exceptionInfo = exceptionInfo;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getLineNumber() {
-        return lineNumber;
-    }
-
-    public void setLineNumber(Integer lineNumber) {
-        this.lineNumber = lineNumber;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getMessage() {
@@ -140,35 +100,27 @@ public class LogDO extends BaseEntity{
         this.method = method;
     }
 
-    public String getParams() {
-        return params;
+    public String getIp() {
+        return ip;
     }
 
-    public void setParams(String params) {
-        this.params = params;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public Integer getTime() {
-        return time;
-    }
-
-    public void setTime(Integer time) {
-        this.time = time;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public long getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

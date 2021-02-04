@@ -5,48 +5,38 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.yexiao.demo.domain.LogDO">
-            <result column="create_date" property="createDate"/>
-            <result column="exception_info" property="exceptionInfo"/>
             <result column="id" property="id"/>
-            <result column="ip" property="ip"/>
-            <result column="line_number" property="lineNumber"/>
+            <result column="user_id" property="userId"/>
+            <result column="user_name" property="userName"/>
             <result column="message" property="message"/>
             <result column="method" property="method"/>
-            <result column="params" property="params"/>
-            <result column="time" property="time"/>
-            <result column="user_id" property="userId"/>
+            <result column="ip" property="ip"/>
+            <result column="create_date" property="createDate"/>
+            <result column="type" property="type"/>
 	</resultMap>
 
 	<!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
-            sys_log.`create_date`,
-            sys_log.`exception_info`,
             sys_log.`id`,
-            sys_log.`ip`,
-            sys_log.`line_number`,
+            sys_log.`user_id`,
+            sys_log.`user_name`,
             sys_log.`message`,
             sys_log.`method`,
-            sys_log.`params`,
-            sys_log.`time`,
-            sys_log.`user_id`
+            sys_log.`ip`,
+            sys_log.`create_date`,
+            sys_log.`type`
 	</sql>
 
 	<sql id="Map_Where_Clause" >
 		<trim prefix="where" prefixOverrides="AND" >
-                <if test="where.createDate != null and where.createDate != ''">
-                    AND sys_log.`create_date` = #{where.createDate}
-                </if>
-                <if test="where.exceptionInfo != null and where.exceptionInfo != ''">
-                    AND sys_log.`exception_info` = #{where.exceptionInfo}
-                </if>
                 <if test="where.id != null and where.id != ''">
                     AND sys_log.`id` = #{where.id}
                 </if>
-                <if test="where.ip != null and where.ip != ''">
-                    AND sys_log.`ip` = #{where.ip}
+                <if test="where.userId != null and where.userId != ''">
+                    AND sys_log.`user_id` = #{where.userId}
                 </if>
-                <if test="where.lineNumber != null and where.lineNumber != ''">
-                    AND sys_log.`line_number` = #{where.lineNumber}
+                <if test="where.userName != null and where.userName != ''">
+                    AND sys_log.`user_name` = #{where.userName}
                 </if>
                 <if test="where.message != null and where.message != ''">
                     AND sys_log.`message` = #{where.message}
@@ -54,20 +44,23 @@
                 <if test="where.method != null and where.method != ''">
                     AND sys_log.`method` = #{where.method}
                 </if>
-                <if test="where.params != null and where.params != ''">
-                    AND sys_log.`params` = #{where.params}
+                <if test="where.ip != null and where.ip != ''">
+                    AND sys_log.`ip` = #{where.ip}
                 </if>
-                <if test="where.time != null and where.time != ''">
-                    AND sys_log.`time` = #{where.time}
+                <if test="where.createDate != null and where.createDate != ''">
+                    AND sys_log.`create_date` = #{where.createDate}
                 </if>
-                <if test="where.userId != null and where.userId != ''">
-                    AND sys_log.`user_id` = #{where.userId}
+                <if test="where.type != null and where.type != ''">
+                    AND sys_log.`type` = #{where.type}
                 </if>
 		</trim>
 	</sql>
 
-	<sql id="leftJion">
+    <sql id="leftJion">
     </sql>
 
+    <delete id="removeById">
+        delete from sys_log where id = #{value}
+    </delete>
 
 </mapper>

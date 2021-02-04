@@ -6,6 +6,8 @@ import com.yexiao.demo.utils.UserUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * @author xuhf
  * @date 2020/8/26 16:37
@@ -20,18 +22,15 @@ public class MybatisFillHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        if(this.getFieldValByName("createBy",metaObject) == null && UserUtils.getUser() != null){
-            this.setFieldValByName("createBy", UserUtils.getUser().getId(), metaObject);
+        UserDO user = UserUtils.getUser();
+        if(user == null){
+            user = new UserDO();
+            user.setId("-1");
         }
-        if(this.getFieldValByName("createDate",metaObject) == null) {
-            this.setFieldValByName("createDate", System.currentTimeMillis(), metaObject);
-        }
-        if(this.getFieldValByName("updateBy",metaObject) == null && UserUtils.getUser() != null){
-            this.setFieldValByName("updateBy", UserUtils.getUser().getId(),metaObject);
-        }
-        if(this.getFieldValByName("updateDate",metaObject) == null) {
-            this.setFieldValByName("updateDate", System.currentTimeMillis(), metaObject);
-        }
+        this.strictInsertFill(metaObject, "createBy", String.class,user.getId());
+        this.strictInsertFill(metaObject, "createDate", Date.class,new  Date());
+        this.strictInsertFill(metaObject, "updateBy", String.class,user.getId());
+        this.strictInsertFill(metaObject, "updateDate", Date.class,new  Date());
     }
 
     @Override
@@ -39,12 +38,9 @@ public class MybatisFillHandler implements MetaObjectHandler {
         UserDO user = UserUtils.getUser();
         if(user == null){
             user = new UserDO();
+            user.setId("-1");
         }
-        if(this.getFieldValByName("updateBy",metaObject) == null && UserUtils.getUser() != null){
-            this.setFieldValByName("updateBy", UserUtils.getUser().getId(),metaObject);
-        }
-        if(this.getFieldValByName("updateDate",metaObject) == null) {
-            this.setFieldValByName("updateDate", System.currentTimeMillis(), metaObject);
-        }
+        this.strictInsertFill(metaObject, "updateBy", String.class,user.getId());
+        this.strictInsertFill(metaObject, "updateDate", Date.class,new  Date());
     }
 }

@@ -1,6 +1,5 @@
 package com.yexiao.demo.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yexiao.demo.domain.LogDO;
 import com.yexiao.demo.mapper.LogMapper;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 **/
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class LogServiceImpl extends ServiceImpl<LogMapper,LogDO> implements LogService {
+public class LogServiceImpl extends ServiceImpl<LogMapper, LogDO> implements LogService {
 
 
 }

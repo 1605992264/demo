@@ -7,6 +7,7 @@ import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 /**
@@ -49,6 +50,7 @@ public class UserDO extends UserInfoBaseEntity {
     /**
      * 删除标识
      */
+
     @ApiModelProperty(value = "删除标识")
     @TableField(value = "delete_flag")
     @TableLogic(value = "0",delval = "1")

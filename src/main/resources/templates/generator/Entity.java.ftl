@@ -3,6 +3,7 @@ package ${packageName!"com.yexiao.demo"}.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import java.util.Date;
 <#if extendsUserInfoBaseEntity == false>
 import com.yexiao.demo.base.domain.BaseEntity;
 <#else>
@@ -10,16 +11,12 @@ import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 </#if>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
 * @author xuhf
 * @date ${DATE} ${TIME}
 **/
 @ApiModel(value = "${className}对象", description = "${tableComment}")
-@Data
-@Accessors(chain = true)
 @TableName("${tableName}")
 public class ${className}DO extends <#if extendsUserInfoBaseEntity == false>BaseEntity<#else>UserInfoBaseEntity</#if>{
 <#list columns as column>

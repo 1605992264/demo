@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "definitions": {
+    "actor": {
+      "type": ["array","null"],
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "id",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "user",
+              "director",
+              "office",
+              "role",
+              "myself"
+            ]
+          }
+        }
+      }
+    },
+    "approvers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "basicSetting",
+    "processData",
+    "advancedSetting"
+  ],
+  "properties": {
+    "basicSetting": {
+      "type": "object",
+      "required": [
+        "flowName"
+      ],
+      "properties": {
+        "flowName": {
+          "type": "string"
+        }
+      }
+    },
+    "processData": {
+      "type": "object",
+      "required": [
+        "type",
+        "content",
+        "nodeId",
+        "properties"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "start",
+            "approver",
+            "condition",
+            "copy",
+            "empty",
+            "circulation"
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "pervId": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object",
+          "dependencies": {
+            "assigneeType": [
+              "counterSign",
+              "rejectionMod",
+              "approvers"
+            ],
+            "counterSign": [
+              "assigneeType"
+            ],
+            "alternativeHandler": [
+              "defaultHandler"
+            ],
+            "defaultHandler": [
+              "alternativeHandler"
+            ],
+            "conditions": [
+              "priority"
+            ],
+            "priority": [
+              "conditions"
+            ]
+          },
+          "properties": {
+            "defaultHandler": {
+              "$ref": "#/definitions/actor"
+            },
+            "alternativeHandler": {
+              "$ref": "#/definitions/actor"
+            },
+            "menbers": {
+              "$ref": "#/definitions/approvers"
+            },
+            "initiator": {
+              "$ref": "#/definitions/actor"
+            },
+            "title": {
+              "type": "string"
+            },
+            "counterSign": {
+              "type": "number",
+              "enum": [
+                1,
+                2
+              ]
+            },
+            "rejectionMod": {
+              "type": "number",
+              "enum": [
+                1,
+                2
+              ]
+            },
+            "assigneeType": {
+              "type": "string",
+              "enum": [
+                "user",
+                "director",
+                "office",
+                "role",
+                "myself"
+              ]
+            },
+            "directorLevel": {
+              "type": "number"
+            },
+            "approvers": {
+              "$ref": "#/definitions/approvers"
+            },
+            "priority": {
+              "type": "number"
+            },
+            "conditions": {
+
+            }
+          }
+        },
+        "childNode": {
+          "$ref": "#/properties/processData"
+        },
+        "conditionNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/properties/processData"
+          }
+        }
+      }
+    },
+    "advancedSetting": {
+      "type": "object",
+      "properties": {
+        "autoRepeat": {
+          "type": "string"
+        },
+        "myAuditAutoPass": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "variableDecls": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": [
+        "key",
+        "type"
+      ],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "object",
+            "number",
+            "boolean",
+            "array"
+          ]
+        },
+        "default": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/properties/variableDecls"
+        },
+        "items": {
+          "$ref": "#/properties/variableDecls/items"
+        }
+      }
+    }
+  }
+}

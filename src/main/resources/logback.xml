@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.yexiao" additivity="false">
+    <logger name="com.yexiao" additivity="false" level="debug">
         <appender-ref ref="Console"/>
     </logger>
 

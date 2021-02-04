@@ -1,0 +1,709 @@
+{
+  "basicSetting": {
+    "flowName": "费用报销",
+    "flowImg": 0,
+    "flowGroup": 2,
+    "flowRemark": "审批意见填写",
+    "initiator": {
+      "dep&user": [
+        {
+          "name": "智慧政务事业部",
+          "id": "2e57ea64f02346eab5e4c5660e823a0d",
+          "type": "office"
+        },
+        {
+          "name": "周昱",
+          "id": "b427e3c4af7a4825b4753906537719ea",
+          "type": "user"
+        },
+        {
+          "name": "淦述义",
+          "id": "676f5e980db940c0b670e187e3acceff",
+          "type": "user"
+        },
+        {
+          "name": "物联网事业部",
+          "id": "85c1fba5ec804025874969b885f03b4e",
+          "type": "office"
+        },
+        {
+          "name": "胡海亮",
+          "id": "c41fa23932d04bd9ace7f37406dda220",
+          "type": "user"
+        }
+      ]
+    }
+  },
+  "formData": {
+    "fields": [
+      {
+        "formId": "name",
+        "default": "DEFINE_STR:$CONSTNAME_$CONSTDATE_费用报销",
+        "hidden": false,
+        "searchFiled": true,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销单名称",
+        "type": "input",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "number",
+        "default": "",
+        "searchFiled": true,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销单编号",
+        "placeholder": "保存时自动生成",
+        "type": "input",
+        "required": false,
+        "listFiled": true
+      },
+      {
+        "formId": "user",
+        "default": "DEFINE_STR:$CONSTUSERID",
+        "hidden": true,
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销人",
+        "type": "input",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "userName",
+        "default": "DEFINE_STR:$CONSTNAME",
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销人",
+        "type": "input",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "time",
+        "default": "DEFINE_STR:$CONSTDATETIME",
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销时间",
+        "type": "datetime",
+        "required": true,
+        "listFiled": false
+      },
+      {
+        "formId": "projectName",
+        "default": "1",
+        "searchFiled": false,
+        "isCondition": false,
+        "dict": {
+          "dictData": [],
+          "dictType": "project_no"
+        },
+        "disabled": false,
+        "label": "关联项目",
+        "type": "select",
+        "required": true,
+        "listFiled": false
+      },
+      {
+        "formId": "office",
+        "default": "DEFINE_STR:$CONSTOFFICE",
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": true,
+        "label": "所属部门",
+        "type": "input",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "allmoney",
+        "default": "DEFINE_STR:$ARRAYcostDetail>money",
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": true,
+        "label": "报销总金额(元)",
+        "type": "inputNumber",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "flag",
+        "default": "1",
+        "hidden": true,
+        "searchFiled": true,
+        "isCondition": false,
+        "dict": {
+          "dictData": [
+            {
+              "label": "通过",
+              "value": "1"
+            },
+            {
+              "label": "不通过",
+              "value": "2"
+            }
+          ]
+        },
+        "disabled": false,
+        "label": "是否通过",
+        "type": "select",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "comment",
+        "default": "",
+        "hidden": true,
+        "searchFiled": true,
+        "isCondition": false,
+        "disabled": false,
+        "label": "审批意见",
+        "type": "textarea",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "procInsId",
+        "default": "",
+        "hidden": true,
+        "searchFiled": true,
+        "isCondition": false,
+        "disabled": false,
+        "label": "实例id",
+        "type": "input",
+        "required": true,
+        "listFiled": true
+      },
+      {
+        "formId": "costDetail",
+        "default": [],
+        "childArray": [
+          {
+            "formId": "happenDate",
+            "default": "",
+            "label": "发生日期",
+            "type": "date",
+            "required": true
+          },
+          {
+            "formId": "type",
+            "default": "1",
+            "dict": {
+              "dictData": [],
+              "dictType": "cost_type"
+            },
+            "label": "费用类型",
+            "type": "select",
+            "required": true
+          },
+          {
+            "formId": "money",
+            "default": "",
+            "isMoney": true,
+            "label": "报销金额(元)",
+            "type": "inputNumber",
+            "required": true
+          },
+          {
+            "formId": "content",
+            "default": "",
+            "label": "报销内容",
+            "type": "input",
+            "required": true
+          },
+          {
+            "formId": "remarks",
+            "default": "",
+            "label": "费用说明",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "formId": "filePath",
+            "default": "",
+            "label": "费用票据",
+            "type": "upload",
+            "required": true
+          }
+        ],
+        "searchFiled": false,
+        "isCondition": false,
+        "disabled": false,
+        "label": "费用明细",
+        "type": "childTabel",
+        "required": false,
+        "listFiled": false
+      }
+    ]
+  },
+  "processData": {
+    "type": "start",
+    "content": "智慧政务事业部,周昱,淦述义,物联网事业部,胡海亮",
+    "properties": {
+      "initiator": null,
+      "title": "发起人",
+      "formOperates": [
+        {
+          "formId": "name",
+          "formOperate": 2
+        },
+        {
+          "formId": "number",
+          "formOperate": 2
+        },
+        {
+          "formId": "user",
+          "formOperate": 2
+        },
+        {
+          "formId": "userName",
+          "formOperate": 2
+        },
+        {
+          "formId": "time",
+          "formOperate": 2
+        },
+        {
+          "formId": "projectName",
+          "formOperate": 2
+        },
+        {
+          "formId": "office",
+          "formOperate": 2
+        },
+        {
+          "formId": "allmoney",
+          "formOperate": 2
+        },
+        {
+          "formId": "flag",
+          "formOperate": 2
+        },
+        {
+          "formId": "comment",
+          "formOperate": 2
+        },
+        {
+          "formId": "procInsId",
+          "formOperate": 2
+        },
+        {
+          "formId": "costDetail",
+          "formOperate": 2
+        },
+        {
+          "formId": "happenDate",
+          "formOperate": 2
+        },
+        {
+          "formId": "type",
+          "formOperate": 2
+        },
+        {
+          "formId": "money",
+          "formOperate": 2
+        },
+        {
+          "formId": "content",
+          "formOperate": 2
+        },
+        {
+          "formId": "remarks",
+          "formOperate": 2
+        },
+        {
+          "formId": "filePath",
+          "formOperate": 2
+        }
+      ]
+    },
+    "nodeId": "3749be401c999c43371e14ab35391ad8",
+    "childNode": {
+      "type": "empty",
+      "content": "",
+      "properties": {},
+      "nodeId": "666b9773407943783085e01f663dc05d",
+      "prevId": "3749be401c999c43371e14ab35391ad8",
+      "childNode": {
+        "prevId": "666b9773407943783085e01f663dc05d",
+        "type": "approver",
+        "nodeId": "705445a5d0dc613229bac7233d3a7a3e",
+        "content": "第3级领导",
+        "properties": {
+          "counterSign": 2,
+          "optionalMultiUser": false,
+          "optionalRange": "all",
+          "approvers": [],
+          "rejectionMod": 1,
+          "assigneeType": "director",
+          "title": "审批人",
+          "formOperates": [
+            {
+              "formId": "name",
+              "formOperate": 1
+            },
+            {
+              "formId": "number",
+              "formOperate": 1
+            },
+            {
+              "formId": "user",
+              "formOperate": 1
+            },
+            {
+              "formId": "userName",
+              "formOperate": 1
+            },
+            {
+              "formId": "time",
+              "formOperate": 1
+            },
+            {
+              "formId": "projectName",
+              "formOperate": 1
+            },
+            {
+              "formId": "office",
+              "formOperate": 1
+            },
+            {
+              "formId": "allmoney",
+              "formOperate": 1
+            },
+            {
+              "formId": "flag",
+              "formOperate": 1
+            },
+            {
+              "formId": "comment",
+              "formOperate": 1
+            },
+            {
+              "formId": "procInsId",
+              "formOperate": 1
+            },
+            {
+              "formId": "costDetail",
+              "formOperate": 1
+            },
+            {
+              "formId": "happenDate",
+              "formOperate": 1
+            },
+            {
+              "formId": "type",
+              "formOperate": 1
+            },
+            {
+              "formId": "money",
+              "formOperate": 1
+            },
+            {
+              "formId": "content",
+              "formOperate": 1
+            },
+            {
+              "formId": "remarks",
+              "formOperate": 1
+            },
+            {
+              "formId": "filePath",
+              "formOperate": 1
+            }
+          ],
+          "directorLevel": 3
+        },
+        "childNode": {
+          "prevId": "705445a5d0dc613229bac7233d3a7a3e",
+          "type": "approver",
+          "nodeId": "2a2ef17c9509cd58ecbedea9f4202ae0",
+          "content": "财务角色",
+          "properties": {
+            "counterSign": 2,
+            "optionalMultiUser": false,
+            "optionalRange": "all",
+            "approvers": [
+              {
+                "name": "财务角色",
+                "id": "c91f5a1ece1540a59cdf1f47513da511"
+              }
+            ],
+            "rejectionMod": 1,
+            "assigneeType": "role",
+            "title": "审批人",
+            "formOperates": [
+              {
+                "formId": "name",
+                "formOperate": 1
+              },
+              {
+                "formId": "number",
+                "formOperate": 1
+              },
+              {
+                "formId": "user",
+                "formOperate": 1
+              },
+              {
+                "formId": "userName",
+                "formOperate": 1
+              },
+              {
+                "formId": "time",
+                "formOperate": 1
+              },
+              {
+                "formId": "projectName",
+                "formOperate": 1
+              },
+              {
+                "formId": "office",
+                "formOperate": 1
+              },
+              {
+                "formId": "allmoney",
+                "formOperate": 1
+              },
+              {
+                "formId": "flag",
+                "formOperate": 1
+              },
+              {
+                "formId": "comment",
+                "formOperate": 1
+              },
+              {
+                "formId": "procInsId",
+                "formOperate": 1
+              },
+              {
+                "formId": "costDetail",
+                "formOperate": 1
+              },
+              {
+                "formId": "happenDate",
+                "formOperate": 1
+              },
+              {
+                "formId": "type",
+                "formOperate": 1
+              },
+              {
+                "formId": "money",
+                "formOperate": 1
+              },
+              {
+                "formId": "content",
+                "formOperate": 1
+              },
+              {
+                "formId": "remarks",
+                "formOperate": 1
+              },
+              {
+                "formId": "filePath",
+                "formOperate": 1
+              }
+            ]
+          },
+          "childNode": {
+            "prevId": "2a2ef17c9509cd58ecbedea9f4202ae0",
+            "type": "approver",
+            "nodeId": "159ce052e4d64678d0c8d6e21ca51de7",
+            "content": "高层领导角色",
+            "properties": {
+              "counterSign": 2,
+              "optionalMultiUser": false,
+              "optionalRange": "all",
+              "approvers": [
+                {
+                  "name": "高层领导角色",
+                  "id": "7733ecb1dc48441780c75126611c9207"
+                }
+              ],
+              "rejectionMod": 1,
+              "assigneeType": "role",
+              "title": "审批人",
+              "formOperates": [
+                {
+                  "formId": "name",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "number",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "user",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "userName",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "time",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "projectName",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "office",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "allmoney",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "flag",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "comment",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "procInsId",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "costDetail",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "happenDate",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "type",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "money",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "content",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "remarks",
+                  "formOperate": 1
+                },
+                {
+                  "formId": "filePath",
+                  "formOperate": 1
+                }
+              ]
+            }
+          }
+        }
+      },
+      "conditionNodes": [
+        {
+          "type": "condition",
+          "content": "[发起人: 智慧政务事业部]\n",
+          "properties": {
+            "title": "条件1",
+            "conditions": [],
+            "initiator": [
+              {
+                "type": "office",
+                "name": "智慧政务事业部",
+                "id": "2e57ea64f02346eab5e4c5660e823a0d"
+              }
+            ],
+            "priority": 0,
+            "isDefault": false
+          },
+          "nodeId": "f0bb10c0bbcc454f50df77660f8dd41e",
+          "prevId": "666b9773407943783085e01f663dc05d"
+        },
+        {
+          "type": "condition",
+          "content": "[发起人: 周昱]\n",
+          "properties": {
+            "title": "条件2",
+            "conditions": [],
+            "initiator": [
+              {
+                "type": "user",
+                "name": "周昱",
+                "id": "b427e3c4af7a4825b4753906537719ea"
+              }
+            ],
+            "priority": 1,
+            "isDefault": false
+          },
+          "nodeId": "9daba2cc220f8e16b08dbcb65cc6df51",
+          "prevId": "666b9773407943783085e01f663dc05d"
+        }
+      ]
+    },
+    "conditionNodes": [
+      {
+        "prevId": "3749be401c999c43371e14ab35391ad8",
+        "type": "condition",
+        "nodeId": "fac4dc06643c0245976f6ff1f3f4e691",
+        "content": "[发起人: 智慧政务事业部,周昱,物联网事业部]\n",
+        "properties": {
+          "isDefault": false,
+          "initiator": [
+            {
+              "name": "智慧政务事业部",
+              "id": "2e57ea64f02346eab5e4c5660e823a0d",
+              "type": "office"
+            },
+            {
+              "name": "周昱",
+              "id": "b427e3c4af7a4825b4753906537719ea",
+              "type": "user"
+            },
+            {
+              "name": "物联网事业部",
+              "id": "85c1fba5ec804025874969b885f03b4e",
+              "type": "office"
+            }
+          ],
+          "title": "条件1",
+          "conditions": [],
+          "priority": 0
+        }
+      },
+      {
+        "prevId": "3749be401c999c43371e14ab35391ad8",
+        "type": "condition",
+        "nodeId": "2f1941a8c178e296afd8b7bdfa465d61",
+        "content": "[发起人: 淦述义]\n",
+        "properties": {
+          "isDefault": false,
+          "initiator": [
+            {
+              "name": "淦述义",
+              "id": "676f5e980db940c0b670e187e3acceff",
+              "type": "user"
+            }
+          ],
+          "title": "条件2",
+          "conditions": [],
+          "priority": 1
+        }
+      }
+    ]
+  },
+  "advancedSetting": {
+    "autoRepeat": "3",
+    "myAuditAutoPass": true,
+    "remarkTip": "这里是填写提示",
+    "remarkRequired": true,
+    "notVisibleForSponsor": true
+  }
+}

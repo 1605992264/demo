@@ -3,7 +3,7 @@ package com.yexiao.demo.base.annotation;
 
 import com.yexiao.demo.base.utils.HttpRequestUtils;
 import com.yexiao.demo.conf.elasticsearch.ElasticSearchUtils;
-import com.yexiao.demo.conf.interceptor.ErrorMethodException;
+import com.yexiao.demo.conf.interceptor.exception.CustomizeException;
 import com.yexiao.demo.domain.LogDO;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.LogService;
@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * @author xuhf
@@ -79,66 +81,40 @@ public class LogAspect {
       * @param joinPoint 切入点
       * */
     @Around("addAdvice()")
-    public Object doAround(ProceedingJoinPoint joinPoint){
-        Object returnResult = null;
+    public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long time = System.currentTimeMillis();
-        UserDO user = UserUtils.getUser();
-        LogDO logDO = new LogDO();
-        try {
-            // 执行被切入的方法
-            returnResult = joinPoint.proceed();
-            logDO.setStatus(LogDO.SUCCESS);
-        } catch (Throwable throwable) {
-            // 填充错误日志信息
-            logDO.setStatus(LogDO.ERROR);
-            logDO.setLineNumber(throwable.getStackTrace()[0].getLineNumber());
-            logDO.setExceptionInfo(throwable.getMessage());
-            throwable.printStackTrace();
-            // 抛出异常 让拦截器捕获
-            if( throwable instanceof ErrorMethodException) {
-                throw (ErrorMethodException) throwable;
-            }else {
-                throw new ErrorMethodException(throwable.getMessage(),throwable.getStackTrace()[0]);
-            }
-        } finally {
-            // 操作时间
-            long runTime = System.currentTimeMillis() - time;
-            if(user == null){
-                user = UserUtils.getUser();
-                if(user == null){
-                    //用户没有登入
-                    user = new UserDO();
-                    user.setName("");
-                    user.setId("");
-                }
-            }
-            MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
-            // 封装参数
-            String params = getParams(methodSignature.getParameterTypes()
-                    , methodSignature.getParameterNames(),joinPoint.getArgs());
-            Log annotation = methodSignature.getMethod().getAnnotation(Log.class);
-            StringBuilder builder = new StringBuilder();
-            builder.append("\n用户[").append(user.getName()).append("]")
-                    .append("操作了[").append(annotation.message()).append("]")
-                    .append(logDO.getStatus()== LogDO.SUCCESS ? "":"报错:"+logDO.getExceptionInfo())
-                    .append("\n")
-                    .append("方法[").append(methodSignature.toShortString()).append("]")
-                    .append("耗时[").append(runTime).append("]毫秒");
-            if(logDO.getStatus()== LogDO.SUCCESS) {
-                logger.info(builder.toString());
-            }else {
-                logger.error(builder.toString());
-            }
-            // 封装日志对象
-            logDO.setTime((int)(runTime));
-            logDO.setCreateDate(time);
-            logDO.setMessage(annotation.message());
-            logDO.setUserId(user.getId());
-            logDO.setParams(params);
-            logDO.setMethod(methodSignature.toShortString());
-            logDO.setIp(HttpRequestUtils.getClientIPAddress());
-            logService.save(logDO);
+        String userName = "未知用户";
+        String userId = "-1";
+        if(UserUtils.getUser() != null){
+            userName = UserUtils.getUser().getName();
+            userId = UserUtils.getUser().getId();
         }
+        // 执行被切入的方法
+        Object returnResult = joinPoint.proceed(joinPoint.getArgs());
+        long runTime = System.currentTimeMillis()-time;
+        if(UserUtils.getUser() != null){
+            userName = UserUtils.getUser().getName();
+            userId = UserUtils.getUser().getId();
+        }
+        MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
+        Log annotation = methodSignature.getMethod().getAnnotation(Log.class);
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n[").append(userName).append("]")
+                .append("操作了[").append(annotation.message()).append("]")
+                .append("\n")
+                .append("方法[").append(methodSignature.toShortString()).append("]")
+                .append("耗时[").append(runTime).append("]毫秒");
+        logger.info(builder.toString());
+        // 封装日志对象
+        LogDO logDO = new LogDO();
+        logDO.setType(LogDO.SUCCESS);
+        logDO.setCreateDate(new Date());
+        logDO.setMessage(annotation.message());
+        logDO.setUserId(userId);
+        logDO.setUserName(userName);
+        logDO.setMethod(HttpRequestUtils.getHttpServletRequest().getServletPath());
+        logDO.setIp(HttpRequestUtils.getClientIPAddress());
+        logService.save(logDO);
         return returnResult;
     }
 

@@ -20,9 +20,9 @@
 	<sql id="Map_Where_Clause" >
 		<trim prefix="where" prefixOverrides="AND" >
             <#list columns as column>
-                <if test="where.${column.javaName} != null and where.${column.javaName} != ''">
-                    AND ${tableName}.`${column.name}` = ${r"#{"}where.${column.javaName}${r"}"}
-                </if>
+            <if test="where.${column.javaName} != null and where.${column.javaName} != ''">
+                AND ${tableName}.`${column.name}` = ${r"#{"}where.${column.javaName}${r"}"}
+            </if>
             </#list>
 		</trim>
 	</sql>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Map;
 
 /**
  * @author xuhf
@@ -29,12 +30,17 @@ public class TestController implements InitializingBean {
     
     @InitBinder
     public void  init(){
-        System.out.println("每次调用接口(方法)都会调用");
+        System.out.println("每次调用接口(被@RequestMapping注解了的)都会调用");
     }
 
     @RequestMapping("/list")
-    public R list( @NotEmpty(message = "a不能为null")@Size(min = 1,max = 5,message = "长度应该在1-5为之间") String a) throws Exception {
-        return R.success(a);
+    public R list(Map<String,Object> map) {
+        return R.success(map);
+    }
+
+    @RequestMapping("/error")
+    public R error() {
+        return R.success(dictService.save(null));
     }
 
     @RequestMapping("getAll")
@@ -47,7 +53,7 @@ public class TestController implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         System.out.println("bean初始化时调用");
     }
 }
