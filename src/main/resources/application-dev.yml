@@ -46,6 +46,7 @@ spring:
         retry:
           enabled: true #是否开启消费者重试（消费端代码异常会一直重复收到消息）
           initial-interval: 5000 #重试时间 （毫秒）
+
 #  boot:
 #    admin:
 #      # 可视化管控台界面的 context-path

@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.zone.ZoneRules;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -47,6 +46,9 @@ public class TestService {
         return false;
     }
 
+    /**
+     * 获取minio上的文件列表
+     * */
     public List<FileVO> fileList(String name){
         List<FileVO> fileList = new ArrayList<>();
         try {
@@ -60,6 +62,10 @@ public class TestService {
                         fileVO.name = item.objectName();
                         fileVO.size = FileUtils.readFileSize(item.size());
                         fileVO.setCreateDate(item.lastModified().toLocalDateTime().plusHours(8));
+                        Map<String, String> reqParams = new HashMap<String, String>();
+                        reqParams.put("response-content-type", "application/octet-stream");
+                        reqParams.put("Content-disposition","attachment;filename=" + URLEncoder.encode(item.objectName(), "UTF-8"));
+                        fileVO.setUrl(minioClient.presignedGetObject(name,item.objectName(),60*60,reqParams));
                         fileList.add(fileVO);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -78,6 +84,15 @@ public class TestService {
         @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
         private LocalDateTime createDate;
         private String size;
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
         public String getName() {
             return name;
