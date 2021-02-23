@@ -1,12 +1,14 @@
 package com.yexiao.demo.conf.interceptor.exception;
 
 
+import com.yexiao.demo.base.domain.R;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,14 @@ public class GlobalExceptionHandler{
         map.put("message", "该用户没有权限");
 //        map.put("errorMsg",exception.toString());
         return map;
+    }
+
+    /**
+     * 校验异常
+     * */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public R ConstraintViolationException(Exception exception){
+        return R.error(exception.getMessage());
     }
 
     /**

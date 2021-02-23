@@ -3,6 +3,7 @@ package com.yexiao.demo.base.cache;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,8 @@ import java.util.Map;
  * @date 2020/8/19 19:06
  * 静态定时任务
  **/
-@Configuration      //1.主要用于标记配置类，兼备Component的效果。
-@EnableScheduling   // 2.开启定时任务
+@Component
 public class CacheDeleteTask {
-
 
     //3.添加定时任务
     @Scheduled(cron = "0/5 * * * * ?")

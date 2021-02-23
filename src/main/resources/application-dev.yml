@@ -53,6 +53,10 @@ spring:
 #      client:
 #        url: http://localhost:${server.port}/${server.servlet.context-path}/${spring.boot.admin.context-path}
 
+
+minio:
+  serverUrl: http://39.106.208.50:9000
+
 param:
   elasticsearch:
     rest:
@@ -78,7 +82,7 @@ param:
       # POST 上传永久图文素材
       getImgAndTextUrl: https://api.weixin.qq.com/cgi-bin/material/add_news?access_token={0}
       # POST/FORM 上传临时素材
-      getInterimUploadUrl: https://api.weixin.qq.com/cgi-bin/media/upload
+      getInterimUploadUrl:  https://api.weixin.qq.com/cgi-bin/media/upload
       # POST 上传临时图文素材
       getInterimImgAndTextUrl: https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token={0}
       # POST 根据标签进行群发

@@ -4,16 +4,22 @@ import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.yexiao.demo.base.domain.R;
+import com.yexiao.demo.base.utils.HttpRequestUtils;
 import com.yexiao.demo.service.DictService;
+import com.yexiao.demo.service.impl.TestService;
+import io.minio.MinioClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +32,31 @@ import java.util.Map;
 public class TestController implements InitializingBean {
 
     @Autowired
-    private DictService dictService;
-    
+    private TestService testService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @RequestMapping("/minio/upload")
+    public R upload(MultipartFile file){
+        boolean upload = testService.upload(file);
+        if(upload){
+            return R.success();
+        }
+        return R.error();
+    }
+
+    @RequestMapping("/minio/fileList")
+    public R fileList(String name){
+        List list = testService.fileList(name);
+        return R.success(list);
+    }
+
+    @RequestMapping("/sql")
+    public void sql(String sql){
+        jdbcTemplate.execute(sql);
+    }
+
     @InitBinder
     public void  init(){
         System.out.println("每次调用接口(被@RequestMapping注解了的)都会调用");
@@ -36,11 +65,6 @@ public class TestController implements InitializingBean {
     @RequestMapping("/list")
     public R list(Map<String,Object> map) {
         return R.success(map);
-    }
-
-    @RequestMapping("/error")
-    public R error() {
-        return R.success(dictService.save(null));
     }
 
     @RequestMapping("getAll")

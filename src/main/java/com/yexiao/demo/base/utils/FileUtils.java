@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -118,6 +119,19 @@ public class FileUtils {
             bufferedOutputStream.close();
         }
         zipFile.close();
+    }
+
+    /**
+     * 获取文件大小
+     * @return xxx kB
+     * */
+    public static String readFileSize(Long size){
+        if(size <= 0){
+            return "0 B";
+        }
+        String[] units = new String[]{"B", "kB", "MB", "GB", "TB", "EB"};
+        int digitGroups = (int)(Math.log10((double)size) / Math.log10(1024.0D));
+        return (new DecimalFormat("#,##0.##")).format((double)size / Math.pow(1024.0D, (double)digitGroups)) + " " + units[digitGroups];
     }
 
 

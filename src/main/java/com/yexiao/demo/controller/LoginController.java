@@ -19,6 +19,11 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/")
+    public R hello(){
+        return R.success("你好！");
+    }
+
     @Log(message = "登入")
     @RequestMapping("/login")
     public R login(@RequestParam String username, @RequestParam String password){

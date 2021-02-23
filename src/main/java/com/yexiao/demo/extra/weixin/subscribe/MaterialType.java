@@ -1,4 +1,4 @@
-package com.yexiao.demo.extra.weixin;
+package com.yexiao.demo.extra.weixin.subscribe;
 
 /**
  * @author xuhf

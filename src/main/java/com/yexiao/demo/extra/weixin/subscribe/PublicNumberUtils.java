@@ -1,4 +1,4 @@
-package com.yexiao.demo.extra.weixin;
+package com.yexiao.demo.extra.weixin.subscribe;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -77,6 +77,9 @@ public class PublicNumberUtils {
 
     /**
      * 上传临时素材
+     * @param file 上传的文件
+     * @param type 文件类型
+     * @return 上传文件的id
      * */
     public String upload(File file, MaterialType type){
         Map<String,Object> map = new HashMap<>(3);
@@ -94,6 +97,8 @@ public class PublicNumberUtils {
 
     /**
      * 上传图文消息素材
+     * @param list 图文消息
+     * @return  素材id
      * */
     public String imgAndTextMessage(List<ImgAndTextDO> list){
         JSONObject jsonObject = new JSONObject();
@@ -110,8 +115,10 @@ public class PublicNumberUtils {
 
     /**
      * 发送图文消息（群发）
+     * @param mediaId 素材id
+     * @return 是否成功
      * */
-    public String sendGroupMessage(String mediaId){
+    public boolean sendGroupMessage(String mediaId){
         JSONObject jsonObject = new JSONObject();
         JSONObject filter = new JSONObject();
         filter.put("is_to_all",true);
@@ -126,9 +133,9 @@ public class PublicNumberUtils {
         JSONObject response = JSONObject.parseObject(HttpUtil.post(url, jsonObject.toJSONString()));
         String errCode = response.getString("errcode");
         if(StrUtil.isEmpty(errCode) || !"0".equals(errCode)){
-            throw new RuntimeException("发送图文消息失败:" + response);
+            return false;
         }else {
-            return "success";
+            return true;
         }
     }
 
