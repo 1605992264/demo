@@ -26,15 +26,14 @@ public class CreateTreeData {
         /** 将泛型中的数据转换为treeNode对象 **/
         /** 迭代遍历树中的根节点 **/
         Iterator<? extends TreeNode> iterator = data.iterator();
-        Class<? extends Iterator> treeClass = iterator.getClass();
         while (iterator.hasNext()) {
             TreeNode treeNode = iterator.next();
             /** 判断数据是否为根节点，根节点父级一般为null或0 **/
-            if ( null == treeNode.getParentId() || 0 == treeNode.getParentId()) {
+            if ( null == treeNode.getParentId() || "0".equals(treeNode.getParentId())) {
                 /** 将根节点放入最终树结构中 **/
                 try {
-                    Method add = treeClass.getDeclaredMethod("add", Object.class);
-                    add.invoke(data,treeNode);
+                    Method add = orgTree.getClass().getDeclaredMethod("add", Object.class);
+                    add.invoke(orgTree,treeNode);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,7 +55,8 @@ public class CreateTreeData {
         Iterator<? extends TreeNode> iterator = nodes.iterator();
         while (iterator.hasNext()) {
             TreeNode node = iterator.next();
-            if (null != node.getParentId() && null != treeNode.getId() && treeNode.getId().equals(node.getParentId())) {
+            if (null != node.getParentId() && null != treeNode.getId()
+                    && treeNode.getId().equals(node.getParentId())) {
                 childrenList.add(node);
                 childrenNodeInfo(node, nodes);
             }

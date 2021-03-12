@@ -78,6 +78,12 @@ public class R<T> implements Serializable {
         return r;
     }
 
+    public static R success(JSONObject jsonObject){
+        R r = new R();
+        r.data = jsonObject;
+        return r;
+    }
+
     public static R success(String message, Map<String,Object> map){
         R r = new R();
         r.message = message;

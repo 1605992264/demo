@@ -14,12 +14,12 @@ public class TreeNode {
     /**
      * id 主键
      * */
-    private Long id;
+    private String id;
 
     /**
      * parentId 父级id
      * */
-    private Long parentId;
+    private String parentId;
 
     /**
      * 名称
@@ -31,19 +31,19 @@ public class TreeNode {
      * */
     private List<TreeNode> children;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

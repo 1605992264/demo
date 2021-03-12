@@ -131,4 +131,8 @@ public class UserDO extends UserInfoBaseEntity {
     public void setRoleList(List<RoleDO> roleList) {
         this.roleList = roleList;
     }
+
+
+
+
 }

@@ -129,7 +129,7 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!--shiro-->
+        <!--shiro 安全框架-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
@@ -170,7 +170,7 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.23</version>
         </dependency>
-        <!--druid -->
+        <!--druid 数据库连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
@@ -225,39 +225,27 @@
             <version>${elasticsearch.version}</version>
         </dependency>
         <!--Spring Boot admin:监控-->
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-server</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-server-ui</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>2.0.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-server</artifactId>-->
+<!--            <version>2.0.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-server-ui</artifactId>-->
+<!--            <version>2.0.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>de.codecentric</groupId>-->
+<!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
+<!--            <version>2.0.3</version>-->
+<!--        </dependency>-->
         <!--RabbitMQ-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
-        <!--pdf导出-->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>5.5.6</version>
-        </dependency>
-        <!-- itextpdf的亚洲字体支持 -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext-asian</artifactId>
-            <version>5.2.0</version>
-        </dependency>
         <!--json校验-->
         <dependency>
             <groupId>com.networknt</groupId>
@@ -269,6 +257,14 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>7.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taobao</groupId>
+            <artifactId>taobao-sdk-java-auto</artifactId>
+            <version>3.2.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210226.jar</systemPath>
         </dependency>
         <!--spring安全管理-->
 <!--        <dependency>-->

@@ -1,6 +1,6 @@
 # 主配置文件 可用于通用的属性
 spring:
-  jackson:
+  jackson: # web返回json格式 是使用jackson
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non-null  #json字符串忽略Null值
@@ -22,7 +22,6 @@ mybatis-plus:
   # 是否自动刷新 Mapper 对应的 XML 文件
   global-config:
     refresh: true
-
 
 session:
   redis:

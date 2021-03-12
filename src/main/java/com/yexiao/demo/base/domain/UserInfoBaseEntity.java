@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.yexiao.demo.utils.UserUtils;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 
 /**
  * @author xuhf
@@ -18,19 +21,19 @@ public class UserInfoBaseEntity extends BaseEntity {
 
     @ApiModelProperty(value = "创建人id")
     @TableField(value = "create_by",fill = FieldFill.INSERT)
-    private String createBy;
+    protected String createBy;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "create_date",fill = FieldFill.INSERT)
-    private Long createDate;
+    protected LocalDateTime createDate;
 
     @ApiModelProperty(value = "修改人id")
     @TableField(value = "update_by",fill = FieldFill.INSERT_UPDATE)
-    private String updateBy;
+    protected String updateBy;
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE)
-    private Long updateDate;
+    protected LocalDateTime updateDate;
 
     public String getCreateBy() {
         return createBy;
@@ -40,13 +43,7 @@ public class UserInfoBaseEntity extends BaseEntity {
         this.createBy = createBy;
     }
 
-    public Long getCreateDate() {
-        return createDate;
-    }
 
-    public void setCreateDate(Long createDate) {
-        this.createDate = createDate;
-    }
 
     public String getUpdateBy() {
         return updateBy;
@@ -56,11 +53,30 @@ public class UserInfoBaseEntity extends BaseEntity {
         this.updateBy = updateBy;
     }
 
-    public Long getUpdateDate() {
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Long updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoBaseEntity{" +
+                "createBy='" + createBy + '\'' +
+                ", createDate=" + createDate +
+                ", updateBy='" + updateBy + '\'' +
+                ", updateDate=" + updateDate +
+                ", id='" + id + '\'' +
+                '}';
     }
 }

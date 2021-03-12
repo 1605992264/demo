@@ -22,7 +22,6 @@
         select count(*) from sys_user where username = #{value}
     </select>
 
-
     <delete id="removeById">
         delete from sys_user where id = #{value}
     </delete>

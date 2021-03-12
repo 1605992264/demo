@@ -34,11 +34,11 @@ public class TestService {
      * */
     public boolean upload(MultipartFile file){
         try {
-            boolean test = minioClient.bucketExists("test");
+            boolean test = minioClient.bucketExists("test/aa/vv");
             if(!test){
-                minioClient.makeBucket("test");
+                minioClient.makeBucket("test/aa/vv");
             }
-            minioClient.putObject("test",file.getOriginalFilename(),file.getInputStream(),new PutObjectOptions(file.getSize(),0L));
+            minioClient.putObject("test/aa/vv",file.getOriginalFilename(),file.getInputStream(),new PutObjectOptions(file.getSize(),0L));
             return true;
         } catch (Exception e) {
             e.printStackTrace();

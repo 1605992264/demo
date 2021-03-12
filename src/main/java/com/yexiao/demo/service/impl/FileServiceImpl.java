@@ -2,6 +2,7 @@ package com.yexiao.demo.service.impl;
 
 
 import com.yexiao.demo.base.utils.FileUtils;
+import com.yexiao.demo.service.FileService;
 import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ import java.time.LocalDate;
  * @date 2020/11/18 14:20
  **/
 @Service
-public class FileServiceImpl {
+public class FileServiceImpl implements FileService {
 
     @Value("${param.uploadPath}")
     private String uploadPath;
 
+    @Override
     public String fileUpload(MultipartFile file){
         String name = file.getOriginalFilename();
         File uploadFile = null;
@@ -61,6 +63,7 @@ public class FileServiceImpl {
     /**
      * 文件下载
      * */
+    @Override
     public void fileDownLoad(HttpServletResponse response, String path){
         FileInputStream fileInputStream = null;
         try {
