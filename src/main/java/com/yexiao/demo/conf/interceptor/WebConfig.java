@@ -1,11 +1,13 @@
 package com.yexiao.demo.conf.interceptor;
 
-import com.yexiao.demo.conf.interceptor.MyHandlerInterceptor;
+import com.yexiao.demo.conf.ConfigParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 
 /**
@@ -24,6 +26,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private NoCacheHandler noCacheHandler;
 
+    private ConfigParams configParams;
+
+    public WebConfig(ConfigParams configParams){
+        this.configParams = configParams;
+    }
+
     /***
      * 添加链式处理器
      * 以添加拦截顺序来执行
@@ -33,15 +41,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(noCacheHandler);
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(myHandlerInterceptor);
         // 设置不拦截的路径
-        interceptorRegistration.excludePathPatterns("/error");
-        interceptorRegistration.excludePathPatterns("/static/**");
-        interceptorRegistration.excludePathPatterns("/login");
-        interceptorRegistration.excludePathPatterns("/logout");
-        interceptorRegistration.excludePathPatterns("/test/**");
-        interceptorRegistration.excludePathPatterns("/valid/**");
-        interceptorRegistration.excludePathPatterns("/generator/**");
-        interceptorRegistration.excludePathPatterns("/monitor/**");
-        interceptorRegistration.excludePathPatterns("/mq/**");
+        interceptorRegistration.excludePathPatterns(
+                configParams.getWebInterceptors().getExcludePathPatterns());
         // 设置拦截路径
         interceptorRegistration.addPathPatterns("/**");
     }

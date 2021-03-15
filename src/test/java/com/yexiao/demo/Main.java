@@ -21,30 +21,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        TreeNode treeNode = new TreeNode();
-        treeNode.setId(1L);
-        treeNode.setName("父级");
-        treeNode.setParentId(null);
 
-        TreeNode treeNode1 = new TreeNode();
-        treeNode1.setId(2L);
-        treeNode1.setName("子级");
-        treeNode1.setParentId(1L);
-
-        TreeNode treeNode2 = new TreeNode();
-        treeNode2.setId(3L);
-        treeNode2.setName("滋滋级");
-        treeNode2.setParentId(2L);
-
-        List<TreeNode> list = new ArrayList<>();
-        list.add(treeNode);
-        list.add(treeNode1);
-        list.add(treeNode2);
-        CreateTreeData createTreeData = new CreateTreeData();
-        List<TreeNode> objects = (List<TreeNode>) createTreeData.TreeData(list);
-        for(TreeNode item : objects){
-            System.out.println(item);
-        }
 
 
     }

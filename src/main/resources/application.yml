@@ -30,3 +30,16 @@ session:
 logging:
   config: classpath:logback.xml
 
+config:
+  web-interceptors:
+    excludePathPatterns:
+      - /error
+      - /static/**
+      - /login
+      - /logout
+      - /test/**
+      - /valid/**
+      - /generator/**
+      - /monitor/**
+      - /mq/**
+
