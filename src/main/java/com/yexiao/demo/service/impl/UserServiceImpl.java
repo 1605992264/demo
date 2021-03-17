@@ -3,7 +3,9 @@ package com.yexiao.demo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yexiao.demo.base.utils.HttpRequestUtils;
 import com.yexiao.demo.conf.interceptor.exception.CustomizeException;
+import com.yexiao.demo.conf.security.springsecurity.PasswordSecurity;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.mapper.UserMapper;
 import com.yexiao.demo.service.UserService;
@@ -17,9 +19,19 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -28,11 +40,16 @@ import java.util.*;
  **/
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService, UserDetailsService {
 
     @Autowired
     private SessionDAO sessionDAO;
-
+    @Autowired
+    private PasswordSecurity passwordSecurity;
+    @Autowired
+    private HttpServletResponse response;
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 查询列表
      * @return*/
@@ -67,6 +84,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public UserDO login(String username, String password) {
+        return springSecurityLogin(username,password);
+    }
+
+    private UserDO springSecurityLogin(String username,String password){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication.getPrincipal() instanceof UserDO){
+            throw new CustomizeException("请先退出原用户");
+        }
+        //  用户登入
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(username,password);
+            DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+            daoAuthenticationProvider.setUserDetailsService(this);
+            daoAuthenticationProvider.setPasswordEncoder(passwordSecurity);
+            Authentication authenticate = daoAuthenticationProvider.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
+        }catch (Exception e){
+            throw new CustomizeException("用户名或密码错误！");
+        }
+        return UserUtils.getUser();
+    }
+
+
+    private UserDO shiroLogin(String username,String password){
         // 由前端一起加密更为安全
         // 登入
         Subject subject = SecurityUtils.getSubject();
@@ -84,10 +126,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         return UserUtils.getUser();
     }
 
+
     @Override
     public void logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+        UserUtils.logout();
     }
 
     /**
@@ -110,7 +152,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     public boolean register(UserDO userDO) {
         boolean flag = verificationUserName(userDO.getUsername());
         // 加密
-        userDO.setPassword(UserUtils.newPassword(userDO.getPassword(),userDO.getUsername()));
+        userDO.setPassword(UserUtils.newPassword(userDO.getPassword()));
         if(flag){
             int insert = baseMapper.insert(userDO);
             if (insert > 0) {
@@ -148,4 +190,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        UserDO userDO = findUserByUserName(s);
+        return userDO;
+    }
 }

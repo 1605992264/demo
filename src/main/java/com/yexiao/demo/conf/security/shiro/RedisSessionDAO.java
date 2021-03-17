@@ -1,15 +1,10 @@
-package com.yexiao.demo.conf.shiro;
+package com.yexiao.demo.conf.security.shiro;
 
-import com.yexiao.demo.domain.UserDO;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -19,8 +14,6 @@ import java.io.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.o;
 
 /**
  * @author xuhf

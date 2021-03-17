@@ -27,6 +27,11 @@ public class ConfigParams {
         public void setExcludePathPatterns(List<String> excludePathPatterns) {
             this.excludePathPatterns = excludePathPatterns;
         }
+
+        public String[] ExcludePathPatternsToArray(){
+            String[] s = new String[excludePathPatterns.size()];
+            return excludePathPatterns.toArray(s);
+        }
     }
 
     public WebInterceptors getWebInterceptors() {

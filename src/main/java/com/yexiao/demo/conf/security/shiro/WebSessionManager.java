@@ -1,4 +1,4 @@
-package com.yexiao.demo.conf.shiro;
+package com.yexiao.demo.conf.security.shiro;
 
 import cn.hutool.core.util.StrUtil;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;

@@ -1,4 +1,4 @@
-package com.yexiao.demo.conf.shiro;
+package com.yexiao.demo.conf.security.shiro;
 
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.utils.UserUtils;
@@ -25,7 +25,7 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
             if(usernamePasswordToken.getPassword().equals(user)){
                 return true;
             }else {
-                String s = UserUtils.newPassword(String.valueOf(usernamePasswordToken.getPassword()), user.getUsername());
+                String s = UserUtils.newPassword(String.valueOf(usernamePasswordToken.getPassword()));
                 if(s.equals(user.getPassword())){
                     return true;
                 }

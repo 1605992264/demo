@@ -2,7 +2,7 @@ package com.yexiao.demo.conf.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yexiao.demo.conf.SpringContextHolder;
-import com.yexiao.demo.conf.shiro.RedisSessionDAO;
+import com.yexiao.demo.conf.security.shiro.RedisSessionDAO;
 import com.yexiao.demo.utils.UserUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,22 +23,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        //controller方法处理完毕前
-        String token = request.getHeader("Authorization");
-        String userId = request.getHeader("UserId");
-        Boolean flag = UserUtils.verification(token,userId);
-        if(!flag) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("code", 999);
-            map.put("message", "请重新登录");
-            String string = JSONObject.toJSONString(map);
-            response.setContentType("application/json; charset=UTF-8");
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().print(string);
-            return false;
-        }
-        RedisSessionDAO redisSessionDAO = SpringContextHolder.getBean("sessionDAO");
-        redisSessionDAO.update(redisSessionDAO.readSession(token));
+
         return true;
     }
 

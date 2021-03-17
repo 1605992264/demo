@@ -1,4 +1,4 @@
-package com.yexiao.demo.conf.shiro;
+package com.yexiao.demo.conf.security.shiro;
 
 import com.yexiao.demo.domain.PermissionDO;
 import com.yexiao.demo.domain.RoleDO;

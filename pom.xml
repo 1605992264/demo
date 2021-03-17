@@ -267,10 +267,10 @@
             <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20210226.jar</systemPath>
         </dependency>
         <!--spring安全管理-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
     </dependencies>
 

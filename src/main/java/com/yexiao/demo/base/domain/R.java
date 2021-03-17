@@ -28,6 +28,14 @@ public class R<T> implements Serializable {
         return r;
     }
 
+    public static R success(Object o){
+        R r = new R();
+        HashMap<String, Object> hashMap = new HashMap<>(1);
+        hashMap.put("formObject",o);
+        r.data = hashMap;
+        return r;
+    }
+
     public static R success(String message){
         R r = new R();
         r.message = message;
@@ -104,7 +112,6 @@ public class R<T> implements Serializable {
         r.message = message;
         return r;
     }
-
 
     public static R custom(Integer code,String message,Serializable o){
         R r = new R();

@@ -1,13 +1,10 @@
 package com.yexiao.demo.controller;
 
 import cn.hutool.http.HttpUtil;
-import com.baomidou.mybatisplus.core.config.GlobalConfig;
-import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.yexiao.demo.base.domain.R;
-import com.yexiao.demo.base.utils.HttpRequestUtils;
-import com.yexiao.demo.service.DictService;
+import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.impl.TestService;
-import io.minio.MinioClient;
+import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +61,13 @@ public class TestController implements InitializingBean {
     public R list(Map<String,Object> map) {
         return R.success(map);
     }
+
+    @RequestMapping("getNowUser")
+    public R getNowUser(){
+        UserDO user = UserUtils.getUser();
+        return R.success(user);
+    }
+
 
     @RequestMapping("getAll")
     public R a(){

@@ -6,8 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,7 +20,7 @@ import java.util.List;
 @ApiModel(value = "User对象", description = "用户表")
 
 @TableName("sys_user")
-public class UserDO extends UserInfoBaseEntity {
+public class UserDO extends UserInfoBaseEntity implements UserDetails {
 
     @ApiModelProperty(value = "名字")
     @TableField("name")
@@ -70,10 +73,6 @@ public class UserDO extends UserInfoBaseEntity {
 
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -132,6 +131,32 @@ public class UserDO extends UserInfoBaseEntity {
         this.roleList = roleList;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 
 

@@ -25,7 +25,7 @@ public class UserInfoBaseEntity extends BaseEntity {
 
     @ApiModelProperty(value = "创建时间")
     @TableField(value = "create_date",fill = FieldFill.INSERT)
-    protected LocalDateTime createDate;
+    protected Date createDate;
 
     @ApiModelProperty(value = "修改人id")
     @TableField(value = "update_by",fill = FieldFill.INSERT_UPDATE)
@@ -33,7 +33,7 @@ public class UserInfoBaseEntity extends BaseEntity {
 
     @ApiModelProperty(value = "修改时间")
     @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE)
-    protected LocalDateTime updateDate;
+    protected Date updateDate;
 
     public String getCreateBy() {
         return createBy;
@@ -53,19 +53,19 @@ public class UserInfoBaseEntity extends BaseEntity {
         this.updateBy = updateBy;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
