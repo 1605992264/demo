@@ -16,37 +16,32 @@ public class UserUtils {
     /**
      * shiro获取当前用户登入的信息
      * */
-//    public static UserDO getUser(){
-//        if(SecurityUtils.getSecurityManager() != null) {
-//            Object principal = SecurityUtils.getSubject().getPrincipal();
-//            if (principal != null && principal instanceof UserDO) {
-//                ((UserDO) principal).setToken(SecurityUtils.getSubject().getSession().getId().toString());
-//            }
-//            return (UserDO) principal;
-//        }
-//        return null;
-//    }
-
-    public static void logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+    public static UserDO getUser(){
+        if(SecurityUtils.getSecurityManager() != null) {
+            Object principal = SecurityUtils.getSubject().getPrincipal();
+            if (principal != null && principal instanceof UserDO) {
+                ((UserDO) principal).setToken(SecurityUtils.getSubject().getSession().getId().toString());
+            }
+            return (UserDO) principal;
+        }
+        return null;
     }
 
     /**
      * spring-security 获取当前用户登入的信息
      * */
-    public static UserDO getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && authentication.getPrincipal() instanceof UserDO){
-            Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
-            UserDO userDO = ((UserDO) authentication.getPrincipal());
-            if(userDO != null){
-                //userDO.setToken(((WebAuthenticationDetails)details).getSessionId());
-            }
-            return userDO;
-        }
-        return null;
-    }
+//    public static UserDO getUser(){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if(authentication != null && authentication.getPrincipal() instanceof UserDO){
+//            Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+//            UserDO userDO = ((UserDO) authentication.getPrincipal());
+//            if(userDO != null){
+//                //userDO.setToken(((WebAuthenticationDetails)details).getSessionId());
+//            }
+//            return userDO;
+//        }
+//        return null;
+//    }
 
     /**
      * @param password 密码

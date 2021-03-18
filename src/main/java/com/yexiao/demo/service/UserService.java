@@ -25,10 +25,6 @@ public interface UserService extends IService<UserDO> {
      * */
     boolean deleteById(String id);
 
-    UserDO login(String username,String password);
-
-    void logout();
-
     /**
      * 验证登录名唯一性
      * */

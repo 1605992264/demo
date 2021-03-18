@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,12 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Autowired
     private SessionDAO sessionDAO;
-    @Autowired
-    private PasswordSecurity passwordSecurity;
-    @Autowired
-    private HttpServletResponse response;
-    @Autowired
-    private HttpServletRequest request;
+
     /**
      * 查询列表
      * @return*/
@@ -80,56 +76,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             return true;
         }
         return false;
-    }
-
-    @Override
-    public UserDO login(String username, String password) {
-        return springSecurityLogin(username,password);
-    }
-
-    private UserDO springSecurityLogin(String username,String password){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || authentication.getPrincipal() instanceof UserDO){
-            throw new CustomizeException("请先退出原用户");
-        }
-        //  用户登入
-        try {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(username,password);
-            DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-            daoAuthenticationProvider.setUserDetailsService(this);
-            daoAuthenticationProvider.setPasswordEncoder(passwordSecurity);
-            Authentication authenticate = daoAuthenticationProvider.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authenticate);
-        }catch (Exception e){
-            throw new CustomizeException("用户名或密码错误！");
-        }
-        return UserUtils.getUser();
-    }
-
-
-    private UserDO shiroLogin(String username,String password){
-        // 由前端一起加密更为安全
-        // 登入
-        Subject subject = SecurityUtils.getSubject();
-        UserDO userDO = (UserDO) subject.getPrincipal();
-        if(userDO != null){
-            throw new CustomizeException("请先退出原用户");
-        }
-        try {
-            UsernamePasswordToken token = new UsernamePasswordToken(username,password);
-            subject.login(token);
-            // 把sessionId 存到redis中
-        }catch (IncorrectCredentialsException e){
-            throw new CustomizeException("用户名或密码错误！");
-        }
-        return UserUtils.getUser();
-    }
-
-
-    @Override
-    public void logout() {
-        UserUtils.logout();
     }
 
     /**

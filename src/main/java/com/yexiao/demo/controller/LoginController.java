@@ -4,6 +4,8 @@ package com.yexiao.demo.controller;
 import com.yexiao.demo.base.annotation.Log;
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.service.UserService;
+import com.yexiao.demo.service.impl.ShiroLoginServiceImpl;
+import com.yexiao.demo.service.impl.SpringSecurityLoginServiceImpl;
 import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,18 +24,18 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private ShiroLoginServiceImpl loginService;
 
     @Log(message = "登入")
     @PostMapping("/login")
     public R login(@RequestParam String username, @RequestParam String password){
-        return R.success(userService.login(username,password));
+        return R.success(loginService.login(username,password));
     }
 
     @Log(message = "登出")
     @RequestMapping("/logout")
     public R logout(){
-        userService.logout();
+        loginService.logout();
         return R.success("登出成功");
     }
 

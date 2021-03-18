@@ -8,10 +8,6 @@ server:
     uri-encoding: utf-8
 
 spring:
-  mail:
-#    host: smtp.qq.com   # smtp.163.com
-#    username: 1605992264 # xxx@163.com
-#    password: izrmuycyewejfgha # 163的邮箱授权码
   application:
     name: test
   datasource: #数据库配置
