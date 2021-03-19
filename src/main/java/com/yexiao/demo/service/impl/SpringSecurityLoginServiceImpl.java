@@ -11,6 +11,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +26,7 @@ public class SpringSecurityLoginServiceImpl implements LoginService {
     private PasswordSecurity passwordSecurity;
     @Autowired
     private UserServiceImpl userService;
+
 
     @Override
     public UserDO login(String username, String password) {

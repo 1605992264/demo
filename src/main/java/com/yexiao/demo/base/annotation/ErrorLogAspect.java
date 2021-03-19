@@ -1,6 +1,6 @@
 package com.yexiao.demo.base.annotation;
 
-import com.yexiao.demo.base.utils.HttpRequestUtils;
+import com.yexiao.demo.base.utils.WebUtils;
 import com.yexiao.demo.domain.LogDO;
 import com.yexiao.demo.service.LogService;
 import com.yexiao.demo.utils.UserUtils;
@@ -52,8 +52,8 @@ public class ErrorLogAspect {
             logDO.setType(LogDO.ERROR);
             logDO.setUserName(userName);
             logDO.setUserId(userId);
-            logDO.setIp(HttpRequestUtils.getClientIPAddress());
-            logDO.setMethod(HttpRequestUtils.getHttpServletRequest().getServletPath());
+            logDO.setIp(WebUtils.getClientIPAddress());
+            logDO.setMethod(WebUtils.getHttpServletRequest().getServletPath());
             logDO.setMessage(getExceptionArg(joinPoint.getArgs()).getMessage());
             logDO.setCreateDate(new Date());
             logService.save(logDO);

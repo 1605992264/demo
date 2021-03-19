@@ -1,11 +1,9 @@
 package com.yexiao.demo.base.annotation;
 
 
-import com.yexiao.demo.base.utils.HttpRequestUtils;
+import com.yexiao.demo.base.utils.WebUtils;
 import com.yexiao.demo.conf.elasticsearch.ElasticSearchUtils;
-import com.yexiao.demo.conf.interceptor.exception.CustomizeException;
 import com.yexiao.demo.domain.LogDO;
-import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.LogService;
 import com.yexiao.demo.utils.UserUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -112,8 +110,8 @@ public class LogAspect {
         logDO.setMessage(annotation.message());
         logDO.setUserId(userId);
         logDO.setUserName(userName);
-        logDO.setMethod(HttpRequestUtils.getHttpServletRequest().getServletPath());
-        logDO.setIp(HttpRequestUtils.getClientIPAddress());
+        logDO.setMethod(WebUtils.getHttpServletRequest().getServletPath());
+        logDO.setIp(WebUtils.getClientIPAddress());
         logService.save(logDO);
         return returnResult;
     }

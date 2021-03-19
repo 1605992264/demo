@@ -25,8 +25,8 @@ import javax.servlet.ServletException;
 /**
  * @author xuhf
  * */
-@EnableAutoConfiguration(exclude =
-        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class)
+//@EnableAutoConfiguration(exclude =
+//        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class)
 @SpringBootApplication
 @MapperScan({"com.yexiao.demo.mapper","com.yexiao.demo.**.mapper","com.yexiao.demo.xxx.schedule"})
 @EnableScheduling

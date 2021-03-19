@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * 静态获取httpRequest
  **/
-public class HttpRequestUtils {
+public class WebUtils {
 
     /**
      * 获取调用者的ip

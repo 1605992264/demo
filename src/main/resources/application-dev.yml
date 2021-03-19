@@ -1,11 +1,12 @@
 server:
-  session-timeout: 1800
   tomcat:
     uri-encoding: UTF-8
   port: 9999
   servlet:
     context-path: /test # 项目名
     uri-encoding: utf-8
+    session:
+      timeout: 1800
 
 spring:
   application:
