@@ -2,6 +2,7 @@ package com.yexiao.demo.controller;
 
 import com.yexiao.demo.base.domain.R;
 import com.yexiao.demo.service.impl.FileServiceImpl;
+import com.yexiao.demo.service.impl.MinioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class FileController {
 
     @Autowired
-    private FileServiceImpl fileService;
+    private MinioServiceImpl fileService;
 
     @ResponseBody
     @PostMapping("fileUpload")

@@ -30,6 +30,7 @@ session:
 logging:
   config: classpath:logback.xml
 
+
 config:
   web-interceptors:
     excludePathPatterns:

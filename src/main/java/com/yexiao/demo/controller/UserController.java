@@ -12,6 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // spring-security 使用 @PreAuthorize("hsaRole('admin')")
     @RequiresRoles("admin")
     @PostMapping("getOnlineUsers")
     public R onlineUsers(){

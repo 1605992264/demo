@@ -13,7 +13,16 @@ public class DingProperty {
 
     private String appKey;
     private String appSecret;
+    private Long agentId;
     private String getTokenURL;
+
+    public Long getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Long agentId) {
+        this.agentId = agentId;
+    }
 
     public String getGetTokenURL() {
         return getTokenURL;

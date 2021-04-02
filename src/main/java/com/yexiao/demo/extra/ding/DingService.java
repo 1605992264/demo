@@ -6,8 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
+import com.dingtalk.api.request.OapiImChatScenegroupGetRequest;
+import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
 import com.dingtalk.api.request.OapiV2UserListRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiImChatScenegroupGetResponse;
+import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.dingtalk.api.response.OapiV2UserListResponse;
 import com.taobao.api.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +83,36 @@ public class DingService {
     }
 
     /**
-     *
+     * 发送消息
      * */
+    public void sendMsgToUser(){
+
+    }
+
+    /**
+     * 发送消息
+     * */
+    public void sendMsgToAll(){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2");
+        OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
+        request.setAgentId(dingProperty.getAgentId());
+        request.setToAllUser(true);
+        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+        msg.setMsgtype("text");
+        msg.setText(new OapiMessageCorpconversationAsyncsendV2Request.Text());
+        msg.getText().setContent("test123");
+        request.setMsg(msg);
+        try {
+            OapiMessageCorpconversationAsyncsendV2Response execute = client.execute(request,getToken());
+            System.out.println(execute.getBody());
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
+    public void test() {
+
+
+    }
 }

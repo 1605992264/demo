@@ -2,11 +2,19 @@ package com.yexiao.demo.controller;
 
 import cn.hutool.http.HttpUtil;
 import com.yexiao.demo.base.domain.R;
+import com.yexiao.demo.conf.redis.RedisMessageListener;
 import com.yexiao.demo.domain.UserDO;
+import com.yexiao.demo.extra.ding.DingService;
 import com.yexiao.demo.service.impl.TestService;
 import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -31,6 +39,10 @@ public class TestController implements InitializingBean {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DingService dingService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping("/minio/upload")
     public R upload(MultipartFile file){
@@ -68,6 +80,17 @@ public class TestController implements InitializingBean {
         return R.success(user);
     }
 
+    @RequestMapping("timeout")
+    public R timeout(){
+        String s = HttpUtil.get("http://localhost:8088/cds/cdsFile/download");
+        return R.success(s);
+    }
+
+    @RequestMapping("dingTest")
+    public R dingTest(){
+        dingService.test();
+        return R.success();
+    }
 
     @RequestMapping("getAll")
     public R a(){
@@ -77,9 +100,17 @@ public class TestController implements InitializingBean {
         return R.success();
     }
 
+    @RequestMapping("redisPub")
+    public R redisPub(){
+        redisTemplate.getRequiredConnectionFactory().getConnection().
+                publish("test".getBytes(),"你好啊".getBytes());
+        return R.success();
+    }
+
 
     @Override
     public void afterPropertiesSet(){
         System.out.println("bean初始化时调用");
     }
+
 }

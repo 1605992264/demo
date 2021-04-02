@@ -67,6 +67,7 @@ param:
   # 钉钉
   ding:
     getTokenURL: https://oapi.dingtalk.com/gettoken
+    agentId: 1116334559
     appKey: dingrbwvkdfhkzjgddap
     appSecret: WwqgY_CmJRKnsT-k7wgSIfPawqgowp8gteXo2ML6cbR0spbimXGiSL58Wmc15O48
   # 阿里巴巴支付

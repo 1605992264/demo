@@ -5,7 +5,6 @@ import com.yexiao.demo.service.impl.UserServiceImpl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
@@ -44,17 +43,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 不启用csrf定牌
                 .csrf().disable()
                 // 设置登入登出接口
-                .logout().logoutUrl("logout")
+                .logout().logoutUrl("/logout")
                 .and()
-                .formLogin().loginProcessingUrl("login")
+                // 更改spring-security的自带登入接口 避免覆盖自己写的登入
+                .formLogin().loginProcessingUrl("1234")
                 .and()
                 // 对请求做过滤
                 .authorizeRequests()
                 .mvcMatchers(configParams.getWebInterceptors().ExcludePathPatternsToArray()).permitAll()
                 .anyRequest().access("isAuthenticated()")
-                .and();
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
         super.configure(http);
     }
