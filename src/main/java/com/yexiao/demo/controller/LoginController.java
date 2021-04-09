@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     @Autowired
-    private SpringSecurityLoginServiceImpl loginService;
+    private ShiroLoginServiceImpl loginService;
 
     @Log(message = "登入")
     @PostMapping("/login")

@@ -259,6 +259,7 @@
             <version>7.0.2</version>
         </dependency>
 
+        <!--钉钉api-->
         <dependency>
             <groupId>com.taobao</groupId>
             <artifactId>taobao-sdk-java-auto</artifactId>
@@ -270,6 +271,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--kafka-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>1.0.2</version>
         </dependency>
 
     </dependencies>

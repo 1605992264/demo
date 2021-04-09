@@ -2,22 +2,22 @@ package com.yexiao.demo.controller;
 
 import cn.hutool.http.HttpUtil;
 import com.yexiao.demo.base.domain.R;
-import com.yexiao.demo.conf.redis.RedisMessageListener;
 import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.extra.ding.DingService;
 import com.yexiao.demo.service.impl.TestService;
 import com.yexiao.demo.utils.UserUtils;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +43,10 @@ public class TestController implements InitializingBean {
     private DingService dingService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private KafkaProducer kafkaProducer;
+    @Autowired
+    private KafkaConsumer kafkaConsumerTwo;
 
     @RequestMapping("/minio/upload")
     public R upload(MultipartFile file){
@@ -107,6 +111,13 @@ public class TestController implements InitializingBean {
         return R.success();
     }
 
+    @RequestMapping("kafkaPub/{value}")
+    public R kafkaPub(@PathVariable("value") String value){
+        ProducerRecord<String, Object> producerRecord =
+                new ProducerRecord<String, Object>("test",value);
+        kafkaProducer.send(producerRecord);
+        return R.success();
+    }
 
     @Override
     public void afterPropertiesSet(){

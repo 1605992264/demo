@@ -3,7 +3,9 @@ package com.yexiao.demo.conf.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.yexiao.demo.conf.SpringContextHolder;
 import com.yexiao.demo.conf.security.shiro.RedisSessionDAO;
+import com.yexiao.demo.service.impl.ShiroLoginServiceImpl;
 import com.yexiao.demo.utils.UserUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +25,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-
+        //controller方法处理完毕前
         return true;
     }
 
