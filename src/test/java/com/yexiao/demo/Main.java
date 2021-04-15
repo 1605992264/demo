@@ -1,35 +1,19 @@
 package com.yexiao.demo;
 
-import com.alibaba.fastjson.annotation.JSONType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.internal.ws.util.VersionUtil;
-import com.yexiao.demo.base.domain.BaseEntity;
-import com.yexiao.demo.base.domain.UserInfoBaseEntity;
-import com.yexiao.demo.base.tree.CreateTreeData;
-import com.yexiao.demo.base.tree.TreeNode;
-import com.yexiao.demo.conf.kafka.MyKafkaProperties;
-import com.yexiao.demo.domain.UserDO;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.beans.factory.config.YamlProcessor;
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.boot.json.YamlJsonParser;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.data.util.Version;
-import org.yaml.snakeyaml.Yaml;
-import sun.util.resources.zh.TimeZoneNames_zh_CN;
+import cn.hutool.core.io.IoUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.yexiao.demo.base.generator.domain.Column;
+import com.yexiao.demo.base.generator.domain.Table;
+import com.yexiao.demo.base.generator.utils.GeneratorUtils;
+import com.yexiao.demo.base.utils.FileUtils;
+import org.apache.xmlbeans.impl.common.ReaderInputStream;
+import sun.misc.Resource;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xuhf
@@ -37,16 +21,72 @@ import java.util.concurrent.atomic.AtomicReference;
  **/
 public class Main {
 
-
-
-
     public static void main(String[] args) throws Exception {
-        MyKafkaProperties myKafkaProperties = new MyKafkaProperties();
-        KafkaProducer kafkaProducer = new KafkaProducer(myKafkaProperties.buildProducerProperties());
-        for(int i=0;i<1000;i++){
-            ProducerRecord<String, Object> producerRecord = new ProducerRecord<>("testTopic", String.valueOf(i));
-            kafkaProducer.send(producerRecord);
+        InputStream resourceAsStream = Main.class.getResourceAsStream("/static/form/form.json");
+        Reader fileReader = new InputStreamReader(resourceAsStream);
+        JSONObject jsonObject = JSONObject.parseObject(IoUtil.read(fileReader));
+        JSONObject base = jsonObject.getJSONObject("base");
+        Table table = new Table();
+        table.setTableName("aaa_" + base.getString("name"));
+        table.setTableComment(base.getString("remarks"));
+        ArrayList<Column> columns = new ArrayList<>();
+        for(JSONObject item :jsonObject.getJSONArray("fields").toJavaList(JSONObject.class)) {
+            Column column = new Column();
+            column.setComment(item.getString("remarks"));
+            column.setName(item.getString("name"));
+            column.setType(getFieldType(item.getString("type")));
+            columns.add(column);
         }
+        table.setColumns(columns);
+        table = GeneratorUtils.FillTable(table);
+        ByteArrayOutputStream byteArrayOutputStream = GeneratorUtils.generatorCode(table);
+        FileOutputStream fileOutputStream = new FileOutputStream("D://a.zip");
+        fileOutputStream.write(byteArrayOutputStream.toByteArray());
+        fileOutputStream.close();
+        byteArrayOutputStream.close();
+        System.out.println(jsonObject);
+        System.out.println(createTableSql(table));
+    }
+
+    public static String getFieldType(String type){
+        switch (type){
+            case "date":
+                return "date";
+            case "radio":
+            case "input":
+                return "varchar";
+            default:
+                return "varchar";
+        }
+    }
+
+    public static String getSqlType(String type,Integer length){
+        switch (type){
+            case "date":
+                return "date";
+            case "varchar":
+                return "varchar(" + length + ")";
+        }
+        return null;
+    }
+
+    public static String createTableSql(Table table){
+        StringBuilder builder = new StringBuilder();
+        builder.append("create table ")
+                .append(table.getTableName())
+                .append("( ");
+        for(Column column : table.getColumns()){
+            builder.append(column.getName())
+                    .append(" ")
+                    .append(getSqlType(column.getType(),64))
+                    .append(" comment ")
+                    .append("'")
+                    .append(column.getComment())
+                    .append("'")
+                    .append(",");
+        }
+        builder.replace(builder.length()-1,builder.length(),")");
+        return builder.toString();
     }
 
 

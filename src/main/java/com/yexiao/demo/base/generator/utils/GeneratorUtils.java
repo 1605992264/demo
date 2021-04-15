@@ -48,10 +48,7 @@ public class GeneratorUtils {
         return templates;
     }
 
-    /**
-     * 生成代码
-     * */
-    public static void generatorCode(Table table, HttpServletResponse response){
+    public static ByteArrayOutputStream generatorCode(Table table){
         List<String> templateNames = getTemplateNames();
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(byteStream);
@@ -71,6 +68,14 @@ public class GeneratorUtils {
                 e.printStackTrace();
             }
         }
+        return byteStream;
+    }
+
+    /**
+     * 生成代码
+     * */
+    public static void generatorCode(Table table, HttpServletResponse response){
+        ByteArrayOutputStream byteStream = generatorCode(table);
         /**
          * 设置浏览器下载
          * */
@@ -94,7 +99,6 @@ public class GeneratorUtils {
         }finally {
 
         }
-
 
     }
 

@@ -28,10 +28,10 @@ public class Table extends BaseEntity {
     private List<Column> columns;
 
     @ApiModelProperty("日期")
-    private LocalDate DATE;
+    private LocalDate DATE = LocalDate.now();
 
     @ApiModelProperty("时间")
-    private LocalTime TIME;
+    private LocalTime TIME = LocalTime.now();
 
     @ApiModelProperty("包名")
     private String packageName;
