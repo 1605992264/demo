@@ -6,6 +6,7 @@ import com.yexiao.demo.domain.UserDO;
 import com.yexiao.demo.service.LoginService;
 import com.yexiao.demo.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  * @author xuhf
  * @date 2021/3/18 9:48
  **/
+@ConditionalOnClass(name = "com.yexiao.demo.conf.security.springsecurity.WebSecurityConfig")
 @Service
 public class SpringSecurityLoginServiceImpl implements LoginService {
 

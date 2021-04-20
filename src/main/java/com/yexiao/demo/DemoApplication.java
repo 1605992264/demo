@@ -8,12 +8,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.context.WebApplicationContext;
@@ -25,8 +19,8 @@ import javax.servlet.ServletException;
 /**
  * @author xuhf
  * */
-@EnableAutoConfiguration(exclude =
-        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class)
+//@EnableAutoConfiguration(exclude =
+//        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class)
 @SpringBootApplication
 @MapperScan({"com.yexiao.demo.mapper","com.yexiao.demo.**.mapper","com.yexiao.demo.xxx.schedule"})
 @EnableScheduling

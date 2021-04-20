@@ -1,6 +1,7 @@
 package com.yexiao.demo.conf.security.shiro;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.CharEncoding;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;

@@ -3,6 +3,7 @@ package com.yexiao.demo.controller;
 
 import com.yexiao.demo.base.annotation.Log;
 import com.yexiao.demo.base.domain.R;
+import com.yexiao.demo.service.LoginService;
 import com.yexiao.demo.service.UserService;
 import com.yexiao.demo.service.impl.ShiroLoginServiceImpl;
 import com.yexiao.demo.service.impl.SpringSecurityLoginServiceImpl;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     @Autowired
-    private ShiroLoginServiceImpl loginService;
+    private LoginService loginService;
 
     @Log(message = "登入")
     @PostMapping("/login")

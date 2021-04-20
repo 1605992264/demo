@@ -1,8 +1,10 @@
 package com.yexiao.demo;
 
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yexiao.demo.base.domain.UserInfoBaseEntity;
+import com.yexiao.demo.extra.alipay.MyAlipayUtils;
 import com.yexiao.demo.extra.ding.DingService;
 import com.yexiao.demo.extra.weixin.subscribe.MaterialType;
 import com.yexiao.demo.extra.weixin.subscribe.PublicNumberUtils;
@@ -29,6 +31,9 @@ public class DemoApplicationTests {
     DingService dingService;
     @Autowired
     ApplicationContext applicationContext;
+    @Autowired
+    private MyAlipayUtils alipayUtils;
+
 
     @Test
     public void contextLoads() throws IOException {

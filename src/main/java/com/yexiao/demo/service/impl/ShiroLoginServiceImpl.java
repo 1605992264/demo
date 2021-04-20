@@ -8,12 +8,14 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
 
 /**
  * @author xuhf
  * @date 2021/3/18 9:47
  **/
+@ConditionalOnClass(name = "com.yexiao.demo.conf.security.shiro.ShiroConfig")
 @Service
 public class ShiroLoginServiceImpl implements LoginService {
     @Override

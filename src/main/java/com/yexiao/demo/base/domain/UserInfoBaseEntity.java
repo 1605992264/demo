@@ -43,8 +43,6 @@ public class UserInfoBaseEntity extends BaseEntity {
         this.createBy = createBy;
     }
 
-
-
     public String getUpdateBy() {
         return updateBy;
     }
