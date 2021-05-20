@@ -16,7 +16,7 @@ public class CreateTreeData {
      * @param data
      * @return 返回一颗标准定义的树
      */
-    public static  <E> List<E> TreeData(List<TreeNode> data) {
+    public static  <E extends TreeNode> List<E> TreeData(List<E> data) {
         /** 判断数据是否为空 **/
         if (data.isEmpty()) {
             return null;
@@ -49,7 +49,7 @@ public class CreateTreeData {
      * @param treeNode 当前节点数据
      * @param nodes 需要遍历的数据
      */
-    private static void childrenNodeInfo(TreeNode treeNode,List<? extends TreeNode> nodes) {
+    private static <E extends TreeNode> void childrenNodeInfo(TreeNode treeNode,List<E> nodes) {
         /** 子节点/数据结构 **/
         List<TreeNode> childrenList = new ArrayList<>();
         Iterator<? extends TreeNode> iterator = nodes.iterator();
